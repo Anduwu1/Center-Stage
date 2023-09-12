@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 // New vision system
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @Config
 @Autonomous(group = "drive")
-public class AutonomousOpsMode extends LinearOpMode implements OpenCvCamera.AsyncCameraOpenListener{
+public class AutonomousOpsMode extends LinearOpMode {
 
     // Used to manage the video source
     private VisionPortal visionPortal;
