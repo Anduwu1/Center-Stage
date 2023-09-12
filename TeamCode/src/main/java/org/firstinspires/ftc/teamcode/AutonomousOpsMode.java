@@ -18,7 +18,6 @@ import java.util.List;
     Class for all the Autonomous stuff
  */
 
-@Config
 @Autonomous(group = "drive")
 public class AutonomousOpsMode extends LinearOpMode {
 
@@ -39,17 +38,24 @@ public class AutonomousOpsMode extends LinearOpMode {
             // Do something
         }
 
-        // Start autonomous
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        for (AprilTagDetection detection : currentDetections) {
-            telemetry.addData("Target", "ID %d (%s)", detection.id, detection.metadata.name);
-            telemetry.addData("Range",  "%5.1f inches", detection.ftcPose.range);
-            telemetry.addData("Bearing","%3.0f degrees", detection.ftcPose.bearing);
-            telemetry.addData("Yaw","%3.0f degrees", detection.ftcPose.yaw);
-            telemetry.update();
+        while(opModeIsActive()) {
+            // Start autonomous
+            List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+            for (AprilTagDetection detection : currentDetections) {
+                // Print out all debug information about the current tag
+                telemetry.addData("Target", "ID %d (%s)", detection.id, detection.metadata.name);
+                telemetry.addData("Range", "%5.1f inches", detection.ftcPose.range);
+                telemetry.addData("Bearing", "%3.0f degrees", detection.ftcPose.bearing);
+                telemetry.addData("Yaw", "%3.0f degrees", detection.ftcPose.yaw);
+                telemetry.update();
+            }
+            // TODO make it like do stuff
         }
     }
 
+    /*
+        Initializes the new camera system
+     */
     private void initAprilTagDetection() {
         aprilTag = new AprilTagProcessor.Builder().build();
 
