@@ -41,6 +41,13 @@ public class AutonomousOpsMode extends LinearOpMode {
 
         // Start autonomous
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        for (AprilTagDetection detection : currentDetections) {
+            telemetry.addData("Target", "ID %d (%s)", detection.id, detection.metadata.name);
+            telemetry.addData("Range",  "%5.1f inches", detection.ftcPose.range);
+            telemetry.addData("Bearing","%3.0f degrees", detection.ftcPose.bearing);
+            telemetry.addData("Yaw","%3.0f degrees", detection.ftcPose.yaw);
+            telemetry.update();
+        }
     }
 
     private void initAprilTagDetection() {
