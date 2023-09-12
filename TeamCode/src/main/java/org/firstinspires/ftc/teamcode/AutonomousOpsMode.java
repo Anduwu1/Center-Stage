@@ -6,12 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-// OpenCV
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 
+
+// New vision system
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.List;
 /*
     Class for all the Autonomous stuff
  */
@@ -19,35 +21,35 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Config
 @Autonomous(group = "drive")
 public class AutonomousOpsMode extends LinearOpMode implements OpenCvCamera.AsyncCameraOpenListener{
-    // Constants
-    public static int CAM_WIDTH = 432;
-    public static int CAM_HEIGHT = 240;
 
-    // OpenCV Camera
-    private OpenCvCamera camera;
+    // Used to manage the video source
+    private VisionPortal visionPortal;
+    // Used for managing the AprilTag detection process.
+    private AprilTagProcessor aprilTag;
+    // Used to hold the data for a detected AprilTag
+    private AprilTagDetection desiredTag = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        // Grab the webcam and init it
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        WebcamName webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
-        // Create live preview
-        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        camera.openCameraDeviceAsync(this);
-        // [TODO] set a pipeline here
+        initAprilTagDetection();
 
         while(!isStarted()){
             // Do something
         }
 
         // Start autonomous
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
     }
 
-    @Override
-    public void onOpened() {
-        camera.startStreaming(CAM_WIDTH, CAM_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+    private void initAprilTagDetection() {
+        aprilTag = new AprilTagProcessor.Builder().build();
+
+        visionPortal = new VisionPortal.Builder().setCamera(hardwareMap.get(WebcamName.class, "webcam"))
+                .addProcessor(aprilTag)
+                .build();
     }
-    
+
+
 }
