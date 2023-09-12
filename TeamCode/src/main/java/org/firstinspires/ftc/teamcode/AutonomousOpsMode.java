@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -10,9 +12,16 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
+/*
+    Class for all the Autonomous stuff
+ */
+
 @Config
 @Autonomous(group = "drive")
 public class AutonomousOpsMode extends LinearOpMode implements OpenCvCamera.AsyncCameraOpenListener{
+    // Constants
+    public static int CAM_WIDTH = 432;
+    public static int CAM_HEIGHT = 240;
 
     // OpenCV Camera
     private OpenCvCamera camera;
@@ -33,6 +42,12 @@ public class AutonomousOpsMode extends LinearOpMode implements OpenCvCamera.Asyn
             // Do something
         }
 
-        // Start autonomus
+        // Start autonomous
     }
+
+    @Override
+    public void onOpened() {
+        camera.startStreaming(CAM_WIDTH, CAM_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+    }
+    
 }
