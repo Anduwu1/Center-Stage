@@ -71,15 +71,8 @@ public class AutonomousOpsMode extends LinearOpMode {
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 
             for (AprilTagDetection detection : currentDetections) {
-                if(detection.id <= aprilTags.size())
-                    points.add(aprilTags.get(detection.id).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.yaw));
-
-                // Print out all debug information about the current tag (yay)
-                /*telemetry.addData("Target", "ID %d (%s)", detection.id, detection.metadata.name);
-                telemetry.addData("Range", "%5.1f inches", detection.ftcPose.range);
-                telemetry.addData("Bearing", "%3.0f degrees", detection.ftcPose.bearing);
-                telemetry.addData("Yaw", "%3.0f degrees", detection.ftcPose.yaw);
-                telemetry.update();*/
+                if(detection.id - 1<= aprilTags.size())
+                    points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.yaw));
             }
             // Average out
             float tmpX = 0.0f, tmpY = 0.0f;
@@ -89,8 +82,11 @@ public class AutonomousOpsMode extends LinearOpMode {
                 tmpY += p.y;
 
             }
-            x = tmpX / points.size();
-            y = tmpY / points.size();
+            if(tmpX / points.size() > 0 && tmpY / points.size() > 0) {
+                x = tmpX / points.size();
+                y = tmpY / points.size();
+                telemetry.addLine("NO UPDATE");
+            }
             points.clear();
             telemetry.addData("X", "%5.1f", x);
             telemetry.addData("Y", "%5.1f", y);

@@ -20,7 +20,7 @@ public class AprilTagData {
 
     public Point calculate(float _d, float bearing, float yaw){
         this.d = _d;
-        this.dr = (float) (this.d * Math.cos((double) yaw));
+        this.dr = (float) (this.d * Math.cos((double) yaw + 30.0));
 
         float _x = (float) (this.x - this.dr * Math.cos(bearing));
         float _y = (float) (this.y + this.dr * Math.sin(bearing));
