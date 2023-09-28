@@ -1,23 +1,20 @@
 package org.firstinspires.ftc.teamcode;
-
-
-
+// Basic stuff
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-
 // New vision system
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+// Default java stuff
 import java.util.List;
+
 /*
     Class for all the Autonomous stuff
  */
-
 @Autonomous(group = "drive")
 public class AutonomousOpsMode extends LinearOpMode {
 
@@ -30,19 +27,20 @@ public class AutonomousOpsMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
-
+        // Init
         initAprilTagDetection();
 
+        // wait
         while(!isStarted()){
             // Do something
         }
 
+        // go
         while(opModeIsActive()) {
-            // Start autonomous
+            // Start autonomous (wow)
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
             for (AprilTagDetection detection : currentDetections) {
-                // Print out all debug information about the current tag
+                // Print out all debug information about the current tag (yay)
                 telemetry.addData("Target", "ID %d (%s)", detection.id, detection.metadata.name);
                 telemetry.addData("Range", "%5.1f inches", detection.ftcPose.range);
                 telemetry.addData("Bearing", "%3.0f degrees", detection.ftcPose.bearing);
@@ -63,6 +61,4 @@ public class AutonomousOpsMode extends LinearOpMode {
                 .addProcessor(aprilTag)
                 .build();
     }
-
-
 }
