@@ -18,9 +18,12 @@ public class AprilTag {
         return y;
     }
 
-    public Point calculate(float range, float bearing, float yaw){
-        float _x = (float) (this.x - range * Math.cos(bearing));
-        float _y = (float) (this.y - range * Math.sin(bearing));
+    public Point calculate(float _d, float bearing, float yaw){
+        this.d = _d;
+        this.dr = (float) (this.d * Math.cos((double) yaw));
+
+        float _x = (float) (this.x - this.dr * Math.cos(bearing));
+        float _y = (float) (this.y + this.dr * Math.sin(bearing));
 
         return new Point(_x,_y);
     }
