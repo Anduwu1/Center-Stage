@@ -25,6 +25,9 @@ public class AutonomousOpsMode extends LinearOpMode {
     // Used to hold the data for a detected AprilTag
     private AprilTagDetection desiredTag = null;
 
+
+    // POSITION
+    float x = 0.0f, y = 0.0f;
     @Override
     public void runOpMode() throws InterruptedException {
         // Init
@@ -39,13 +42,16 @@ public class AutonomousOpsMode extends LinearOpMode {
         while(opModeIsActive()) {
             // Start autonomous (wow)
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+            float loc_X = 0.0f, loc_Y = 0.0f;
             for (AprilTagDetection detection : currentDetections) {
+
+                telemetry.update();
                 // Print out all debug information about the current tag (yay)
-                telemetry.addData("Target", "ID %d (%s)", detection.id, detection.metadata.name);
+                /*telemetry.addData("Target", "ID %d (%s)", detection.id, detection.metadata.name);
                 telemetry.addData("Range", "%5.1f inches", detection.ftcPose.range);
                 telemetry.addData("Bearing", "%3.0f degrees", detection.ftcPose.bearing);
                 telemetry.addData("Yaw", "%3.0f degrees", detection.ftcPose.yaw);
-                telemetry.update();
+                telemetry.update();*/
             }
             // TODO make it like do stuff
         }
@@ -61,4 +67,6 @@ public class AutonomousOpsMode extends LinearOpMode {
                 .addProcessor(aprilTag)
                 .build();
     }
+
+
 }
