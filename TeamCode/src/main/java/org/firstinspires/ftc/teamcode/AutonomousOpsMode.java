@@ -48,8 +48,8 @@ public class AutonomousOpsMode extends LinearOpMode {
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 
             for (AprilTagDetection detection : currentDetections) {
-                points.add(aprilTags.get(detection.id).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.yaw));
-
+                if(detection.id <= aprilTags.size())
+                    points.add(aprilTags.get(detection.id).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.yaw));
 
                 // Print out all debug information about the current tag (yay)
                 /*telemetry.addData("Target", "ID %d (%s)", detection.id, detection.metadata.name);
