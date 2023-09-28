@@ -25,17 +25,40 @@ public class AutonomousOpsMode extends LinearOpMode {
     private AprilTagProcessor aprilTag;
     // Used to hold the data for a detected AprilTag
     private AprilTagDetection desiredTag = null;
-
+    public final int FIELDSIZE = 144;
 
     // POSITION
     float x = 0.0f, y = 0.0f;
+
+    public void fillList(ArrayList<AprilTagData> tags) {
+        // 1 - 3
+        AprilTagData aprilTag = new AprilTagData(1, (float) 29.4, 10);
+        tags.add(aprilTag);
+
+        aprilTag = new AprilTagData(2, (float) 34.4, 10);
+        tags.add(aprilTag);
+
+        aprilTag = new AprilTagData(3, (float) 39.4, 10);
+        tags.add(aprilTag);
+
+        // 4 - 6
+        aprilTag = new AprilTagData(4, (float) (FIELDSIZE - 29.4), 10);
+        tags.add(aprilTag);
+
+        aprilTag = new AprilTagData(5, (float) (FIELDSIZE - 34.4), 10);
+        tags.add(aprilTag);
+
+        aprilTag = new AprilTagData(6, (float) (FIELDSIZE - 39.4), 10);
+        tags.add(aprilTag);
+    }
     @Override
     public void runOpMode() throws InterruptedException {
         // Init
         initAprilTagDetection();
 
-        ArrayList<AprilTag> aprilTags = new ArrayList<>();
+        ArrayList<AprilTagData> aprilTags = new ArrayList<>();
         // Fill april tags
+        fillList(aprilTags);
 
         // wait
         while(!isStarted()){

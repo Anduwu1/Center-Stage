@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-public class AprilTag {
+public class AprilTagData {
     private int index;
     private float x, y;
     private float d, dr, dx, dy;
-    public AprilTag(int _index, float _x, float _y){
+    public AprilTagData(int _index, float _x, float _y){
         this.index = _index;
         this.x = _x;
         this.y = _y;
