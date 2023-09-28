@@ -10,6 +10,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 // Default java stuff
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -33,19 +34,23 @@ public class AutonomousOpsMode extends LinearOpMode {
         // Init
         initAprilTagDetection();
 
+        ArrayList<AprilTag> aprilTags = new ArrayList<>();
+        // Fill april tags
+
         // wait
         while(!isStarted()){
             // Do something
         }
-
+        ArrayList<Point> points = new ArrayList<>();
         // go
         while(opModeIsActive()) {
             // Start autonomous (wow)
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-            float loc_X = 0.0f, loc_Y = 0.0f;
-            for (AprilTagDetection detection : currentDetections) {
 
-                telemetry.update();
+            for (AprilTagDetection detection : currentDetections) {
+                points.add(aprilTags.get(detection.id).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.yaw));
+
+
                 // Print out all debug information about the current tag (yay)
                 /*telemetry.addData("Target", "ID %d (%s)", detection.id, detection.metadata.name);
                 telemetry.addData("Range", "%5.1f inches", detection.ftcPose.range);
@@ -53,6 +58,20 @@ public class AutonomousOpsMode extends LinearOpMode {
                 telemetry.addData("Yaw", "%3.0f degrees", detection.ftcPose.yaw);
                 telemetry.update();*/
             }
+            // Average out
+            float tmpX = 0.0f, tmpY = 0.0f;
+            for (Point p:
+                 points) {
+                tmpX += p.x;
+                tmpY += p.y;
+
+            }
+            x = tmpX / points.size();
+            y = tmpY / points.size();
+            points.clear();
+            telemetry.addData("X", "%5.1f", x);
+            telemetry.addData("Y", "%5.1f", y);
+            telemetry.update();
             // TODO make it like do stuff
         }
     }
