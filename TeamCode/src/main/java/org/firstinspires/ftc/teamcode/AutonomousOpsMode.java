@@ -74,17 +74,19 @@ public class AutonomousOpsMode extends LinearOpMode {
                 if(detection.id - 1<= aprilTags.size())
                     points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.yaw));
             }
-            // Average out
+            // Average out the values
+            // [TODO] make it average out the values
+            // [TODO] with the odometer/encoders
+            // [TODO] for an more precision
             float tmpX = 0.0f, tmpY = 0.0f;
-            for (Point p:
-                 points) {
+            for (Point p: points) {
                 tmpX += p.x;
                 tmpY += p.y;
-
             }
             if(tmpX / points.size() > 0 && tmpY / points.size() > 0) {
                 x = tmpX / points.size();
                 y = tmpY / points.size();
+            }else{
                 telemetry.addLine("NO UPDATE");
             }
             points.clear();
