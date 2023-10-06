@@ -18,12 +18,13 @@ public class AprilTagData {
         return y;
     }
 
-    public Point calculate(float _d, float bearing, float yaw){
+    public Point calculate(float _d, float bearing, float pitch){
         this.d = _d;
-        this.dr = (float) (this.d * Math.cos((double) yaw + 30.0));
+        this.dr = (float) (this.d * (Math.cos((double) pitch + 30.0)));
 
-        float _x = (float) (this.x - this.dr * Math.cos(bearing));
-        float _y = (float) (this.y + this.dr * Math.sin(bearing));
+        // Used to be dr but that looks wrong im ngl
+        float _x = (float) (this.x - this.d * Math.sin(bearing));
+        float _y = (float) (this.y - this.d * Math.cos(bearing));
 
         return new Point(_x,_y);
     }

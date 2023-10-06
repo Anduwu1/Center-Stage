@@ -32,13 +32,13 @@ public class AutonomousOpsMode extends LinearOpMode {
 
     public void fillList(ArrayList<AprilTagData> tags) {
         // 1 - 3
-        AprilTagData aprilTag = new AprilTagData(1, (float) 29.4, 10);
+        AprilTagData aprilTag = new AprilTagData(1, (float) 29.4, 10.5f);
         tags.add(aprilTag);
 
-        aprilTag = new AprilTagData(2, (float) 34.4, 10);
+        aprilTag = new AprilTagData(2, (float) 35.4, 10.5f);
         tags.add(aprilTag);
 
-        aprilTag = new AprilTagData(3, (float) 39.4, 10);
+        aprilTag = new AprilTagData(3, (float) 39.4, 10.5f);
         tags.add(aprilTag);
 
         // 4 - 6
@@ -71,8 +71,9 @@ public class AutonomousOpsMode extends LinearOpMode {
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 
             for (AprilTagDetection detection : currentDetections) {
+                telemetry.addData("Read tag", "%s", detection.metadata.name);
                 if(detection.id - 1<= aprilTags.size())
-                    points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.yaw));
+                    points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation));
             }
             // Average out the values
             // [TODO] make it average out the values
