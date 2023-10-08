@@ -10,6 +10,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 // Default java stuff
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,26 +31,26 @@ public class AutonomousOpsMode extends LinearOpMode {
     // POSITION
     float x = 0.0f, y = 0.0f;
 
-    public void fillList(ArrayList<AprilTagData> tags) {
+    public void fillList(ArrayList<AprilTagData> tags) throws IOException {
         // 1 - 3
-        AprilTagData aprilTag = new AprilTagData(1, (float) 29.4, 10.5f);
-        tags.add(aprilTag);
+        AprilTagData aprilTag1 = new AprilTagData(1, (float) 29.4, 10.5f);
+        tags.add(aprilTag1);
 
-        aprilTag = new AprilTagData(2, (float) 35.4, 10.5f);
-        tags.add(aprilTag);
+        AprilTagData aprilTag2 = new AprilTagData(2, (float) 35.4, 10.5f);
+        tags.add(aprilTag2);
 
-        aprilTag = new AprilTagData(3, (float) 39.4, 10.5f);
-        tags.add(aprilTag);
+        AprilTagData aprilTag3 = new AprilTagData(3, (float) 39.4, 10.5f);
+        tags.add(aprilTag3);
 
         // 4 - 6
-        aprilTag = new AprilTagData(4, (float) (FIELDSIZE - 29.4), 10);
-        tags.add(aprilTag);
+        AprilTagData aprilTag4 = new AprilTagData(4, (float) (FIELDSIZE - 29.4), 10);
+        tags.add(aprilTag4);
 
-        aprilTag = new AprilTagData(5, (float) (FIELDSIZE - 34.4), 10);
-        tags.add(aprilTag);
+        AprilTagData aprilTag5 = new AprilTagData(5, (float) (FIELDSIZE - 34.4), 10);
+        tags.add(aprilTag5);
 
-        aprilTag = new AprilTagData(6, (float) (FIELDSIZE - 39.4), 10);
-        tags.add(aprilTag);
+        AprilTagData aprilTag6 = new AprilTagData(6, (float) (FIELDSIZE - 39.4), 10);
+        tags.add(aprilTag6);
     }
     @Override
     public void runOpMode() throws InterruptedException {
@@ -58,7 +59,11 @@ public class AutonomousOpsMode extends LinearOpMode {
 
         ArrayList<AprilTagData> aprilTags = new ArrayList<>();
         // Fill april tags
-        fillList(aprilTags);
+        try {
+            fillList(aprilTags);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // wait
         while(!isStarted()){
@@ -72,8 +77,16 @@ public class AutonomousOpsMode extends LinearOpMode {
 
             for (AprilTagDetection detection : currentDetections) {
                 telemetry.addData("Read tag", "%s", detection.metadata.name);
+
                 if(detection.id - 1<= aprilTags.size())
                     points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation));
+                telemetry.addData("Point", "%f, %f", points.get(detection.id - 1).x,  points.get(detection.id - 1).y);
+                float d = (float) Math.sqrt(Math.pow(points.get(detection.id - 1).x, 2) + Math.pow(points.get(detection.id - 1).y, 2));
+                boolean sane =  d == detection.ftcPose.range;
+                telemetry.addLine("Sanity Check: " + sane);
+                telemetry.addData("delta sanity", Math.abs(d - detection.ftcPose.range));
+
+
             }
             // Average out the values
             // [TODO] make it average out the values
