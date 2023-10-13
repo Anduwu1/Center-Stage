@@ -79,9 +79,9 @@ public class AutonomousOpsMode extends LinearOpMode {
                 telemetry.addData("Read tag", "%s", detection.metadata.name);
 
                 if(detection.id - 1<= aprilTags.size())
-                    points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation));
-                telemetry.addData("Point", "%f, %f", points.get(detection.id - 1).x,  points.get(detection.id - 1).y);
-                float d = (float) Math.sqrt(Math.pow(points.get(detection.id - 1).x, 2) + Math.pow(points.get(detection.id - 1).y, 2));
+                    points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation, (float) detection.ftcPose.yaw));
+                telemetry.addData("Point", "%f, %f", points.get(points.size() - 1).x,  points.get(points.size() - 1).y);
+                float d = (float) Math.sqrt(Math.pow(points.get(points.size() - 1).x, 2) + Math.pow(points.get(points.size() - 1).y, 2));
                 boolean sane =  d == detection.ftcPose.range;
                 telemetry.addLine("Sanity Check: " + sane);
                 telemetry.addData("delta sanity", Math.abs(d - detection.ftcPose.range));

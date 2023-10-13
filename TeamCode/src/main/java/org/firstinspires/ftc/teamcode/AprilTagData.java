@@ -27,30 +27,12 @@ public class AprilTagData {
         return y;
     }
 
-    public Point calculate(float _d, float bearing, float pitch){
-        this.d = _d;
-        // this.dr = (float) (this.d * (Math.cos((double) pitch + 30.0)));
-        //
-
-        // convert bearing from deg to rad
+    public Point calculate(float _d, float bearing, float pitch, float yaw){
         bearing = (float) Math.toRadians(bearing);
-        float _x = (float) (this.x - (this.d * Math.cos(bearing)));
-        float _y = (float) (this.y - (this.d * Math.sin(bearing)));
+        yaw = (float) Math.toRadians(yaw);
 
-        try{
-            log.log("Bearing: " + Float.toString(bearing)/*(float)(3.1415)) + "pi"*/);
-            log.log("Range: " + Float.toString(_d) + "in");
-            // log.log("X-Component: " + _x + "in");
-            //log.log("Y-Component: " + _y + "in");
-            log.log("");
-
-        } catch (NullPointerException n) {
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
+        float _y = (float) (this.y + (_d*Math.cos(bearing)*Math.cos(yaw)));
+        float _x = (float) (this.x + Math.sqrt(Math.pow(_d*Math.cos(bearing),2)-Math.pow(_y,2)));
 
         return new Point(_x,_y);
     }
