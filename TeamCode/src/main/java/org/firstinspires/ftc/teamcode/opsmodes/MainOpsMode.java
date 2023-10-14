@@ -23,12 +23,12 @@ public class MainOpsMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Init hardware Vars
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "left_front_drive");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "frontL");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "backL");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "frontR");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "backR");
 
-        // Set directions
+        // Set directionss
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
