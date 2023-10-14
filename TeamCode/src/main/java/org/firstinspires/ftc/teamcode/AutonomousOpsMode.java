@@ -4,7 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 // New vision system
+import org.checkerframework.checker.units.qual.C;
+import org.firstinspires.ftc.robotcore.external.android.util.Size;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibrationIdentity;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -115,7 +119,15 @@ public class AutonomousOpsMode extends LinearOpMode {
      */
     private void initAprilTagDetection() {
         aprilTag = new AprilTagProcessor.Builder().build();
-
+        CameraCalibrationIdentity cci = new CameraCalibrationIdentity() {
+            @Override
+            public boolean isDegenerate() {
+                return false;
+            }
+        };
+        float co[] = { -0.0347492f, -0.0148858f,0, 0, -0.0072575f,  0.0121186f, -0.156374f, 0};
+        CameraCalibration goof = new CameraCalibration(cci, new Size(640, 480), 499.542f, 499.542f, 341.04f,225.8f, co, false, false);
+        aprilTag.init(640, 480, goof);
         visionPortal = new VisionPortal.Builder().setCamera(hardwareMap.get(WebcamName.class, "webcam"))
                 .addProcessor(aprilTag)
                 .build();
