@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.opsmodes;
 // Basic stuff
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 // New vision system
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.objects.AprilTagData;
+import org.firstinspires.ftc.teamcode.objects.Point;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -79,8 +81,8 @@ public class AutonomousOpsMode extends LinearOpMode {
                 telemetry.addData("Read tag", "%s", detection.metadata.name);
                 if(detection.id - 1<= aprilTags.size())
                     points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.y, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation, (float) detection.ftcPose.yaw));
-                telemetry.addData("Point", "%f, %f", points.get(points.size() - 1).x,  points.get(points.size() - 1).y);
-                float d = (float) Math.sqrt(Math.pow(points.get(points.size() - 1).x, 2) + Math.pow(points.get(points.size() - 1).y, 2));
+                telemetry.addData("Point", "%f, %f", points.get(points.size() - 1).get_x(),  points.get(points.size() - 1).get_y());
+                float d = (float) Math.sqrt(Math.pow(points.get(points.size() - 1).get_x(), 2) + Math.pow(points.get(points.size() - 1).get_y(), 2));
                 boolean sane =  d == detection.ftcPose.range;
                 telemetry.addLine("Sanity Check: " + sane);
                 telemetry.addData("delta sanity", Math.abs(d - detection.ftcPose.range));
@@ -93,8 +95,8 @@ public class AutonomousOpsMode extends LinearOpMode {
             // [TODO] for an more precision
             float tmpX = 0.0f, tmpY = 0.0f;
             for (Point p: points) {
-                tmpX += p.x;
-                tmpY += p.y;
+                tmpX += p.get_x();
+                tmpY += p.get_y();
             }
             if(tmpX / points.size() > 0 && tmpY / points.size() > 0) {
                 x = tmpX / points.size();

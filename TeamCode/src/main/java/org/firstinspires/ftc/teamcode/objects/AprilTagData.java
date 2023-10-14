@@ -1,8 +1,4 @@
-package org.firstinspires.ftc.teamcode;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import com.qualcomm.robotcore.robot.Robot;
+package org.firstinspires.ftc.teamcode.objects;
 
 import java.io.IOException;
 
@@ -36,6 +32,12 @@ public class AprilTagData {
         float _x = (float) 1; // TODO: MAKE REAL VALUE
         return new Point(_x,_y);
     }
+    public float get_x() {
+        return this.x;
+    }
 
+    public float get_y() {
+        return this.y;
+    }
 
 }
