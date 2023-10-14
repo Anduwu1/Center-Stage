@@ -33,23 +33,23 @@ public class AutonomousOpsMode extends LinearOpMode {
 
     public void fillList(ArrayList<AprilTagData> tags) throws IOException {
         // 1 - 3
-        AprilTagData aprilTag1 = new AprilTagData(1, (float) 29.4, 10.5f);
+        AprilTagData aprilTag1 = new AprilTagData(1, (float) 29.4, 7.5f);
         tags.add(aprilTag1);
 
-        AprilTagData aprilTag2 = new AprilTagData(2, (float) 35.4, 10.5f);
+        AprilTagData aprilTag2 = new AprilTagData(2, (float) 35.4, 7.5f);
         tags.add(aprilTag2);
 
-        AprilTagData aprilTag3 = new AprilTagData(3, (float) 39.4, 10.5f);
+        AprilTagData aprilTag3 = new AprilTagData(3, (float) 39.4, 7.5f);
         tags.add(aprilTag3);
 
         // 4 - 6
-        AprilTagData aprilTag4 = new AprilTagData(4, (float) (FIELDSIZE - 29.4), 10);
+        AprilTagData aprilTag4 = new AprilTagData(4, (float) (FIELDSIZE - 29.4), 7.5f);
         tags.add(aprilTag4);
 
-        AprilTagData aprilTag5 = new AprilTagData(5, (float) (FIELDSIZE - 34.4), 10);
+        AprilTagData aprilTag5 = new AprilTagData(5, (float) (FIELDSIZE - 34.4), 7.5f);
         tags.add(aprilTag5);
 
-        AprilTagData aprilTag6 = new AprilTagData(6, (float) (FIELDSIZE - 39.4), 10);
+        AprilTagData aprilTag6 = new AprilTagData(6, (float) (FIELDSIZE - 39.4), 7.5f);
         tags.add(aprilTag6);
     }
     @Override
@@ -77,9 +77,8 @@ public class AutonomousOpsMode extends LinearOpMode {
 
             for (AprilTagDetection detection : currentDetections) {
                 telemetry.addData("Read tag", "%s", detection.metadata.name);
-
                 if(detection.id - 1<= aprilTags.size())
-                    points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.range, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation, (float) detection.ftcPose.yaw));
+                    points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.y, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation, (float) detection.ftcPose.yaw));
                 telemetry.addData("Point", "%f, %f", points.get(points.size() - 1).x,  points.get(points.size() - 1).y);
                 float d = (float) Math.sqrt(Math.pow(points.get(points.size() - 1).x, 2) + Math.pow(points.get(points.size() - 1).y, 2));
                 boolean sane =  d == detection.ftcPose.range;
