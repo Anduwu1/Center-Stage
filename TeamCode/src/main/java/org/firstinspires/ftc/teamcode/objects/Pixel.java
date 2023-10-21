@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.resources;
+package org.firstinspires.ftc.teamcode.objects;
 
 public class Pixel {
     public enum PixelColor{
