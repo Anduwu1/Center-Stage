@@ -34,7 +34,9 @@ public class AutonomousOpsMode extends LinearOpMode {
         BLUE_ALLIANCE
     }
 
-    public enum Start
+    public enum StartPos {
+
+    }
 
 
     @Override
