@@ -54,7 +54,7 @@ public class MainOpsMode extends LinearOpMode {
         double max;
 
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-        double axial = gamepad1.left_stick_y;  // Note: pushing stick forward no longer gives negative value
+        double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward no longer gives negative value
         double lateral = gamepad1.left_stick_x;
         double yaw = gamepad1.right_stick_x;
 
@@ -79,7 +79,7 @@ public class MainOpsMode extends LinearOpMode {
         double leftBackPower = axial - lateral + yaw;
         double rightBackPower = axial + lateral - yaw;
 
-        leftFrontPower *= DRIVE_SPEED;
+        leftFrontPower *= -DRIVE_SPEED;
         rightFrontPower *= DRIVE_SPEED;
         leftBackPower *= DRIVE_SPEED;
         rightBackPower *= DRIVE_SPEED;
