@@ -41,16 +41,24 @@ public class AutonomousOpsMode extends LinearOpMode {
         BLUE_ALLIANCE
     }
 
-    public enum AutonomousStage {
-        SPIKE_STRIP,
-        BACKDROP
+    private enum AutonomousState
+    {
+        START,
+        PLACE_PURPLE_PIXEL,
+        DO_DELAY,
+        DRIVE_TO_LOOKOUT,
+        FIND_APRILTAG,
+        DRIVE_TO_APRILTAG,
+        PLACE_YELLOW_PIXEL,
+        PARK_AT_BACKSTAGE,
+        DONE
     }
 
 
-    /* public enum StartPos {
+    public enum StartPos {
         AUDIENCE,
         BACKSTAGE
-    } */
+    }
 
     /* public enum ParkPos {
         CORNER,
@@ -61,10 +69,12 @@ public class AutonomousOpsMode extends LinearOpMode {
 
 
     public static class AutoChoices {
+        public RobotState state = RobotState.RUNNING;
         public double delay = 0.0;
         public Alliance alliance = Alliance.RED_ALLIANCE;
-        /* public StartPos startPos = StartPos.BACKSTAGE;
-        public ParkPos parkPos = ParkPos.CORNER; */
+        public StartPos startPos = StartPos.BACKSTAGE;
+        // public ParkPos parkPos = ParkPos.CORNER;
+        public AutonomousState autonomousStage = AutonomousState.START;
         public double xTarget = 0.0;
         public double yTarget = 0.0;
         public double turnTarget = 0.0; // Angle in deg
@@ -76,20 +86,21 @@ public class AutonomousOpsMode extends LinearOpMode {
         {
             return String.format(
                     Locale.US,
-                    "delay=%.0f " +
+                            "state=\"%s\" " +
+                            "delay=%.0f " +
                             "alliance=\"%s\" " +
-                            /*"startPos=\"%s\" " +
-                            "parkPos=\"%s\" " +*/
+                            "startPos=\"%s\" " +
+                            // "parkPos=\"%s\" " +
+                            "autostage=\"%s\" " +
                             "xTarget=%.1f " +
                             "yTarget=%.1f " +
                             "turnTarget=%.0f " +
                             "driveTime=%.0f " +
                             "drivePower=%.1f",
-                    delay, alliance,/* startPos, parkPos,*/ xTarget, yTarget, turnTarget, driveTime, drivePower);
+                    state, delay, alliance,startPos, /*parkPos,*/ autonomousStage, xTarget, yTarget, turnTarget, driveTime, drivePower);
         }
     }
 
-    public RobotState state = RobotState.RUNNING;
     public static final AutoChoices autoChoices = new AutoChoices();
     private Robot robot;
 
@@ -97,12 +108,12 @@ public class AutonomousOpsMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        while (state == RobotState.RUNNING) {
+        while (autoChoices.state == RobotState.RUNNING) {
             // Update Telemetry
             telemetry.addLine(autoChoices.toString());
             telemetry.update();
 
-            //
+            // switch for
         }
     }
 
