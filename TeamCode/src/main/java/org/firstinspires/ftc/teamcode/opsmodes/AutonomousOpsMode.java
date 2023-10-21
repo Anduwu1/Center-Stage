@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opsmodes;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.robot.Robot;
 
 // New vision system
 import org.checkerframework.checker.units.qual.A;
@@ -37,6 +38,7 @@ public class AutonomousOpsMode extends LinearOpMode {
     public enum StartPos {
 
     }
+
 
 
     @Override
