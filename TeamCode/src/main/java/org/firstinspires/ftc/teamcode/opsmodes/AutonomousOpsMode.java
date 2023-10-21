@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.robot.Robot;
 
+import java.util.Locale;
 // New vision system
 import org.checkerframework.checker.units.qual.A;
 import org.checkerframework.checker.units.qual.C;
@@ -35,8 +36,58 @@ public class AutonomousOpsMode extends LinearOpMode {
         BLUE_ALLIANCE
     }
 
-    public enum StartPos {
+    public enum StartPos
+    {
+        AUDIENCE,
+        BACKSTAGE
+    }
 
+    public enum AutoStrategy
+    {
+        AUTO,
+        PID_DRIVE,
+        TIMED_DRIVE,
+        DO_NOTHING
+    }
+
+    public enum ParkPos
+    {
+        CORNER,
+        CENTER
+    }   //enum ParkPos
+
+
+
+
+    public static class AutoChoices {
+        public double delay = 0.0;
+        public Alliance alliance = Alliance.RED_ALLIANCE;
+        public StartPos startPos = StartPos.BACKSTAGE;
+        public AutoStrategy strategy = AutoStrategy.DO_NOTHING;
+        public ParkPos parkPos = ParkPos.CORNER;
+        public double xTarget = 0.0;
+        public double yTarget = 0.0;
+        public double turnTarget = 0.0;
+        public double driveTime = 0.0;
+        public double drivePower = 0.0;
+
+        @Override
+        public String toString()
+        {
+            return String.format(
+                    Locale.US,
+                    "delay=%.0f " +
+                            "alliance=\"%s\" " +
+                            "startPos=\"%s\" " +
+                            "strategy=\"%s\" " +
+                            "parkPos=\"%s\" " +
+                            "xTarget=%.1f " +
+                            "yTarget=%.1f " +
+                            "turnTarget=%.0f " +
+                            "driveTime=%.0f " +
+                            "drivePower=%.1f",
+                    delay, alliance, startPos, strategy, parkPos, xTarget, yTarget, turnTarget, driveTime, drivePower);
+        }
     }
 
 
@@ -45,4 +96,5 @@ public class AutonomousOpsMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
     }
+
 }
