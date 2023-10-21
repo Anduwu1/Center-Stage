@@ -42,7 +42,6 @@ public class MainOpsMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
             updateDriveMotors();
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -60,17 +59,17 @@ public class MainOpsMode extends LinearOpMode {
 
         //fine control using dpad and bumpers
         if (gamepad1.dpad_up)
-            axial += 0.3;
+            axial += 0.3 * -1;
         if (gamepad1.dpad_down)
-            axial -= 0.3;
+            axial -= 0.3 * -1;
         if (gamepad1.dpad_left)
-            lateral -= 0.3;
+            lateral -= 0.3 * -1;
         if (gamepad1.dpad_right)
-            lateral += 0.3;
+            lateral += 0.3 * -1;
         if (gamepad1.left_bumper)
-            yaw -= 0.3;
+            yaw -= 0.3 * -1;
         if (gamepad1.right_bumper)
-            yaw += 0.3;
+            yaw += 0.3 * -1;
 
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
