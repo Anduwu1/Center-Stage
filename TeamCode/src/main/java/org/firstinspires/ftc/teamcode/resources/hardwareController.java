@@ -23,12 +23,12 @@ public class hardwareController{
         // Since the bot isnt finished yet, these may not exist
         // but we may still want to test other functionality so this
         // makes sure that it doesnt crash
-        try{
+        try {
             arm.armServo = hardwareMap.get(Servo.class, "ArmServo");
             bucket.bucketServoOne = hardwareMap.get(Servo.class, "BucketServoOne");
             bucket.bucketServoTwo = hardwareMap.get(Servo.class, "BucketServoTwo");
 
-        }catch(Exception e){
+        } catch(Exception e){
 
         }
     }
