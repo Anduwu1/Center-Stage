@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.resources;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -30,6 +32,7 @@ public class HardwareController{
 
     // Pass in a hardware map please
     public HardwareController(HardwareMap hardwareMap){
+        telemetry.addLine("[HardwareMap] Init HardwareMap");
         drive = new SampleMecanumDrive(hardwareMap);
         // Since the bot isn't finished yet, these may not exist
         // but we may still want to test other functionality so this
@@ -40,8 +43,12 @@ public class HardwareController{
             bucket.bucketServoTwo = hardwareMap.get(Servo.class, "BucketServoTwo");
             intake.intakeMotor = hardwareMap.get(DcMotor.class, "IntakeMotor");
         }catch(Exception e){
-
+            // uhhh
+            telemetry.addLine("[HardwareMap] Error. errm.. Embarrassing");
+            telemetry.speak("errrm we have an error (cringe)"); // test (remove in the future)
         }
+
+        telemetry.update();
     }
 
     /*

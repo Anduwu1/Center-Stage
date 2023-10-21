@@ -16,7 +16,12 @@ public class ParkTask extends AutoTask {
         // General steps:
 
         // Read state of stage
+        if(state.isParked()){
+            this.taskFinished = true;
+            return;
+        }
         // Figure out where we at
+        int c;
         // Move (parkLocation - currentPos)
 
         // Awesome

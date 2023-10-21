@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.resources.taskManagment;
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
 
 public abstract class AutoTask {
-    private String taskName;
-    private boolean taskFinished = false;
+    protected String taskName;
+    protected boolean taskFinished = false;
 
     public AutoTask(String name){
         this.taskName = name;
