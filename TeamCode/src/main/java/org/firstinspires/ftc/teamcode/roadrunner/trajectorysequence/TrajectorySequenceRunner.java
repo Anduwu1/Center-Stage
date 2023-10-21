@@ -17,13 +17,13 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.drive.DriveConstants;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.SequenceSegment;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.TrajectorySegment;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.TurnSegment;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.WaitSegment;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.util.DashboardUtil;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.util.LogFiles;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.sequencesegment.SequenceSegment;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.sequencesegment.TrajectorySegment;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.sequencesegment.TurnSegment;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.sequencesegment.WaitSegment;
+import org.firstinspires.ftc.teamcode.roadrunner.util.DashboardUtil;
+import org.firstinspires.ftc.teamcode.roadrunner.util.LogFiles;
 
 import java.util.ArrayList;
 import java.util.Collections;

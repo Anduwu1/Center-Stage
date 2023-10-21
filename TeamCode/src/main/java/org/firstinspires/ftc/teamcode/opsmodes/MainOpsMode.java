@@ -30,7 +30,7 @@ public class MainOpsMode extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontR");
         rightBackDrive = hardwareMap.get(DcMotor.class, "backR");
 
-        // Set directionss
+        // Set directions
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
