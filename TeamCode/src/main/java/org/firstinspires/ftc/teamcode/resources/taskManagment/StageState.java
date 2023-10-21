@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.objects.Pixel;
 
 import java.util.ArrayList;
 /*
-    Current state of the gamefield
+    Current state of the game field
     passed into AutoTask's so they know what
     they need to do to complete their task
  */
@@ -12,7 +12,7 @@ public class StageState {
     // This is for our board
     private ArrayList<Pixel> pixels;
 
-    // TODO "Make work with Driver assists
+    // TODO "Make work with Driver assists"
 
 
     // Things that can happen in autonomous
