@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opsmodes;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.robot.Robot;
 
 import java.util.Locale;
 // New vision system
@@ -16,6 +15,7 @@ import org.firstinspires.ftc.teamcode.objects.AprilTagData;
 import org.firstinspires.ftc.teamcode.objects.Point;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibrationIdentity;
+import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -36,13 +36,12 @@ public class AutonomousOpsMode extends LinearOpMode {
         RUNNING,
         STOP
     }
-    public enum Alliance {
+    public static enum Alliance {
         RED_ALLIANCE,
         BLUE_ALLIANCE
     }
 
-    private enum AutonomousState
-    {
+    private enum AutonomousState {
         START,
         PLACE_PURPLE_PIXEL,
         DO_DELAY,
@@ -55,7 +54,7 @@ public class AutonomousOpsMode extends LinearOpMode {
     }
 
 
-    public enum StartPos {
+    public static enum StartPos {
         AUDIENCE,
         BACKSTAGE
     }
@@ -86,16 +85,16 @@ public class AutonomousOpsMode extends LinearOpMode {
         {
             return String.format(
                     Locale.US,
-                            "state=\"%s\" " +
-                            "delay=%.0f " +
-                            "alliance=\"%s\" " +
-                            "startPos=\"%s\" " +
-                            // "parkPos=\"%s\" " +
-                            "autostage=\"%s\" " +
-                            "xTarget=%.1f " +
-                            "yTarget=%.1f " +
-                            "turnTarget=%.0f " +
-                            "driveTime=%.0f " +
+                            "state=\"%s\" \n" +
+                            "delay=%.0f \n" +
+                            "alliance=\"%s\" \n" +
+                            "startPos=\"%s\" \n" +
+                            // "parkPos=\"%s\" \n" +
+                            "autostage=\"%s\" \n" +
+                            "xTarget=%.1f \n" +
+                            "yTarget=%.1f \n" +
+                            "turnTarget=%.0f \n" +
+                            "driveTime=%.0f \n" +
                             "drivePower=%.1f",
                     state, delay, alliance,startPos, /*parkPos,*/ autonomousStage, xTarget, yTarget, turnTarget, driveTime, drivePower);
         }
@@ -105,15 +104,36 @@ public class AutonomousOpsMode extends LinearOpMode {
     private Robot robot;
 
 
-
-    @Override
     public void runOpMode() throws InterruptedException {
         while (autoChoices.state == RobotState.RUNNING) {
             // Update Telemetry
             telemetry.addLine(autoChoices.toString());
             telemetry.update();
 
-            // switch for
+            // switch for whate we do
+            switch (autoChoices.autonomousStage) {
+                case START:
+                    int teamPropPos = 0; // means nothing rn
+                    String msg;
+
+                    robot = new Robot(autoChoices.alliance, autoChoices.startPos);
+
+                    if (robot.vision != null) {
+                        teamPropPos = robot.vision.getLastDetetectedTeamPropLoc();
+
+                        if (teamPropPos > 0) {
+                            msg = "Team Prop found at position " + teamPropPos;
+                            // robot.speak(msg);
+                        }
+                    }
+
+                    if (teamPropPos == 0) {
+                        // Vision did not find the team prop, set to default position.
+                        teamPropPos = 2;
+                        msg = "No team prop found, default to position " + teamPropPos;
+                        // robot.speak(msg);
+                    }
+            }
         }
     }
 

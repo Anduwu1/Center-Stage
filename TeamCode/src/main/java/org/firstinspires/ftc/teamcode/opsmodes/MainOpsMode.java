@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.opsmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -16,12 +18,27 @@ public class MainOpsMode extends LinearOpMode {
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
 
+    private DcMotor intakeDrive = null;
+    private enum ArmState {
+        UP,
+        DOWN
+    }
+
+    private boolean trapdoorOpened = false;
+    private boolean bay1 = false;
+    private boolean bay2 = false;
+    private ArmState armState = ArmState.DOWN;
 
 
     // Constants
     private static final double DRIVE_SPEED = 0.6;
-
-    //
+    private static final double INTAKE_SPEED = 0.3;
+    // Servo Constants
+    // TODO: Get real values for these
+    private static final double TRAPDOOR_OPEN = 0;
+    private static final double TRAPDOOR_CLOSED = 0;
+    private static final double ARM_UP = 0;
+    private static final double ARM_DOWN = 0;
     @Override
     public void runOpMode() throws InterruptedException {
         // Init hardware Vars
@@ -30,11 +47,15 @@ public class MainOpsMode extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontR");
         rightBackDrive = hardwareMap.get(DcMotor.class, "backR");
 
+        intakeDrive = hardwareMap.get(DcMotor.class, "intake");
+
         // Set directions
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        intakeDrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -55,19 +76,19 @@ public class MainOpsMode extends LinearOpMode {
         double max;
 
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-        double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward no longer gives negative value
+        double axial = -gamepad1.left_stick_y;
         double lateral = gamepad1.left_stick_x;
         double yaw = gamepad1.right_stick_x;
 
         //fine control using dpad and bumpers
         if (gamepad1.dpad_up)
-            axial += 0.3 * -1;
+            axial += 0.3;
         if (gamepad1.dpad_down)
-            axial -= 0.3 * -1;
+            axial -= 0.3;
         if (gamepad1.dpad_left)
-            lateral -= 0.3 * -1;
+            lateral -= 0.3;
         if (gamepad1.dpad_right)
-            lateral += 0.3 * -1;
+            lateral += 0.3;
         if (gamepad1.left_bumper)
             yaw -= 0.3 * -1;
         if (gamepad1.right_bumper)
@@ -104,7 +125,17 @@ public class MainOpsMode extends LinearOpMode {
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
 
-        // telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-        // telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+        // Intake
+        double intakePower = 0;
+        if(gamepad1.right_trigger != 0) {
+            intakePower = Math.min(Math.max(gamepad1.right_trigger * INTAKE_SPEED, 1.0), -1.0);
+        }
+
+        if(gamepad1.left_trigger != 0) {
+            intakePower = Math.min(Math.max(gamepad1.left_trigger * -INTAKE_SPEED, 1.0), -1.0);
+        }
+
+        intakeDrive.setPower(intakePower);
+
     }
 }
