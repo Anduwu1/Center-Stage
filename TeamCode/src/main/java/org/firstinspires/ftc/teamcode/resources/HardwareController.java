@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
@@ -39,11 +40,10 @@ public class HardwareController{
         // makes sure that it doesn't crash
         try{
             arm.armServo = hardwareMap.get(Servo.class, "ArmServo");
-            bucket.bucketServoOne = hardwareMap.get(Servo.class, "BucketServoOne");
-            bucket.bucketServoTwo = hardwareMap.get(Servo.class, "BucketServoTwo");
-            intake.intakeMotor = hardwareMap.get(DcMotor.class, "IntakeMotor");
-            telemetry.addLine("Subsystems initialized (awesome)");
-        } catch(Exception e){
+            bucket.bucketRotation = hardwareMap.get(Servo.class, RobotSettings.bucket.ROTATION_SERVO);
+            bucket.bucketTrapdoor = hardwareMap.get(Servo.class, RobotSettings.bucket.TRAPDOOR_SERVO);
+            intake.intakeMotor = hardwareMap.get(DcMotor.class, RobotSettings.intake.MOTOR);
+        }catch(Exception e){
             // uhhh
             telemetry.addLine("[HardwareMap] Error. errm.. Embarrassing");
             telemetry.speak("errrm we have an error (cringe)"); // test (remove in the future)
