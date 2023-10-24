@@ -42,7 +42,8 @@ public class HardwareController{
             bucket.bucketServoOne = hardwareMap.get(Servo.class, "BucketServoOne");
             bucket.bucketServoTwo = hardwareMap.get(Servo.class, "BucketServoTwo");
             intake.intakeMotor = hardwareMap.get(DcMotor.class, "IntakeMotor");
-        }catch(Exception e){
+            telemetry.addLine("Subsystems initialized (awesome)");
+        } catch(Exception e){
             // uhhh
             telemetry.addLine("[HardwareMap] Error. errm.. Embarrassing");
             telemetry.speak("errrm we have an error (cringe)"); // test (remove in the future)
