@@ -6,7 +6,7 @@ public class AprilTagData {
     private int index;
     private float x, y;
     private float d, dr, dx, dy;
-    public AprilTagData(int _index, float _x, float _y) throws IOException {
+    public AprilTagData(int _index, float _x, float _y){
         this.index = _index;
         this.x = _x;
         this.y = _y;

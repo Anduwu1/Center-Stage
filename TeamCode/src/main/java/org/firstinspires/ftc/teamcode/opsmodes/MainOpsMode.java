@@ -85,9 +85,26 @@ public class MainOpsMode extends LinearOpMode {
         double gamePadY = gamepad2.left_stick_y;
 
         armX += gamePadY / 10.0f;
-
+        if(armX > 1.0f) armX = 1.0f;
+        if(armX < 0.0f) armX = 0.0f;
         hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
+        telemetry.addData("Arm Pos", "%f", armX);
 
+        // Check for bucket
+        if (gamepad2.y) {
+            hardwareController.servoMove(0.0f, HardwareController.Servo_Type.BUCKET_SERVO);
+        }
+        if(gamepad2.b){
+            hardwareController.servoMove(1.0f, HardwareController.Servo_Type.BUCKET_SERVO);
+        }
+        if(gamepad2.x){
+            hardwareController.servoMove(0.0f, HardwareController.Servo_Type.DOOR_SERVO);
+        }
+        if(gamepad2.a){
+            hardwareController.servoMove(1.0f, HardwareController.Servo_Type.DOOR_SERVO);
+        }
+
+        telemetry.update();
     }
 
     private void updateDriveMotors() {

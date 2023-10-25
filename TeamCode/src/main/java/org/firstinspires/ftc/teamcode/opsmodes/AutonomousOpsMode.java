@@ -132,7 +132,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                     int teamPropPos = 0; // means nothing rn
                     String msg;
 
-                    robot = new Robot(autoChoices.alliance, autoChoices.startPos);
+                    robot = new Robot(autoChoices.alliance, autoChoices.startPos, hardwareMap);
 
                     hardCont.robot = robot;
 
