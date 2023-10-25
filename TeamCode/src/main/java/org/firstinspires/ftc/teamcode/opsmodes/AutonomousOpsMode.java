@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opsmodes;
 // Basic stuff
+import android.media.audiofx.DynamicsProcessing;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,6 +18,10 @@ import org.firstinspires.ftc.teamcode.objects.Point;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibrationIdentity;
 import org.firstinspires.ftc.teamcode.objects.Robot;
+import org.firstinspires.ftc.teamcode.resources.HardwareController;
+import org.firstinspires.ftc.teamcode.resources.taskManagment.AutoTask;
+import org.firstinspires.ftc.teamcode.resources.taskManagment.StageState;
+import org.firstinspires.ftc.teamcode.resources.tasks.ParkTask;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -80,6 +86,9 @@ public class AutonomousOpsMode extends LinearOpMode {
         public double driveTime = 0.0;
         public double drivePower = 0.0;
 
+
+
+
         @Override
         public String toString()
         {
@@ -103,20 +112,29 @@ public class AutonomousOpsMode extends LinearOpMode {
     public static final AutoChoices autoChoices = new AutoChoices();
     private Robot robot;
 
+    //public ArrayList<AutoTask> tasks;
 
+    ParkTask pTask = new ParkTask();
+
+    StageState stageState = new StageState();
+
+    HardwareController hardCont = new HardwareController(hardwareMap);
     public void runOpMode() throws InterruptedException {
         while (autoChoices.state == RobotState.RUNNING) {
             // Update Telemetry
             telemetry.addLine(autoChoices.toString());
             telemetry.update();
 
-            // switch for whate we do
+            // switch for what we do
             switch (autoChoices.autonomousStage) {
                 case START:
+
                     int teamPropPos = 0; // means nothing rn
                     String msg;
 
                     robot = new Robot(autoChoices.alliance, autoChoices.startPos);
+
+                    hardCont.robot = robot;
 
                     if (robot.vision != null) {
                         teamPropPos = robot.vision.getLastDetetectedTeamPropLoc();
@@ -131,8 +149,24 @@ public class AutonomousOpsMode extends LinearOpMode {
                         // Vision did not find the team prop, set to default position.
                         teamPropPos = 2;
                         msg = "No team prop found, default to position " + teamPropPos;
+                        telemetry.addLine(msg);
                         // robot.speak(msg);
                     }
+                    // Currently the only other option is PARK
+                    autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
+                    break;
+                case PARK_AT_BACKSTAGE:
+                    pTask.runTaskTick(stageState, hardCont);
+                    if(pTask.isFinished()){
+                        // Change current stage state
+                        // oh whoops i forgot
+                        // no other stage states are implemented
+                        // ¯\_(ツ)_/¯
+                        // guess i'll stop
+                        autoChoices.autonomousStage = AutonomousState.DONE;
+                    }
+                    break;
+
             }
         }
     }

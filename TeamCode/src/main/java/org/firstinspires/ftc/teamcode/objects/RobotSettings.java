@@ -53,4 +53,8 @@ public class RobotSettings {
     public static final double CAM_LEFT_OFFSET                  = 0;    //Camera offset from left of robot in inches
     public static final double CAM_HEIGHT_OFFSET                = 0;    //Camera offset from floor in inches
     public static final double CAM_TILT_DOWN                    = 0;    //Camera tilt down angle from horizontal in deg
+
+    // Locations
+    public static final float BACKSTAGE_BLUE                    = 22.0f;
+    public static final float BACKSTAGE_RED                     = (float) (FULL_FIELD_INCHES - 22.0f);
 }

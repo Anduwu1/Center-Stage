@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.resources.HardwareController;
+
 @TeleOp(name="Main OpMode")
 public class MainOpsMode extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
@@ -39,6 +41,11 @@ public class MainOpsMode extends LinearOpMode {
     private static final double TRAPDOOR_CLOSED = 0;
     private static final double ARM_UP = 0;
     private static final double ARM_DOWN = 0;
+
+    private HardwareController hardwareController = new HardwareController(hardwareMap);
+
+    //
+    private double intakePower = 0;
     @Override
     public void runOpMode() throws InterruptedException {
         // Init hardware Vars
@@ -66,10 +73,21 @@ public class MainOpsMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             updateDriveMotors();
+            updateServos();
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
+    }
+
+    private float armX = 0.0f; // this is at the bottom
+    private void updateServos(){
+        double gamePadY = gamepad2.left_stick_y;
+
+        armX += gamePadY / 10.0f;
+
+        hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
+
     }
 
     private void updateDriveMotors() {
@@ -126,7 +144,7 @@ public class MainOpsMode extends LinearOpMode {
         rightBackDrive.setPower(rightBackPower);
 
         // Intake
-        double intakePower = 0;
+        intakePower = 0;
         if(gamepad1.right_trigger != 0) {
             intakePower = Math.min(Math.max(gamepad1.right_trigger * INTAKE_SPEED, 1.0), -1.0);
         }

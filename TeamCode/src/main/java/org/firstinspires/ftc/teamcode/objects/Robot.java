@@ -5,9 +5,10 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 import org.firstinspires.ftc.teamcode.opsmodes.AutonomousOpsMode;
 
 public class Robot {
-    Point position;
+    public Point position;
     public Vision vision = new Vision();
 
+    public AutonomousOpsMode.Alliance alliance;
 
     public static class Vision {
         // TODO: Make do stuff usefull
@@ -19,7 +20,7 @@ public class Robot {
     }
 
     public Robot(AutonomousOpsMode.Alliance alliance, AutonomousOpsMode.StartPos start) {
-
+        this.alliance = alliance;
         // Sets Robot Start Position
         // TODO: Verify that these locations are correct
         float x, y;

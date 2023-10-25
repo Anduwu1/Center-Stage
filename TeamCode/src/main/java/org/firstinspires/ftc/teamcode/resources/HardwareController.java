@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.resources;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
+import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
@@ -23,10 +27,20 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
  */
 public class HardwareController{
 
+    public enum Servo_Type{
+        ARM_SERVO,
+        BUCKET_SERVO,
+        DOOR_SERVO
+    }
+
     // Subsystems
     private Bucket bucket;
     private Arm arm;
     private Intake intake;
+
+
+    // Robot we're controlling
+    public Robot robot;
 
     // Roadrunner drive
     SampleMecanumDrive drive;
@@ -57,8 +71,25 @@ public class HardwareController{
      */
     public void driveTo(float xPos, float yPos){
         drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
-                .lineTo(new Vector2d(xPos, yPos))
+                .splineTo(new Vector2d(xPos, yPos), Math.toRadians(0))
                 .build());
+        telemetry.addLine("If this shows up sooner than expected \" follow trajectory \" is asyncrohjnousl> i thinik");
+        telemetry.update();
+    }
+
+
+    public void servoMove(float to, @NonNull Servo_Type sT){
+        switch (sT){
+            case ARM_SERVO:
+                arm.armServo.setPosition(to);
+                break;
+            case DOOR_SERVO:
+                bucket.bucketTrapdoor.setPosition(to);
+                break;
+            case BUCKET_SERVO:
+                bucket.bucketRotation.setPosition(to);
+                break;
+        }
     }
 
 }
