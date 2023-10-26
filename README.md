@@ -23,7 +23,7 @@
 
 <br>
 
-* D-Pad - Precise bot control
+* D-Pad - Precise bot control <br>
 ***Redundant***
 * D-Pad Left - N/A
 * D-Pad Right - N/A
