@@ -26,6 +26,11 @@ public class MainOpsMode extends LinearOpMode {
         DOWN
     }
 
+    public enum IntakeState {
+        IN,
+        OUT
+    }
+
     private boolean trapdoorOpened = false;
     private boolean bay1 = false;
     private boolean bay2 = false;
@@ -46,6 +51,9 @@ public class MainOpsMode extends LinearOpMode {
 
     //
     private double intakePower = 0;
+    private int inState = 1;
+    private IntakeState intakeState = IntakeState.IN;
+
     @Override
     public void runOpMode() throws InterruptedException {
         // Init hardware Vars
@@ -162,12 +170,10 @@ public class MainOpsMode extends LinearOpMode {
 
         // Intake
         intakePower = 0;
-        if(gamepad1.right_trigger != 0) {
-            intakePower = Math.min(Math.max(gamepad1.right_trigger * INTAKE_SPEED, 1.0), -1.0);
-        }
+        if(gamepad1.y) inState *= -1;
 
-        if(gamepad1.left_trigger != 0) {
-            intakePower = Math.min(Math.max(gamepad1.left_trigger * -INTAKE_SPEED, 1.0), -1.0);
+        if(gamepad1.right_trigger != 0) {
+            intakePower = Math.min(Math.max(gamepad1.right_trigger * INTAKE_SPEED * inState, 1.0), -1.0);
         }
 
         intakeDrive.setPower(intakePower);
