@@ -12,6 +12,6 @@ public class SpikeTask extends AutoTask {
 
     @Override
     public void runTaskTick(StageState state, HardwareController controller) {
-
+        
     }
 }
