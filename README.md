@@ -4,22 +4,22 @@
 * b - N/A
 * y - Switches direction of intake motor
 * x - N/A
-
+<br>
 * Right Trigger - Controls intake
 * Left Trigger - N/A
-
+<br>
 * Right Bumper - Rotates the bot to the right slowly
 * Left Bumper - Rotates the bot to the left slowly
-
+<br>
 * Right Stick - Rotates Bot
 * Left Stick - Moves Bot
-
+<br>
 * D-Pad - Precise bot controk\l
 * D-Pad Left - N/A
 * D-Pad Right - N/A
 * D-Pad Up - N/A
 * D-Pad Down - N/A
-
+<br>
 # TODO
  - ()
 
