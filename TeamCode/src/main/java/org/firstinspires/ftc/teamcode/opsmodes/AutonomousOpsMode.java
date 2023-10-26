@@ -118,7 +118,10 @@ public class AutonomousOpsMode extends LinearOpMode {
 
     StageState stageState = new StageState();
 
-    HardwareController hardCont = new HardwareController(hardwareMap);
+    HardwareController hardCont = new HardwareController(hardwareMap, robot);
+
+
+
     public void runOpMode() throws InterruptedException {
         while (autoChoices.state == RobotState.RUNNING) {
             // Update Telemetry
@@ -154,6 +157,9 @@ public class AutonomousOpsMode extends LinearOpMode {
                     }
                     // Currently the only other option is PARK
                     autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
+                    break;
+                case PLACE_PURPLE_PIXEL:
+
                     break;
                 case PARK_AT_BACKSTAGE:
                     pTask.runTaskTick(stageState, hardCont);

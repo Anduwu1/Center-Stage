@@ -47,24 +47,32 @@ public class HardwareController{
 
 
     // Pass in a hardware map please
-    public HardwareController(HardwareMap hardwareMap){
-        telemetry.addLine("[HardwareMap] Init HardwareMap");
-        drive = new SampleMecanumDrive(hardwareMap);
+    public HardwareController(HardwareMap hardwareMap, Robot robot){
+        this.robot = robot;
+        bucket = new Bucket();
+        arm = new Arm();
+        //intake = new Intake();
+        //telemetry.addLine("[HardwareMap] Init HardwareMap");
+        try {
+            drive = new SampleMecanumDrive(hardwareMap);
+        }catch (Exception e){
+
+        }
         // Since the bot isn't finished yet, these may not exist
         // but we may still want to test other functionality so this
         // makes sure that it doesn't crash
-        try{
-            arm.armServo = hardwareMap.get(Servo.class, "ArmServo");
+        //try{
+            arm.armServo = hardwareMap.get(Servo.class, "servoA");
             bucket.bucketRotation = hardwareMap.get(Servo.class, RobotSettings.bucket.ROTATION_SERVO);
             bucket.bucketTrapdoor = hardwareMap.get(Servo.class, RobotSettings.bucket.TRAPDOOR_SERVO);
-            intake.intakeMotor = hardwareMap.get(DcMotor.class, RobotSettings.intake.MOTOR);
-        }catch(Exception e){
+            //intake.intakeMotor = hardwareMap.get(DcMotor.class, RobotSettings.intake.MOTOR);
+        /*}catch(Exception e){
             // uhhh
-            telemetry.addLine("[HardwareMap] Error. errm.. Embarrassing");
-            telemetry.speak("errrm we have an error (cringe)"); // test (remove in the future)
-        }
+            //telemetry.addLine("[HardwareMap] Error. errm.. Embarrassing");
+            //telemetry.speak("errrm we have an error (cringe)"); // test (remove in the future)
+        }*/
 
-        telemetry.update();
+        //telemetry.update();
     }
 
     /*
@@ -74,8 +82,8 @@ public class HardwareController{
         drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
                 .splineTo(new Vector2d(xPos, yPos), Math.toRadians(0))
                 .build());
-        telemetry.addLine("If this shows up sooner than expected \" follow trajectory \" is asyncrohjnousl> i thinik");
-        telemetry.update();
+        //telemetry.addLine("If this shows up sooner than expected \" follow trajectory \" is asyncrohjnousl> i thinik");
+        //telemetry.update();
     }
 
 
