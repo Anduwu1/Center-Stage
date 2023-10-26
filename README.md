@@ -1,3 +1,10 @@
+# Controls
+### Gamepad 1
+a - 
+b - 
+y - 
+x -
+
 # TODO
  - ()
 
