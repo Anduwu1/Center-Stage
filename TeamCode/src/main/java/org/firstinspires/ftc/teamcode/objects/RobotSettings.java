@@ -20,10 +20,10 @@ public class RobotSettings {
     public final String ROBOT_NAME = "gOoFbALL";
 
     // Drive
-    public static final String BANA_LFDRIVE_MOTOR = "frontL";
-    public static final String BANA_RFDRIVE_MOTOR = "frontR";
-    public static final String BANA_LBDRIVE_MOTOR = "backL";
-    public static final String BANA_RBDRIVE_MOTOR = "backR";
+    public static final String BANA_LFDRIVE_MOTOR = "leftFront";
+    public static final String BANA_RFDRIVE_MOTOR = "rightFront";
+    public static final String BANA_LBDRIVE_MOTOR = "leftRear";
+    public static final String BANA_RBDRIVE_MOTOR = "rightRear";
 
     // Subsystems
     public static final Arm arm = new Arm();

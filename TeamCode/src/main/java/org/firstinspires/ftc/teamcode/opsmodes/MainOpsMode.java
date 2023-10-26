@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
 
 @TeleOp(name="Main OpMode")
@@ -47,8 +48,8 @@ public class MainOpsMode extends LinearOpMode {
     private static final double ARM_UP = 0;
     private static final double ARM_DOWN = 0;
 
-    private HardwareController hardwareController = new HardwareController(hardwareMap);
-
+    private HardwareController hardwareController;
+    private Robot robot;
     //
     private double intakePower = 0;
     private int inState = 1;
@@ -56,6 +57,8 @@ public class MainOpsMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        robot = new Robot(AutonomousOpsMode.Alliance.BLUE_ALLIANCE, AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+        hardwareController = new HardwareController(hardwareMap, robot);
         // Init hardware Vars
         leftFrontDrive = hardwareMap.get(DcMotor.class, "frontL");
         leftBackDrive = hardwareMap.get(DcMotor.class, "backL");

@@ -71,9 +71,13 @@ public class Robot {
             float co[] = { -0.0347492f, -0.0148858f,0, 0, -0.0072575f,  0.0121186f, -0.156374f, 0};
             CameraCalibration goof = new CameraCalibration(cci, new Size(640, 480), 499.542f, 499.542f, 341.04f,225.8f, co, false, false);
             aprilTag.init(640, 480, goof);
-            visionPortal = new VisionPortal.Builder().setCamera(hardCont.get(WebcamName.class, "webcam"))
-                    .addProcessor(aprilTag)
-                    .build();
+            try {
+                visionPortal = new VisionPortal.Builder().setCamera(hardCont.get(WebcamName.class, "webcam"))
+                        .addProcessor(aprilTag)
+                        .build();
+            } catch (Exception e){
+                // REMOVE THIS TRY CATCH LATER
+            }
         }
     }
 
