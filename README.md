@@ -3,7 +3,7 @@
 
 * a - N/A
 * b - N/A
-* y - Switches direction of intake motor
+* y - N/A
 * x - N/A
 
 <br>
