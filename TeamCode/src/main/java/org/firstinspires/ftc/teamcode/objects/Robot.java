@@ -83,6 +83,9 @@ public class Robot {
 
     public Robot(AutonomousOpsMode.StartPos start, HardwareMap hard) {
         this.hardCont = hard;
+
+        vision = new Vision();
+        vision.initVision();
         // Sets Robot Start Position
         // TODO: Verify that these locations are correct
         float x, y;

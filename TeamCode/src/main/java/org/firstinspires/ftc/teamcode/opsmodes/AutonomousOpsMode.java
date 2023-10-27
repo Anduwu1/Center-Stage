@@ -1,18 +1,35 @@
 package org.firstinspires.ftc.teamcode.opsmodes;
 // Basic stuff
+import android.media.audiofx.DynamicsProcessing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.Locale;
 // New vision system
+import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.C;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.android.util.Size;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.objects.AprilTagData;
+import org.firstinspires.ftc.teamcode.objects.Point;
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibrationIdentity;
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
+import org.firstinspires.ftc.teamcode.resources.taskManagment.AutoTask;
 import org.firstinspires.ftc.teamcode.resources.taskManagment.StageState;
 import org.firstinspires.ftc.teamcode.resources.tasks.ParkTask;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 // Default java stuff
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
     Class for all the Autonomous stuff
@@ -115,38 +132,39 @@ public class AutonomousOpsMode extends LinearOpMode {
                     int teamPropPos = 0; // means nothing rn
                     String msg;
 
-                    robot = new Robot(autoChoices.startPos, hardwareMap);
+                        robot = new Robot(autoChoices.startPos, hardwareMap);
 
                     hardCont.robot = robot;
 
-                    if (robot.vision != null) {
-                        teamPropPos = robot.vision.getLastDetetectedTeamPropLoc();
+                        if (robot.vision != null) {
+                            teamPropPos = robot.vision.getLastDetetectedTeamPropLoc();
 
-                        if (teamPropPos > 0) {
-                            msg = "Team Prop found at position " + teamPropPos;
+                            if (teamPropPos > 0) {
+                                msg = "Team Prop found at position " + teamPropPos;
+                                // robot.speak(msg);
+                            }
+                        }
+
+                        if (teamPropPos == 0) {
+                            // Vision did not find the team prop, set to default position.
+                            teamPropPos = 2;
+                            msg = "No team prop found, default to position " + teamPropPos;
+                            telemetry.addLine(msg);
                             // robot.speak(msg);
                         }
-                    }
+                        // Currently the only other option is PARK
+                        autoChoices.autonomousStage = AutonomousState.PLACE_PURPLE_PIXEL;
+                        break;
+                    case PLACE_PURPLE_PIXEL:
 
-                    if (teamPropPos == 0) {
-                        // Vision did not find the team prop, set to default position.
-                        teamPropPos = 2;
-                        msg = "No team prop found, default to position " + teamPropPos;
-                        telemetry.addLine(msg);
-                        // robot.speak(msg);
-                    }
-                    // Currently the only other option is PARK
-                    autoChoices.autonomousStage = AutonomousState.PLACE_PURPLE_PIXEL;
-                    break;
-                case PLACE_PURPLE_PIXEL:
+                        break;
+                    case PARK_AT_BACKSTAGE:
+                        pTask.runTaskTick(stageState, hardCont);
+                        if (pTask.isFinished()) {
 
-                    break;
-                case PARK_AT_BACKSTAGE:
-                    pTask.runTaskTick(stageState, hardCont);
-                    if(pTask.isFinished()){
-                        autoChoices.autonomousStage = AutonomousState.DONE;
-                    }
-                    break;
+                            autoChoices.autonomousStage = AutonomousState.DONE;
+                        }
+                        break;
 
             }
         }
