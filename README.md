@@ -8,8 +8,8 @@
 
 <br>
 
-* Right Trigger - Controls intake
-* Left Trigger - N/A
+* Right Trigger - Intake goes in
+* Left Trigger - Intake goes out
 
 <br>
 
