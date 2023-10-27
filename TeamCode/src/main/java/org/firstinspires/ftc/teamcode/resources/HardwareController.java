@@ -51,7 +51,7 @@ public class HardwareController{
         this.robot = robot;
         bucket = new Bucket();
         arm = new Arm();
-        //intake = new Intake();
+        intake = new Intake();
         //telemetry.addLine("[HardwareMap] Init HardwareMap");
         try {
             drive = new SampleMecanumDrive(hardwareMap);
@@ -65,7 +65,7 @@ public class HardwareController{
             arm.armServo = hardwareMap.get(Servo.class, "servoA");
             bucket.bucketRotation = hardwareMap.get(Servo.class, RobotSettings.bucket.ROTATION_SERVO);
             bucket.bucketTrapdoor = hardwareMap.get(Servo.class, RobotSettings.bucket.TRAPDOOR_SERVO);
-            //intake.intakeMotor = hardwareMap.get(DcMotor.class, RobotSettings.intake.MOTOR);
+            intake.intakeMotor = hardwareMap.get(DcMotor.class, RobotSettings.intake.MOTOR);
         /*}catch(Exception e){
             // uhhh
             //telemetry.addLine("[HardwareMap] Error. errm.. Embarrassing");

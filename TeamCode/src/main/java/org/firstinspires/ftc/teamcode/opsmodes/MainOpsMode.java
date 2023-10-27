@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.objects.Robot;
+import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
 
 @TeleOp(name="Main OpMode")
@@ -40,7 +41,7 @@ public class MainOpsMode extends LinearOpMode {
 
     // Constants
     private static final double DRIVE_SPEED = 0.6;
-    private static final double INTAKE_SPEED = 0.3;
+    private static final double INTAKE_SPEED = 0.1;
     // Servo Constants
     // TODO: Get real values for these
     private static final double TRAPDOOR_OPEN = 0;
@@ -52,7 +53,7 @@ public class MainOpsMode extends LinearOpMode {
     private Robot robot;
     //
     private double intakePower = 0;
-    private int inState = 1;
+    private int inState = -1;
     private IntakeState intakeState = IntakeState.IN;
 
     @Override
@@ -60,10 +61,10 @@ public class MainOpsMode extends LinearOpMode {
         robot = new Robot(AutonomousOpsMode.Alliance.BLUE_ALLIANCE, AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
         hardwareController = new HardwareController(hardwareMap, robot);
         // Init hardware Vars
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "frontL");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "backL");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "frontR");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "backR");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LFDRIVE_MOTOR);
+        leftBackDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LBDRIVE_MOTOR);
+        rightFrontDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_RFDRIVE_MOTOR);
+        rightBackDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_RBDRIVE_MOTOR);
 
         intakeDrive = hardwareMap.get(DcMotor.class, "intake");
 
@@ -91,11 +92,11 @@ public class MainOpsMode extends LinearOpMode {
         }
     }
 
-    private float armX = 0.0f; // this is at the bottom
+    private float armX = 0.5f; // this is at the bottom
     private void updateServos(){
         double gamePadY = gamepad2.left_stick_y;
 
-        armX += gamePadY / 10.0f;
+        armX += gamePadY / 1000.0f;
         if(armX > 1.0f) armX = 1.0f;
         if(armX < 0.0f) armX = 0.0f;
         hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
@@ -173,10 +174,13 @@ public class MainOpsMode extends LinearOpMode {
 
         // Intake
         intakePower = 0;
-        if(gamepad1.y) inState *= -1;
 
         if(gamepad1.right_trigger != 0) {
-            intakePower = Math.min(Math.max(gamepad1.right_trigger * INTAKE_SPEED * inState, 1.0), -1.0);
+            intakePower = 1;
+        }
+
+        if(gamepad1.left_trigger != 0) {
+            intakePower = -1;
         }
 
         intakeDrive.setPower(intakePower);

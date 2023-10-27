@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.resources.taskManagment;
 
 import org.firstinspires.ftc.teamcode.objects.Pixel;
+import org.firstinspires.ftc.teamcode.objects.Robot;
 
 import java.util.ArrayList;
 /*
@@ -18,8 +19,6 @@ public class StageState {
     // Things that can happen in autonomous
     private boolean botParked = false;
 
-
-
     public ArrayList<Pixel> getPixels(){
         return this.pixels;
     }
@@ -30,4 +29,10 @@ public class StageState {
     public void updateParkedStatus(boolean newParkedState){
         this.botParked = newParkedState;
     }
+
+
+    public void update(Robot robot){
+
+    }
+
 }
