@@ -95,17 +95,15 @@ public class MainOpsMode extends LinearOpMode {
 
     private float armX = (float) Arm.ARM_DOWN; // this is at the bottom
     private void updateServos(){
-        double gamePadY = gamepad2.left_stick_y;
 
-        armX += gamePadY / 1000.0f;
+        armX += gamepad2.left_stick_y / 1000.0f;
         if(armX > Arm.ARM_UP) armX = (float) Arm.ARM_UP;
         if(armX < Arm.ARM_DOWN) armX = (float) Arm.ARM_DOWN;
         hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
         telemetry.addData("Arm Pos", "%f", armX);
 
-        float percent = (float) (armX / (Arm.ARM_UP - Arm.ARM_DOWN));
 
-        hardwareController.servoMove(percent, HardwareController.Servo_Type.BUCKET_SERVO);
+        hardwareController.servoMove((float) (armX / (Arm.ARM_UP - Arm.ARM_DOWN)), HardwareController.Servo_Type.BUCKET_SERVO);
 
         if(gamepad2.x){
             hardwareController.servoMove(0.0f, HardwareController.Servo_Type.DOOR_SERVO);
