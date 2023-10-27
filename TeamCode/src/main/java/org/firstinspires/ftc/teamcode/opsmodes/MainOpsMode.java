@@ -95,13 +95,15 @@ public class MainOpsMode extends LinearOpMode {
 
     private float armX = (float) Arm.ARM_DOWN; // this is at the bottom
     private void updateServos(){
-        double gamePadY = gamepad2.left_stick_y;
+        if (gamepad2.a) {
+            if(armX == Arm.ARM_UP) armX = (float) Arm.ARM_DOWN; else armX = (float) Arm.ARM_UP;
+        }
 
-        armX += gamePadY / 1000.0f;
         if(armX > Arm.ARM_UP) armX = (float) Arm.ARM_UP;
         if(armX < Arm.ARM_DOWN) armX = (float) Arm.ARM_DOWN;
         hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
-        telemetry.addData("Arm Pos", "%f", armX);
+
+        // telemetry.addData("Arm Pos", "%f", armX);
 
         float percent = (float) (armX / (Arm.ARM_UP - Arm.ARM_DOWN));
 
@@ -178,7 +180,6 @@ public class MainOpsMode extends LinearOpMode {
 
         if(gamepad1.left_trigger != 0)
             intakePower = 1;
-        }
 
         intakeDrive.setPower(intakePower);
 

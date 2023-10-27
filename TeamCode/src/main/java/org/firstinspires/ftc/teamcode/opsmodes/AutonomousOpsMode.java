@@ -86,9 +86,6 @@ public class AutonomousOpsMode extends LinearOpMode {
         public double driveTime = 0.0;
         public double drivePower = 0.0;
 
-
-
-
         @Override
         public String toString()
         {
