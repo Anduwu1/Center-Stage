@@ -12,7 +12,7 @@ public class ServoCalib extends LinearOpMode {
     Robot robot;
 
     // Float
-    float armPos = 0.5f, bucketPos = 0.0f, doorPos = 0.0f;
+    float armPos = 0.75f, bucketPos = 0.0f, doorPos = 0.0f;
 
     HardwareController.Servo_Type cur = HardwareController.Servo_Type.ARM_SERVO;
 
@@ -50,7 +50,7 @@ public class ServoCalib extends LinearOpMode {
                 changeDown = false;
             }
 
-            if(armPos < 0.0f)armPos = 0.0f;
+            if(armPos < 0.0f)armPos = 0.7f;
             if(armPos > 1.0f)armPos = 1.0f;
             if(bucketPos < 0.0f)bucketPos = 0.0f;
             if(bucketPos > 1.0f)bucketPos = 1.0f;
@@ -74,13 +74,13 @@ public class ServoCalib extends LinearOpMode {
                     if (gamepad1.dpad_up) doorPos += diff;
                     if (gamepad1.dpad_down) doorPos -= diff;
                     hardwareController.servoMove(doorPos, cur);
-                    telemetry.addLine("CURRENT IS BUCKET");
+                    telemetry.addLine("CURRENT IS DOOR");
                     break;
                 case BUCKET_SERVO:
                     if (gamepad1.dpad_up) bucketPos += diff;
                     if (gamepad1.dpad_down) bucketPos -= diff;
                     hardwareController.servoMove(bucketPos, cur);
-                    telemetry.addLine("CURRENT IS DOOR");
+                    telemetry.addLine("CURRENT IS BUCKET");
                     break;
             }
             telemetry.update();

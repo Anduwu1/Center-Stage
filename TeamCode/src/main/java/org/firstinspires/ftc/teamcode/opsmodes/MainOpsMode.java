@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
 
 @TeleOp(name="Main OpMode")
 public class MainOpsMode extends LinearOpMode {
@@ -92,21 +93,21 @@ public class MainOpsMode extends LinearOpMode {
         }
     }
 
-    private float armX = 0.5f; // this is at the bottom
+    private float armX = 0.51f; // this is at the bottom
     private void updateServos(){
         double gamePadY = gamepad2.left_stick_y;
 
         armX += gamePadY / 1000.0f;
-        if(armX > 1.0f) armX = 1.0f;
-        if(armX < 0.0f) armX = 0.0f;
+        if(armX > Arm.ARM_UP) armX = (float) Arm.ARM_UP;
+        if(armX < Arm.ARM_DOWN) armX = (float) Arm.ARM_DOWN;
         hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
         telemetry.addData("Arm Pos", "%f", armX);
 
         // Check for bucket
-        if (gamepad2.y) {
+        if (gamepad2.y || armX < 0.58) {
             hardwareController.servoMove(0.0f, HardwareController.Servo_Type.BUCKET_SERVO);
         }
-        if(gamepad2.b){
+        if(gamepad2.b || armX > 0.7){
             hardwareController.servoMove(1.0f, HardwareController.Servo_Type.BUCKET_SERVO);
         }
         if(gamepad2.x){
@@ -119,6 +120,12 @@ public class MainOpsMode extends LinearOpMode {
         telemetry.update();
     }
 
+    // Servo Limits
+    // Arm
+    // .5 Down
+    // 1 Up
+    //
+    //
     private void updateDriveMotors() {
         double max;
 
@@ -176,11 +183,11 @@ public class MainOpsMode extends LinearOpMode {
         intakePower = 0;
 
         if(gamepad1.right_trigger != 0) {
-            intakePower = 1;
+            intakePower = -1;
         }
 
         if(gamepad1.left_trigger != 0) {
-            intakePower = -1;
+            intakePower = 1;
         }
 
         intakeDrive.setPower(intakePower);
