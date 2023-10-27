@@ -93,7 +93,7 @@ public class MainOpsMode extends LinearOpMode {
         }
     }
 
-    private float armX = 0.51f; // this is at the bottom
+    private float armX = (float) Arm.ARM_DOWN; // this is at the bottom
     private void updateServos(){
         double gamePadY = gamepad2.left_stick_y;
 
@@ -103,13 +103,10 @@ public class MainOpsMode extends LinearOpMode {
         hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
         telemetry.addData("Arm Pos", "%f", armX);
 
-        // Check for bucket
-        if (gamepad2.y || armX < 0.58) {
-            hardwareController.servoMove(0.0f, HardwareController.Servo_Type.BUCKET_SERVO);
-        }
-        if(gamepad2.b || armX > 0.7){
-            hardwareController.servoMove(1.0f, HardwareController.Servo_Type.BUCKET_SERVO);
-        }
+        float percent = (float) (armX / (Arm.ARM_UP - Arm.ARM_DOWN));
+
+        hardwareController.servoMove(percent, HardwareController.Servo_Type.BUCKET_SERVO);
+
         if(gamepad2.x){
             hardwareController.servoMove(0.0f, HardwareController.Servo_Type.DOOR_SERVO);
         }
