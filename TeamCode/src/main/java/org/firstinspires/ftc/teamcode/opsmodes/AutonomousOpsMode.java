@@ -1,35 +1,18 @@
 package org.firstinspires.ftc.teamcode.opsmodes;
 // Basic stuff
-import android.media.audiofx.DynamicsProcessing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.Locale;
 // New vision system
-import org.checkerframework.checker.units.qual.A;
-import org.checkerframework.checker.units.qual.C;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.android.util.Size;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.objects.AprilTagData;
-import org.firstinspires.ftc.teamcode.objects.Point;
-import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibrationIdentity;
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
-import org.firstinspires.ftc.teamcode.resources.taskManagment.AutoTask;
 import org.firstinspires.ftc.teamcode.resources.taskManagment.StageState;
 import org.firstinspires.ftc.teamcode.resources.tasks.ParkTask;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 // Default java stuff
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /*
     Class for all the Autonomous stuff
@@ -132,7 +115,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                     int teamPropPos = 0; // means nothing rn
                     String msg;
 
-                    robot = new Robot(autoChoices.alliance, autoChoices.startPos, hardwareMap);
+                    robot = new Robot(autoChoices.startPos, hardwareMap);
 
                     hardCont.robot = robot;
 
@@ -153,7 +136,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                         // robot.speak(msg);
                     }
                     // Currently the only other option is PARK
-                    autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
+                    autoChoices.autonomousStage = AutonomousState.PLACE_PURPLE_PIXEL;
                     break;
                 case PLACE_PURPLE_PIXEL:
 
@@ -161,11 +144,6 @@ public class AutonomousOpsMode extends LinearOpMode {
                 case PARK_AT_BACKSTAGE:
                     pTask.runTaskTick(stageState, hardCont);
                     if(pTask.isFinished()){
-                        // Change current stage state
-                        // oh whoops i forgot
-                        // no other stage states are implemented
-                        // ¯\_(ツ)_/¯
-                        // guess i'll stop
                         autoChoices.autonomousStage = AutonomousState.DONE;
                     }
                     break;

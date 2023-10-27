@@ -26,7 +26,7 @@ public class ServoCalib extends LinearOpMode {
         waitForStart();
 
 
-        robot = new Robot(AutonomousOpsMode.Alliance.BLUE_ALLIANCE, AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+        robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
         hardwareController = new HardwareController(hardwareMap, robot);
         while (opModeIsActive()) {
 

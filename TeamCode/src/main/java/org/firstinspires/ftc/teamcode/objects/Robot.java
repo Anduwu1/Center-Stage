@@ -81,18 +81,17 @@ public class Robot {
         }
     }
 
-    public Robot(AutonomousOpsMode.Alliance alliance, AutonomousOpsMode.StartPos start, HardwareMap hard) {
+    public Robot(AutonomousOpsMode.StartPos start, HardwareMap hard) {
         this.hardCont = hard;
-        this.alliance = alliance;
         // Sets Robot Start Position
         // TODO: Verify that these locations are correct
         float x, y;
         switch (alliance) {
             case RED_ALLIANCE:
-                x = (float) RobotSettings.FULL_FIELD_INCHES;
+                x = (float) ((float) RobotSettings.FULL_FIELD_INCHES - (RobotSettings.ROBOT_LENGTH/2));
                 break;
             default:
-                x = 0;
+                x = (float) (RobotSettings.ROBOT_LENGTH/2);
         }
 
         switch(start) {

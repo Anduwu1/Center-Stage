@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.objects.Robot;
@@ -59,7 +57,7 @@ public class MainOpsMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(AutonomousOpsMode.Alliance.BLUE_ALLIANCE, AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+        robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
         hardwareController = new HardwareController(hardwareMap, robot);
         // Init hardware Vars
         leftFrontDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LFDRIVE_MOTOR);
@@ -94,6 +92,7 @@ public class MainOpsMode extends LinearOpMode {
     }
 
     boolean pressed = false;
+    boolean open = true;
     private float armX = (float) Arm.ARM_DOWN; // this is at the bottom
     private void updateServos(){
         if (gamepad2.a && !pressed) {
@@ -114,10 +113,7 @@ public class MainOpsMode extends LinearOpMode {
         hardwareController.servoMove(percent, HardwareController.Servo_Type.BUCKET_SERVO);
 
         if(gamepad2.x){
-            hardwareController.servoMove(0.0f, HardwareController.Servo_Type.DOOR_SERVO);
-        }
-        if(gamepad2.a){
-            hardwareController.servoMove(1.0f, HardwareController.Servo_Type.DOOR_SERVO);
+            if(open) hardwareController.servoMove(0.0f, HardwareController.Servo_Type.DOOR_SERVO); else hardwareController.servoMove(1.0f, HardwareController.Servo_Type.DOOR_SERVO);
         }
 
         telemetry.update();
