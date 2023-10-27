@@ -95,6 +95,13 @@ public class MainOpsMode extends LinearOpMode {
 
     private float armX = (float) Arm.ARM_DOWN; // this is at the bottom
     private void updateServos(){
+
+        armX += gamepad2.left_stick_y / 1000.0f;
+        if(armX > Arm.ARM_UP) armX = (float) Arm.ARM_UP;
+        if(armX < Arm.ARM_DOWN) armX = (float) Arm.ARM_DOWN;
+        hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
+        telemetry.addData("Arm Pos", "%f", armX);
+
         if (gamepad2.a) {
             if(armX == Arm.ARM_UP) armX = (float) Arm.ARM_DOWN; else armX = (float) Arm.ARM_UP;
         }
