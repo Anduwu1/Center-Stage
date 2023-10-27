@@ -93,10 +93,14 @@ public class MainOpsMode extends LinearOpMode {
         }
     }
 
+    boolean pressed = false;
     private float armX = (float) Arm.ARM_DOWN; // this is at the bottom
     private void updateServos(){
-        if (gamepad2.a) {
+        if (gamepad2.a && !pressed) {
+            pressed = true;
             if(armX == Arm.ARM_UP) armX = (float) Arm.ARM_DOWN; else armX = (float) Arm.ARM_UP;
+        } else if (!gamepad2.a) {
+            pressed = false;
         }
 
         if(armX > Arm.ARM_UP) armX = (float) Arm.ARM_UP;
