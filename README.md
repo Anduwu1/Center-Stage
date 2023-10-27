@@ -3,13 +3,13 @@
 
 * a - N/A
 * b - N/A
-* y - Switches direction of intake motor
+* y - N/A
 * x - N/A
 
 <br>
 
-* Right Trigger - Controls intake
-* Left Trigger - N/A
+* Right Trigger - Intake goes in
+* Left Trigger - Intake goes out
 
 <br>
 
