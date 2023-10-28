@@ -52,7 +52,7 @@ public class HardwareController{
     @SuppressLint("SuspiciousIndentation")
     public HardwareController(HardwareMap hardwareMap, Robot robot){
         if(robot != null)
-        this.robot = robot;
+            this.robot = robot;
         bucket = new Bucket();
         arm = new Arm();
         intake = new Intake();

@@ -136,7 +136,7 @@ public class AutonomousOpsMode extends LinearOpMode {
 
                         hardCont.robot = robot;
 
-                        if (robot.vision != null) {
+                        /*if (robot.vision != null) {
                             teamPropPos = robot.vision.getLastDetetectedTeamPropLoc();
 
                             if (teamPropPos > 0) {
@@ -151,7 +151,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                             msg = "No team prop found, default to position " + teamPropPos;
                             telemetry.addLine(msg);
                             // robot.speak(msg);
-                        }
+                        }*/
                         // Currently the only other option is PARK
                         autoChoices.autonomousStage = AutonomousState.PLACE_PURPLE_PIXEL;
                         break;

@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 
 @TeleOp(name="Main OpMode")
 public class MainOpsMode extends LinearOpMode {
@@ -57,8 +58,8 @@ public class MainOpsMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
-        hardwareController = new HardwareController(hardwareMap, robot);
+        //robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+        hardwareController = new HardwareController(hardwareMap, null);
         // Init hardware Vars
         leftFrontDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LFDRIVE_MOTOR);
         leftBackDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LBDRIVE_MOTOR);
@@ -121,12 +122,12 @@ public class MainOpsMode extends LinearOpMode {
             bucketX = 0.19f;
         }
         if(gamepad2.b){
-            bucketX = 1.0f;
+            bucketX = Bucket.DROP_POS;
         }
 
-        if(gamepad2.dpad_up) bucketX+=0.01f;
-        if(gamepad2.dpad_down) bucketX-=0.01f;
-        if(bucketX > 1.0f)bucketX = 1.0f;
+        if(gamepad2.dpad_up) bucketX+=0.005f;
+        if(gamepad2.dpad_down) bucketX-=0.005f;
+        if(bucketX > Bucket.DROP_POS)bucketX = Bucket.DROP_POS;
         if(bucketX < 0.19f) bucketX = 0.19f;
 
         hardwareController.servoMove(bucketX, HardwareController.Servo_Type.BUCKET_SERVO);
