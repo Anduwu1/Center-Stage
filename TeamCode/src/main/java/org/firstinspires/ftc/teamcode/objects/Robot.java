@@ -32,7 +32,7 @@ public class Robot {
             initVision();
         }
 
-        // TODO: Make do stuff usefull
+        // TODO: Make do stuff useful
 
         private VisionPortal visionPortal;
         private AprilTagProcessor aprilTag;
@@ -83,9 +83,9 @@ public class Robot {
 
     public Robot(AutonomousOpsMode.StartPos start, HardwareMap hard) {
         this.hardCont = hard;
-
+        alliance = AutonomousOpsMode.Alliance.RED_ALLIANCE;
         vision = new Vision();
-        vision.initVision();
+        //vision.initVision();
         // Sets Robot Start Position
         // TODO: Verify that these locations are correct
         float x, y;
@@ -116,6 +116,7 @@ public class Robot {
         // telemetry.addLine(s); // Talks out loud maybe?
         // telemetry.speak(s);
     }
+
 
 
 

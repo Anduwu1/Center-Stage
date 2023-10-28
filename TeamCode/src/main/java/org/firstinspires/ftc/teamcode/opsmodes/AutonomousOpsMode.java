@@ -134,7 +134,7 @@ public class AutonomousOpsMode extends LinearOpMode {
 
                         robot = new Robot(autoChoices.startPos, hardwareMap);
 
-                    hardCont.robot = robot;
+                        hardCont.robot = robot;
 
                         if (robot.vision != null) {
                             teamPropPos = robot.vision.getLastDetetectedTeamPropLoc();

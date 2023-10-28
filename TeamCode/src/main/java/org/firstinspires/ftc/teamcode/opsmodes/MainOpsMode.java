@@ -92,13 +92,13 @@ public class MainOpsMode extends LinearOpMode {
     }
 
     boolean pressed = false;
-    boolean open = true;
+    boolean open = true, trapDoor = true;
     private float armX = (float) Arm.ARM_DOWN; // this is at the bottom
     private void updateServos(){
-        if (gamepad2.a && !pressed) {
+        if (gamepad2.right_bumper && !pressed) {
             pressed = true;
             if(armX == Arm.ARM_UP) armX = (float) Arm.ARM_DOWN; else armX = (float) Arm.ARM_UP;
-        } else if (!gamepad2.a) {
+        } else if (!gamepad2.right_bumper) {
             pressed = false;
         }
 
@@ -112,10 +112,21 @@ public class MainOpsMode extends LinearOpMode {
 
         float percent = (float) ((armX - Arm.ARM_DOWN) / (Arm.ARM_UP - Arm.ARM_DOWN));
 
-        hardwareController.servoMove(percent, HardwareController.Servo_Type.BUCKET_SERVO);
+        //hardwareController.servoMove(percent, HardwareController.Servo_Type.BUCKET_SERVO);
+
+        if(gamepad2.y){
+            hardwareController.servoMove(0.0f, HardwareController.Servo_Type.BUCKET_SERVO);
+        }
+        if(gamepad2.b){
+            hardwareController.servoMove(1.0f, HardwareController.Servo_Type.BUCKET_SERVO);
+        }
 
         if(gamepad2.x){
-            if(open) hardwareController.servoMove(0.0f, HardwareController.Servo_Type.DOOR_SERVO); else hardwareController.servoMove(1.0f, HardwareController.Servo_Type.DOOR_SERVO);
+            hardwareController.servoMove(0.0f, HardwareController.Servo_Type.DOOR_SERVO);
+
+        }
+        if(gamepad2.a){
+            hardwareController.servoMove(1.0f, HardwareController.Servo_Type.DOOR_SERVO);
         }
 
         telemetry.update();

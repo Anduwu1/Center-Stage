@@ -29,15 +29,17 @@ public class ParkTask extends AutoTask {
             // We need to start moving
             // Somehow(?) reset our position to a favorable area
             movingToParkPos = true;
+            controller.driveTo((float) (RobotSettings.FULL_TILE_INCHES * 1.5), 0);
             // Get our current alliance
-            switch(controller.robot.alliance){
+            /*switch(controller.robot.alliance){
                 case RED_ALLIANCE:
                     controller.driveTo(controller.robot.position.get_x() - RobotSettings.BACKSTAGE_RED, controller.robot.position.get_y() - (float)(RobotSettings.FULL_FIELD_INCHES - (RobotSettings.FULL_TILE_INCHES / 2.0f)));
                     break;
                 case BLUE_ALLIANCE: // not "default" for readability
                     controller.driveTo(controller.robot.position.get_x() - RobotSettings.BACKSTAGE_BLUE, controller.robot.position.get_y() - (float)(RobotSettings.FULL_FIELD_INCHES - (RobotSettings.FULL_TILE_INCHES / 2.0f)));
                     break;
-            }
+            }*/
+
         }else{
             // It's moving, and its not done yet so
             // wait ig?
