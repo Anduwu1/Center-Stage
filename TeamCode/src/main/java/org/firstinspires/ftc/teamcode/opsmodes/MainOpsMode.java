@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.opsmodes;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Arm.ARM_DOWN;
+import static org.firstinspires.ftc.teamcode.subsystems.Arm.ARM_UP;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -74,19 +77,21 @@ public class MainOpsMode extends LinearOpMode {
 
     public void toggleTrapdoor() {
         if(tX == .7f) {
+            bState = BucketState.DROP;
             tX = 1f;
         } else {
-            tX = 0.7f;
+            bState = BucketState.IN;
+            tX = .7f;
         }
     }
     public void toggleBucket(BucketState bs) {
         if (bs == BucketState.IN) {
             bucketX = Bucket.INTAKE_POS;
-            toggleTrapdoor(bs);
+            // toggleTrapdoor(bs);
         }
         else {
             bucketX = Bucket.DROP_POS;
-            toggleTrapdoor(bs);
+            // toggleTrapdoor(bs);
         }
     }
 
@@ -99,14 +104,14 @@ public class MainOpsMode extends LinearOpMode {
     }
 
     public void toggleArm() {
-        if(armX == Arm.ARM_UP) {
+        if(armX == ARM_UP) {
             bState = BucketState.IN;
-            // toggleBucket(bState);
-            armX = Arm.ARM_DOWN;
+            toggleBucket(bState);
+            armX = ARM_DOWN;
         } else {
             bState = BucketState.DROP;
-            // toggleBucket(bState);
-            armX = Arm.ARM_UP;
+            toggleBucket(bState);
+            armX = ARM_UP;
         }
     }
 
@@ -133,8 +138,7 @@ public class MainOpsMode extends LinearOpMode {
         intakeDrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        // telemetry.addData("Status", "Initialized");
         waitForStart();
         runtime.reset();
 
@@ -142,7 +146,8 @@ public class MainOpsMode extends LinearOpMode {
         while (opModeIsActive()) {
             updateDriveMotors();
             updateServos();
-            // telemetry.addData("Arm Open %", "%f", armX - ARM_DOWN / (ARM_UP - ARM_DOWN));
+
+            telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
             telemetry.addData("Intake Locked", trapDoor);
             telemetry.addData("Bucket %", "%f", bucketX - 0.19f / (1.0f - 0.19f));
 
@@ -155,23 +160,35 @@ public class MainOpsMode extends LinearOpMode {
     boolean rbPressed, bPressed, yPressed = false;
 
     boolean open = true, trapDoor = false;
-    private float armX = (float) Arm.ARM_DOWN;
+    private float armX = (float) ARM_DOWN;
     private void updateServos(){
         // Trapdoor toggle
-        if(gamepad2.y && !yPressed) { yPressed = true; toggleTrapdoor(); } else if(!gamepad2.y) bPressed = false;
+        if(gamepad2.y && !yPressed) {
+            yPressed = true;
+            toggleTrapdoor();
+            telemetry.addLine("Toggling trapdoor");
+        } else if(!gamepad2.y) {
+            yPressed = false;
+            //telemetry.addLine("Button Pressed but not toggling");
+        }
 
         // Bucket Toggle
-        if(gamepad2.b && !bPressed) { bPressed = true; toggleBucket(); } else if(!gamepad2.b) bPressed = false;
+        if(gamepad2.b && !bPressed) {
+            bPressed = true;
+            toggleBucket();
+        } else if(!gamepad2.b) {
+            bPressed = false;
+        }
 
         // Arm Toggle
-        if (gamepad2.right_bumper && !rbPressed) { rbPressed = true; toggleArm(); } else if (!gamepad2.right_bumper) rbPressed = false;
+        if (gamepad2.right_bumper && !rbPressed) { rbPressed = true; toggleArm(); } else if (!gamepad2.right_bumper){ rbPressed = false; }
 
         // Manual arm control
         armX -= gamepad2.left_stick_y / 800.0f;
 
         // Arm clamp
-        if(armX > Arm.ARM_UP) armX = (float) Arm.ARM_UP;
-        if(armX < Arm.ARM_DOWN) armX = (float) Arm.ARM_DOWN;
+        if(armX > ARM_UP) armX = (float) ARM_UP;
+        if(armX < ARM_DOWN) armX = (float) ARM_DOWN;
 
         // Arm location percenetage for telemetry
         // float percent = (float) ((armX - Arm.ARM_DOWN) / (Arm.ARM_UP - Arm.ARM_DOWN));
@@ -188,6 +205,7 @@ public class MainOpsMode extends LinearOpMode {
         hardwareController.servoMove(bucketX, HardwareController.Servo_Type.BUCKET_SERVO);
         hardwareController.servoMove(tX, HardwareController.Servo_Type.DOOR_SERVO);
         hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
+
     }
 
     private void updateDriveMotors() {
@@ -211,9 +229,9 @@ public class MainOpsMode extends LinearOpMode {
 
         // Bumpers Turn Bot Left and Right
         if (gamepad1.left_bumper)
-            yaw -= 0.3 * -1;
+            yaw += 0.6 * -1;
         if (gamepad1.right_bumper)
-            yaw += 0.3 * -1;
+            yaw -= 0.6 * -1;
 
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
