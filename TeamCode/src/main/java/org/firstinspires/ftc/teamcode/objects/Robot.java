@@ -20,71 +20,18 @@ import java.util.List;
 
 public class Robot {
     public Point position;
-    public Vision vision = new Vision();
+//    /public Vision vision = new Vision();
 
     public AutonomousOpsMode.Alliance alliance;
 
     public static HardwareMap hardCont;
 
-    public static class Vision {
 
-        public Vision(){
-            initVision();
-        }
-
-        // TODO: Make do stuff useful
-
-        private VisionPortal visionPortal;
-        private AprilTagProcessor aprilTag;
-
-        public int getLastDetetectedTeamPropLoc() {
-            return 0; // TODO: Make this return the last team prop location seen
-            // If returns 0 no team prop found
-        }
-
-        public AprilTagDetection getClosestTag(){
-            AprilTagDetection tmp = null;
-
-            List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-
-
-            for (AprilTagDetection detection : currentDetections) {
-                if(tmp != null) {
-                    if(tmp.ftcPose.range > detection.ftcPose.range)
-                        tmp = detection;
-                }else{
-                    tmp = detection;
-                }
-            }
-
-            return tmp;
-        }
-
-        public void initVision(){
-            aprilTag = new AprilTagProcessor.Builder().build();
-            CameraCalibrationIdentity cci = new CameraCalibrationIdentity() {
-                @Override
-                public boolean isDegenerate() {
-                    return false;
-                }
-            };
-            float co[] = { -0.0347492f, -0.0148858f,0, 0, -0.0072575f,  0.0121186f, -0.156374f, 0};
-            CameraCalibration goof = new CameraCalibration(cci, new Size(640, 480), 499.542f, 499.542f, 341.04f,225.8f, co, false, false);
-            aprilTag.init(640, 480, goof);
-            try {
-                visionPortal = new VisionPortal.Builder().setCamera(hardCont.get(WebcamName.class, "webcam"))
-                        .addProcessor(aprilTag)
-                        .build();
-            } catch (Exception e){
-                // REMOVE THIS TRY CATCH LATER
-            }
-        }
-    }
 
     public Robot(AutonomousOpsMode.StartPos start, HardwareMap hard) {
         this.hardCont = hard;
         alliance = AutonomousOpsMode.Alliance.RED_ALLIANCE;
-        vision = new Vision();
+        //vision = new Vision();
         //vision.initVision();
         // Sets Robot Start Position
         // TODO: Verify that these locations are correct

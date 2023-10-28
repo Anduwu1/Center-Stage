@@ -39,7 +39,7 @@ public class MainOpsMode extends LinearOpMode {
 
 
     // Constants
-    private static final double DRIVE_SPEED = 0.6;
+    private static final double DRIVE_SPEED = 1;
     private static final double INTAKE_SPEED = 0.1;
     // Servo Constants
     // TODO: Get real values for these
@@ -85,6 +85,9 @@ public class MainOpsMode extends LinearOpMode {
         while (opModeIsActive()) {
             updateDriveMotors();
             updateServos();
+            telemetry.addData("Arm Open %", "%f", armX - ARM_DOWN / (ARM_UP - ARM_DOWN));
+            telemetry.addData("Intake Locked", trapDoor);
+            telemetry.addData("Bucket %", "%f", bucketX - 0.19f / (1.0f - 0.19f));
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
@@ -92,8 +95,8 @@ public class MainOpsMode extends LinearOpMode {
     }
 
     boolean pressed = false;
-    boolean open = true, trapDoor = true;
-    private float armX = (float) Arm.ARM_DOWN; // this is at the bottom
+    boolean open = true, trapDoor = false;
+    private float armX = (float) Arm.ARM_DOWN, bucketX = 0.19f; // this is at the bottom
     private void updateServos(){
         if (gamepad2.right_bumper && !pressed) {
             pressed = true;
@@ -102,7 +105,7 @@ public class MainOpsMode extends LinearOpMode {
             pressed = false;
         }
 
-        armX += gamepad2.left_stick_y / 1000.0f;
+        armX -= gamepad2.left_stick_y / 800.0f;
 
         if(armX > Arm.ARM_UP) armX = (float) Arm.ARM_UP;
         if(armX < Arm.ARM_DOWN) armX = (float) Arm.ARM_DOWN;
@@ -115,17 +118,28 @@ public class MainOpsMode extends LinearOpMode {
         //hardwareController.servoMove(percent, HardwareController.Servo_Type.BUCKET_SERVO);
 
         if(gamepad2.y){
-            hardwareController.servoMove(0.0f, HardwareController.Servo_Type.BUCKET_SERVO);
+            bucketX = 0.19f;
         }
         if(gamepad2.b){
-            hardwareController.servoMove(1.0f, HardwareController.Servo_Type.BUCKET_SERVO);
+            bucketX = 1.0f;
         }
 
+        if(gamepad2.dpad_up) bucketX+=0.01f;
+        if(gamepad2.dpad_down) bucketX-=0.01f;
+        if(bucketX > 1.0f)bucketX = 1.0f;
+        if(bucketX < 0.19f) bucketX = 0.19f;
+
+        hardwareController.servoMove(bucketX, HardwareController.Servo_Type.BUCKET_SERVO);
+
         if(gamepad2.x){
-            hardwareController.servoMove(0.0f, HardwareController.Servo_Type.DOOR_SERVO);
+            trapDoor = true;
+            // closed
+            hardwareController.servoMove(0.7f, HardwareController.Servo_Type.DOOR_SERVO);
 
         }
         if(gamepad2.a){
+            // open
+            trapDoor = false;
             hardwareController.servoMove(1.0f, HardwareController.Servo_Type.DOOR_SERVO);
         }
 
@@ -194,7 +208,8 @@ public class MainOpsMode extends LinearOpMode {
         if(gamepad1.left_trigger != 0)
             intakePower = 1;
 
-        intakeDrive.setPower(intakePower);
+        if(!trapDoor)
+            intakeDrive.setPower(intakePower);
 
     }
 }

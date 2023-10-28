@@ -18,7 +18,7 @@ public class ServoCalib extends LinearOpMode {
 
     boolean changeDown = false;
 
-    float diff = 0.0001f;
+    float diff = 0.0005f;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -26,8 +26,8 @@ public class ServoCalib extends LinearOpMode {
         waitForStart();
 
 
-        robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
-        hardwareController = new HardwareController(hardwareMap, robot);
+        //robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+        hardwareController = new HardwareController(hardwareMap, null);
         while (opModeIsActive()) {
 
             // Switch type
@@ -50,7 +50,7 @@ public class ServoCalib extends LinearOpMode {
                 changeDown = false;
             }
 
-            if(armPos < 0.0f)armPos = 0.7f;
+            if(armPos < 0.0f)armPos = 0.0f;
             if(armPos > 1.0f)armPos = 1.0f;
             if(bucketPos < 0.0f)bucketPos = 0.0f;
             if(bucketPos > 1.0f)bucketPos = 1.0f;

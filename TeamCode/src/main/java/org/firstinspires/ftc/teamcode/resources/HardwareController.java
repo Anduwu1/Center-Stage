@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.resources;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -47,7 +49,9 @@ public class HardwareController{
 
 
     // Pass in a hardware map please
+    @SuppressLint("SuspiciousIndentation")
     public HardwareController(HardwareMap hardwareMap, Robot robot){
+        if(robot != null)
         this.robot = robot;
         bucket = new Bucket();
         arm = new Arm();
