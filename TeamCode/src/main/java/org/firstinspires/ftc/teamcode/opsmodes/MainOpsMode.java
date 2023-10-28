@@ -173,11 +173,8 @@ public class MainOpsMode extends LinearOpMode {
         if(armX > Arm.ARM_UP) armX = (float) Arm.ARM_UP;
         if(armX < Arm.ARM_DOWN) armX = (float) Arm.ARM_DOWN;
 
-        // Move arm
-        hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
-
         // Arm location percenetage for telemetry
-        float percent = (float) ((armX - Arm.ARM_DOWN) / (Arm.ARM_UP - Arm.ARM_DOWN));
+        // float percent = (float) ((armX - Arm.ARM_DOWN) / (Arm.ARM_UP - Arm.ARM_DOWN));
 
         // Manual control of the bucket
         if(gamepad2.dpad_up) bucketX+=0.005f;
@@ -187,21 +184,10 @@ public class MainOpsMode extends LinearOpMode {
         if(bucketX > Bucket.DROP_POS) bucketX = Bucket.DROP_POS;
         if(bucketX < Bucket.INTAKE_POS) bucketX = Bucket.INTAKE_POS;
 
+        // Updates servos
         hardwareController.servoMove(bucketX, HardwareController.Servo_Type.BUCKET_SERVO);
-
-        if(gamepad2.x){
-            trapDoor = true;
-            // closed
-            hardwareController.servoMove(0.7f, HardwareController.Servo_Type.DOOR_SERVO);
-
-        }
-        if(gamepad2.a){
-            // open
-            trapDoor = false;
-            hardwareController.servoMove(1.0f, HardwareController.Servo_Type.DOOR_SERVO);
-        }
-
-        telemetry.update();
+        hardwareController.servoMove(tX, HardwareController.Servo_Type.DOOR_SERVO);
+        hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
     }
 
     private void updateDriveMotors() {
