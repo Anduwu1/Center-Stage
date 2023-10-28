@@ -49,6 +49,6 @@ public class AutoClickThisEXE extends LinearOpMode {
 
         }
         //drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).strafeLeft(2).build());
-        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).forward(RobotSettings.FULL_TILE_INCHES*2.5).build());
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).forward(RobotSettings.FULL_TILE_INCHES*2).build());
     }
 }

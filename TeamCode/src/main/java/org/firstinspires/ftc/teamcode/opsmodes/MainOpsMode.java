@@ -33,6 +33,11 @@ public class MainOpsMode extends LinearOpMode {
         OUT
     }
 
+    public enum BucketState {
+        IN,
+        DROP
+    }
+
     private boolean trapdoorOpened = false;
     private boolean bay1 = false;
     private boolean bay2 = false;
@@ -41,20 +46,71 @@ public class MainOpsMode extends LinearOpMode {
 
     // Constants
     private static final double DRIVE_SPEED = 1;
-    private static final double INTAKE_SPEED = 0.1;
+    // private static final double INTAKE_SPEED = 0.1;
     // Servo Constants
-    // TODO: Get real values for these
-    private static final double TRAPDOOR_OPEN = 0;
-    private static final double TRAPDOOR_CLOSED = 0;
-    private static final double ARM_UP = 0;
-    private static final double ARM_DOWN = 0;
 
     private HardwareController hardwareController;
     private Robot robot;
-    //
+
+    // Intake
     private double intakePower = 0;
-    private int inState = -1;
+    private int inState = 1;
     private IntakeState intakeState = IntakeState.IN;
+
+    // Bucket
+    float bucketX = Bucket.INTAKE_POS;
+    private BucketState bState = BucketState.IN;
+
+    // TDoor
+    float tX = 1f;
+
+    public void toggleTrapdoor(BucketState bs) {
+        if(bs == BucketState.IN) {
+            tX = 1f;
+        } else {
+            tX = 0.7f;
+        }
+    }
+
+    public void toggleTrapdoor() {
+        if(tX == .7f) {
+            tX = 1f;
+        } else {
+            tX = 0.7f;
+        }
+    }
+    public void toggleBucket(BucketState bs) {
+        if (bs == BucketState.IN) {
+            bucketX = Bucket.INTAKE_POS;
+            toggleTrapdoor(bs);
+        }
+        else {
+            bucketX = Bucket.DROP_POS;
+            toggleTrapdoor(bs);
+        }
+    }
+
+    public void toggleBucket() {
+        if (bucketX == Bucket.DROP_POS) {
+            bucketX = Bucket.INTAKE_POS;
+        } else {
+            bucketX = Bucket.DROP_POS;
+        }
+    }
+
+    public void toggleArm() {
+        if(armX == Arm.ARM_UP) {
+            bState = BucketState.IN;
+            // toggleBucket(bState);
+            armX = Arm.ARM_DOWN;
+        } else {
+            bState = BucketState.DROP;
+            // toggleBucket(bState);
+            armX = Arm.ARM_UP;
+        }
+    }
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -86,7 +142,7 @@ public class MainOpsMode extends LinearOpMode {
         while (opModeIsActive()) {
             updateDriveMotors();
             updateServos();
-            telemetry.addData("Arm Open %", "%f", armX - ARM_DOWN / (ARM_UP - ARM_DOWN));
+            // telemetry.addData("Arm Open %", "%f", armX - ARM_DOWN / (ARM_UP - ARM_DOWN));
             telemetry.addData("Intake Locked", trapDoor);
             telemetry.addData("Bucket %", "%f", bucketX - 0.19f / (1.0f - 0.19f));
 
@@ -95,40 +151,41 @@ public class MainOpsMode extends LinearOpMode {
         }
     }
 
-    boolean pressed = false;
-    boolean open = true, trapDoor = false;
-    private float armX = (float) Arm.ARM_DOWN, bucketX = 0.19f; // this is at the bottom
-    private void updateServos(){
-        if (gamepad2.right_bumper && !pressed) {
-            pressed = true;
-            if(armX == Arm.ARM_UP) armX = (float) Arm.ARM_DOWN; else armX = (float) Arm.ARM_UP;
-        } else if (!gamepad2.right_bumper) {
-            pressed = false;
-        }
+    // Booleans that store if the buttons are pressed
+    boolean rbPressed, bPressed, yPressed = false;
 
+    boolean open = true, trapDoor = false;
+    private float armX = (float) Arm.ARM_DOWN;
+    private void updateServos(){
+        // Trapdoor toggle
+        if(gamepad2.y && !yPressed) { yPressed = true; toggleTrapdoor(); } else if(!gamepad2.y) bPressed = false;
+
+        // Bucket Toggle
+        if(gamepad2.b && !bPressed) { bPressed = true; toggleBucket(); } else if(!gamepad2.b) bPressed = false;
+
+        // Arm Toggle
+        if (gamepad2.right_bumper && !rbPressed) { rbPressed = true; toggleArm(); } else if (!gamepad2.right_bumper) rbPressed = false;
+
+        // Manual arm control
         armX -= gamepad2.left_stick_y / 800.0f;
 
+        // Arm clamp
         if(armX > Arm.ARM_UP) armX = (float) Arm.ARM_UP;
         if(armX < Arm.ARM_DOWN) armX = (float) Arm.ARM_DOWN;
+
+        // Move arm
         hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
 
-        // telemetry.addData("Arm Pos", "%f", armX);
-
+        // Arm location percenetage for telemetry
         float percent = (float) ((armX - Arm.ARM_DOWN) / (Arm.ARM_UP - Arm.ARM_DOWN));
 
-        //hardwareController.servoMove(percent, HardwareController.Servo_Type.BUCKET_SERVO);
-
-        if(gamepad2.y){
-            bucketX = 0.19f;
-        }
-        if(gamepad2.b){
-            bucketX = Bucket.DROP_POS;
-        }
-
+        // Manual control of the bucket
         if(gamepad2.dpad_up) bucketX+=0.005f;
         if(gamepad2.dpad_down) bucketX-=0.005f;
-        if(bucketX > Bucket.DROP_POS)bucketX = Bucket.DROP_POS;
-        if(bucketX < 0.19f) bucketX = 0.19f;
+
+        // Clamps the bucket servo position
+        if(bucketX > Bucket.DROP_POS) bucketX = Bucket.DROP_POS;
+        if(bucketX < Bucket.INTAKE_POS) bucketX = Bucket.INTAKE_POS;
 
         hardwareController.servoMove(bucketX, HardwareController.Servo_Type.BUCKET_SERVO);
 
@@ -148,6 +205,7 @@ public class MainOpsMode extends LinearOpMode {
     }
 
     private void updateDriveMotors() {
+        // Max motor speed
         double max;
 
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
@@ -155,7 +213,7 @@ public class MainOpsMode extends LinearOpMode {
         double lateral = gamepad1.left_stick_x;
         double yaw = gamepad1.right_stick_x;
 
-        //fine control using dpad and bumpers
+        // Fine control using dpad and bumpers
         if (gamepad1.dpad_up)
             axial += 0.3;
         if (gamepad1.dpad_down)
@@ -164,6 +222,8 @@ public class MainOpsMode extends LinearOpMode {
             lateral -= 0.3;
         if (gamepad1.dpad_right)
             lateral += 0.3;
+
+        // Bumpers Turn Bot Left and Right
         if (gamepad1.left_bumper)
             yaw -= 0.3 * -1;
         if (gamepad1.right_bumper)
