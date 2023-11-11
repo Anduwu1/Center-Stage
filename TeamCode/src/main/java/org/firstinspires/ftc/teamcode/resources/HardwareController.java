@@ -50,13 +50,12 @@ public class HardwareController{
 
     // Pass in a hardware map please
     @SuppressLint("SuspiciousIndentation")
-    public HardwareController(HardwareMap hardwareMap, Robot robot){
-        if(robot != null)
-            this.robot = robot;
+    public HardwareController(){
+
         bucket = new Bucket();
         arm = new Arm();
         intake = new Intake();
-        //telemetry.addLine("[HardwareMap] Init HardwareMap");
+
         try {
             drive = new SampleMecanumDrive(hardwareMap);
         }catch (Exception e){

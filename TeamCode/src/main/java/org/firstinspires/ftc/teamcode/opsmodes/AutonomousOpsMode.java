@@ -85,12 +85,16 @@ public class AutonomousOpsMode extends LinearOpMode {
         public double turnTarget = 0.0; // Angle in deg
         public double driveTime = 0.0;
         public double drivePower = 0.0;
+        public double xLocation = 0.0;
+        public double yLocation = 0.0;
 
         @Override
         public String toString()
         {
             return String.format(
                     Locale.US,
+                    "x loc=%.0f \n" +
+                            "y loc=%.0f \n" +
                             "state=\"%s\" \n" +
                             "delay=%.0f \n" +
                             "alliance=\"%s\" \n" +
@@ -102,12 +106,11 @@ public class AutonomousOpsMode extends LinearOpMode {
                             "turnTarget=%.0f \n" +
                             "driveTime=%.0f \n" +
                             "drivePower=%.1f",
-                    state, delay, alliance,startPos, /*parkPos,*/ autonomousStage, xTarget, yTarget, turnTarget, driveTime, drivePower);
+                    xLocation, yLocation, delay, alliance,startPos, /*parkPos,*/ autonomousStage, xTarget, yTarget, turnTarget, driveTime, drivePower);
         }
     }
 
     public static final AutoChoices autoChoices = new AutoChoices();
-    private Robot robot;
 
     //public ArrayList<AutoTask> tasks;
 
@@ -115,26 +118,26 @@ public class AutonomousOpsMode extends LinearOpMode {
 
     StageState stageState = new StageState();
 
-    HardwareController hardCont = new HardwareController(hardwareMap, robot);
+    HardwareController hardCont = new HardwareController();
+    private Robot robot = new Robot(autoChoices.startPos);
 
 
 
     public void runOpMode() throws InterruptedException {
         while (autoChoices.state == RobotState.RUNNING) {
+            autoChoices.xLocation = robot.vision.location.get_x();
+            autoChoices.yLocation = robot.vision.location.get_y();
+
             // Update Telemetry
             telemetry.addLine(autoChoices.toString());
             telemetry.update();
+
 
             // switch for what we do
             switch (autoChoices.autonomousStage) {
                 case START:
 
                     int teamPropPos = 0; // means nothing rn
-                    String msg;
-
-                        robot = new Robot(autoChoices.startPos, hardwareMap);
-
-                        hardCont.robot = robot;
 
                         /*if (robot.vision != null) {
                             teamPropPos = robot.vision.getLastDetetectedTeamPropLoc();

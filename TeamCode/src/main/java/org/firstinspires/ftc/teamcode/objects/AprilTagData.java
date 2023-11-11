@@ -22,12 +22,14 @@ public class AprilTagData {
     }
 
     public Point calculate(float _d, float bearing, float pitch, float yaw){
-        bearing = (float) Math.toRadians(bearing);
-        yaw = (float) Math.toRadians(yaw);
+        // bearing = (float) Math.toRadians(bearing);
+        // yaw = (float) Math.toRadians(yaw);
 
-        float _y = (float) (this.y + (_d * Math.cos(bearing) * Math.cos(yaw)) + (Math.sqrt(Math.pow(Math.cos(bearing),2) + Math.pow(_d,2))) * Math.cos(yaw));
+        double v = Math.toRadians(bearing + (180 - (360 - 90 - (90 - bearing) - (90 - yaw))));
+        float _y = (float) (this.y + (_d * Math.sin(v)));
+        float _x = (float) (this.x + (_d * Math.cos(v)));
         // float _x = (float) (this.x + Math.sqrt(Math.pow(_d * Math.cos(bearing),2) - Math.pow(_y,2)));
-        float _x = (float) 1; // TODO: MAKE REAL VALUE
+
         return new Point(_x,_y);
     }
     public float get_x() {

@@ -120,7 +120,7 @@ public class MainOpsMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
-        hardwareController = new HardwareController(hardwareMap, null);
+        hardwareController = new HardwareController();
         // Init hardware Vars
         leftFrontDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LFDRIVE_MOTOR);
         leftBackDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LBDRIVE_MOTOR);
