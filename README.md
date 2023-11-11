@@ -31,8 +31,39 @@
 * D-Pad Down - N/A
 
 <br>
+
+### Gamepad 2
+* a - Toggles arm position
+* b - N/A
+* y - Toggles trapdoor
+* x - N/A
+
+<br>
+
+* Right Trigger - N/A
+* Left Trigger - N/A
+
+<br>
+
+* Right Bumper - N/A
+* Left Bumper - N/A
+
+<br>
+
+* Right Stick - N/A
+* Left Stick - N/A
+
+<br>
+
+* D-Pad Left - N/A
+* D-Pad Right - N/A
+* D-Pad Up - N/A
+* D-Pad Down - N/A
+
+<br>
 # TODO
  - ()
+
 
 
 ## NOTICE
