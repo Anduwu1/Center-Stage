@@ -18,7 +18,6 @@ public class Vision {
     public ArrayList<AprilTagData> aprilTags;
     public Point location;
     public Vision(HardwareMap hardCont){
-        try {
             aprilTag = new AprilTagProcessor.Builder().build();
             CameraCalibrationIdentity cci = new CameraCalibrationIdentity() {
                 @Override
@@ -29,13 +28,9 @@ public class Vision {
             float co[] = { -0.0347492f, -0.0148858f,0, 0, -0.0072575f,  0.0121186f, -0.156374f, 0};
             CameraCalibration goof = new CameraCalibration(cci, new Size(640, 480), 499.542f, 499.542f, 341.04f,225.8f, co, false, false);
             aprilTag.init(640, 480, goof);
-            visionPortal = new VisionPortal.Builder().setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+            visionPortal = new VisionPortal.Builder().setCamera(hardCont.get(WebcamName.class, "Webcam 1"))
                     .addProcessor(aprilTag)
                     .build();
-            visionPortal.liv
-        } catch (Exception e){
-            // REMOVE THIS TRY CATCH LATER
-        }
     }
 
     // TODO: Make do stuff useful

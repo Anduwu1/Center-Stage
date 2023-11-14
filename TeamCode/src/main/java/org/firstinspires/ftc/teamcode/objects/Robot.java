@@ -24,11 +24,11 @@ public class Robot {
 
     public AutonomousOpsMode.Alliance alliance;
 
-    public static HardwareMap hardCont;
+    public HardwareMap hardCont;
 
 
-    public Robot(AutonomousOpsMode.StartPos start) {
-
+    public Robot(AutonomousOpsMode.StartPos start, HardwareMap hM) {
+        this.hardCont = hM;
         vision = new Vision(this.hardCont);
 
         alliance = AutonomousOpsMode.Alliance.RED_ALLIANCE;

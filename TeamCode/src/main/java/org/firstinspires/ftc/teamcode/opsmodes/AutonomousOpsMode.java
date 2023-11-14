@@ -119,12 +119,13 @@ public class AutonomousOpsMode extends LinearOpMode {
     StageState stageState = new StageState();
 
     HardwareController hardCont = new HardwareController();
-    private Robot robot = new Robot(autoChoices.startPos);
+    private Robot robot = new Robot(autoChoices.startPos, hardwareMap);
+
     public Point location;
 
-
     public void runOpMode() throws InterruptedException {
-        while (autoChoices.state == RobotState.RUNNING) {
+
+        while (opModeIsActive()) {
             autoChoices.xLocation = (double) robot.vision.getLocation().get_x();
             autoChoices.yLocation = (double) robot.vision.getLocation().get_y();
 
