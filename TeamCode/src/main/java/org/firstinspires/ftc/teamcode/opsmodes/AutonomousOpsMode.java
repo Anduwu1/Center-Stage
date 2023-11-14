@@ -136,7 +136,7 @@ public class AutonomousOpsMode extends LinearOpMode {
             // telemetry.addLine(autoChoices.toString());
             // telemetry.addLine(robot.vision.aprilTags.get(0).toString());
 
-            telemetry.addLine(String.valueOf(robot.vision.aprilTags.get(0).percentError()));1
+            telemetry.addLine(String.valueOf(robot.vision.aprilTags.get(0).percentError()));
             telemetry.update();
 
 
