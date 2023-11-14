@@ -133,8 +133,8 @@ public class AutonomousOpsMode extends LinearOpMode {
             autoChoices.yLocation = (double) robot.vision.getLocation().get_y();
 
             // Update Telemetry
-            // telemetry.addLine(autoChoices.toString());
-            telemetry.addLine(robot.vision.aprilTags.get(0).toString());
+            telemetry.addLine(autoChoices.toString());
+            // telemetry.addLine(robot.vision.aprilTags.get(0).toString());
             telemetry.update();
 
 

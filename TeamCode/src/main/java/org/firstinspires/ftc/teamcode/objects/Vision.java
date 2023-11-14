@@ -76,7 +76,8 @@ public class Vision {
 
         for (AprilTagDetection detection : currentDetections) {
             aprilTags.get(detection.id-1).update(detection);
-            points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.y, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation, (float) detection.ftcPose.yaw));
+            points.add(aprilTags.get(detection.id-1).calculate());
+            // points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.y, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation, (float) detection.ftcPose.yaw));
         }
     }
 
@@ -86,7 +87,7 @@ public class Vision {
         if (points.isEmpty())
             return new Point(-1, -1);
 
-        float totalX = 0;
+        /* float totalX = 0;
         float totalY = 0;
 
         for (Point p : points) {
@@ -97,27 +98,30 @@ public class Vision {
         }
 
         points.clear();
-        return new Point(totalX / points.size(), totalY / points.size());
+        return new Point(totalX / points.size(), totalY / points.size()); */
+        Point p = points.get(0);
+        points.clear();
+        return p;
     }
     public void fillList(ArrayList<AprilTagData> tags) {
         // 1 - 3
-        AprilTagData aprilTag1 = new AprilTagData(1, (float) 29.4, 7.5f);
+        AprilTagData aprilTag1 = new AprilTagData(1, (float) 29, 11f);
         tags.add(aprilTag1);
 
-        AprilTagData aprilTag2 = new AprilTagData(2, (float) 35.4, 7.5f);
+        AprilTagData aprilTag2 = new AprilTagData(2, (float) 35, 11f);
         tags.add(aprilTag2);
 
-        AprilTagData aprilTag3 = new AprilTagData(3, (float) 39.4, 7.5f);
+        AprilTagData aprilTag3 = new AprilTagData(3, (float) 41, 11f);
         tags.add(aprilTag3);
 
         // 4 - 6
-        AprilTagData aprilTag4 = new AprilTagData(4, (float) (RobotSettings.FULL_FIELD_INCHES - 29.4), 7.5f);
+        AprilTagData aprilTag4 = new AprilTagData(4, (float) (RobotSettings.FULL_FIELD_INCHES - 29), 11f);
         tags.add(aprilTag4);
 
-        AprilTagData aprilTag5 = new AprilTagData(5, (float) (RobotSettings.FULL_FIELD_INCHES - 34.4), 7.5f);
+        AprilTagData aprilTag5 = new AprilTagData(5, (float) (RobotSettings.FULL_FIELD_INCHES - 35), 11f);
         tags.add(aprilTag5);
 
-        AprilTagData aprilTag6 = new AprilTagData(6, (float) (RobotSettings.FULL_FIELD_INCHES - 39.4), 7.5f);
+        AprilTagData aprilTag6 = new AprilTagData(6, (float) (RobotSettings.FULL_FIELD_INCHES - 41), 11f);
         tags.add(aprilTag6);
     }
 }
