@@ -12,11 +12,15 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 public class Vision {
     public ArrayList<AprilTagData> aprilTags;
     public Point location;
+    // TODO: Make do stuff useful
+
+    private VisionPortal visionPortal;
+    private AprilTagProcessor aprilTag;
+
     public Vision(HardwareMap hardCont){
             aprilTag = new AprilTagProcessor.Builder().build();
             CameraCalibrationIdentity cci = new CameraCalibrationIdentity() {
@@ -33,10 +37,7 @@ public class Vision {
                     .build();
     }
 
-    // TODO: Make do stuff useful
 
-    private VisionPortal visionPortal;
-    private AprilTagProcessor aprilTag;
 
     public int getLastDetetectedTeamPropLoc() {
         return 0; // TODO: Make this return the last team prop location seen
@@ -65,6 +66,7 @@ public class Vision {
         aprilTags = new ArrayList<>();
 
         fillList(aprilTags);
+        updateAprilTags();
     }
 
     ArrayList<Point> points = new ArrayList<>();
@@ -73,6 +75,7 @@ public class Vision {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 
         for (AprilTagDetection detection : currentDetections) {
+            aprilTags.get(detection.id-1).update(detection);
             points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.y, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation, (float) detection.ftcPose.yaw));
         }
     }

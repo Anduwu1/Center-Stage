@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.resources;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import android.annotation.SuppressLint;
@@ -46,18 +45,19 @@ public class HardwareController{
 
     // Roadrunner drive
     SampleMecanumDrive drive;
-
+    HardwareMap hardwareMap;
 
     // Pass in a hardware map please
     @SuppressLint("SuspiciousIndentation")
-    public HardwareController(){
+    public HardwareController(HardwareMap _hardwareMap){
+        this.hardwareMap = _hardwareMap;
 
         bucket = new Bucket();
         arm = new Arm();
         intake = new Intake();
 
         try {
-            drive = new SampleMecanumDrive(hardwareMap);
+            drive = new SampleMecanumDrive(this.hardwareMap);
         }catch (Exception e){
 
         }

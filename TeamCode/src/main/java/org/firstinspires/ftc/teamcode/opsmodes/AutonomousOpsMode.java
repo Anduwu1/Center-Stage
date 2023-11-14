@@ -118,19 +118,23 @@ public class AutonomousOpsMode extends LinearOpMode {
 
     StageState stageState = new StageState();
 
-    HardwareController hardCont = new HardwareController();
-    private Robot robot = new Robot(autoChoices.startPos, hardwareMap);
+    HardwareController hardCont;
 
+    private Robot robot;
     public Point location;
 
     public void runOpMode() throws InterruptedException {
+        robot = new Robot(autoChoices.startPos, hardwareMap);
+        hardCont = new HardwareController(hardwareMap);
 
+        waitForStart();
         while (opModeIsActive()) {
             autoChoices.xLocation = (double) robot.vision.getLocation().get_x();
             autoChoices.yLocation = (double) robot.vision.getLocation().get_y();
 
             // Update Telemetry
-            telemetry.addLine(autoChoices.toString());
+            // telemetry.addLine(autoChoices.toString());
+            telemetry.addLine(robot.vision.aprilTags.get(0).toString());
             telemetry.update();
 
 
@@ -172,8 +176,6 @@ public class AutonomousOpsMode extends LinearOpMode {
 
             }
         }
-        telemetry.addLine("vision null uhh ohh");
-        telemetry.update();
     }
 
 }

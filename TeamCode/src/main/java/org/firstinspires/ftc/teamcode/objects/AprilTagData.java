@@ -1,16 +1,27 @@
 package org.firstinspires.ftc.teamcode.objects;
 
-import java.io.IOException;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
+import java.util.Locale;
 
 public class AprilTagData {
     private int index;
-    private float x, y;
     private float d, dr, dx, dy;
+
+        float x;
+        float y;
+        float z;
+        float yaw;
+        float pitch;
+        float roll;
+        float range;
+        float bearing;
+        float elevation;
+
     public AprilTagData(int _index, float _x, float _y){
         this.index = _index;
         this.x = _x;
         this.y = _y;
-        String fName = Integer.toString(_index) + "_debug.txt";
     }
 
     public float getX() {
@@ -39,5 +50,37 @@ public class AprilTagData {
     public float get_y() {
         return this.y;
     }
+
+    public String toString() {
+        return String.format(
+                Locale.US,
+
+                "x: %f%n" +
+                        "y: %f%n" +
+                        "z: %f%n%n" +
+
+                        "yaw: %f%n" +
+                        "pitch: %f%n" +
+                        "roll: %f%n" +
+
+                        "range: %f%n%n" +
+                        "bearing: %f%n" +
+                        "elevation: %f%n",
+                this.x, this.y, this.z, this.yaw, this.pitch, this.roll, this.range, this.bearing, this.elevation
+        );
+    }
+
+    public void update(AprilTagDetection detection) {
+        this.x = (float) detection.ftcPose.x;
+        this.y = (float) detection.ftcPose.y;
+        this.z = (float) detection.ftcPose.z;
+        this.yaw = (float) detection.ftcPose.yaw;
+        this.pitch = (float) detection.ftcPose.pitch;
+        this.roll = (float) detection.ftcPose.roll;
+        this.range = (float) detection.ftcPose.range;
+        this.bearing = (float) detection.ftcPose.bearing;
+        this.elevation = (float) detection.ftcPose.elevation;
+    }
+
 
 }
