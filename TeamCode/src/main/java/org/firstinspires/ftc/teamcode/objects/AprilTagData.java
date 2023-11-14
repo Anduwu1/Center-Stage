@@ -44,15 +44,18 @@ public class AprilTagData {
         return new Point(_x,_y);
     }
 
+    public float _x, _y;
+    public double v;
     public Point calculate() {
-        double v = Math.toRadians(bearing + (180 - (360 - 90 - (90 - bearing) - (90 - yaw))));
-        float _y = (float) (this.y + (range * Math.sin(v)));
-        float _x = (float) (this.x + (range * Math.cos(v)));
+        v = Math.toRadians(bearing + (180 - (360 - 90 - (90 - bearing) - (90 - yaw))));
+        _y = (float) (this.y + (range * Math.sin(v)));
+        _x = (float) (this.x + (range * Math.cos(v)));
 
-        _x += this.x;
-        _y += this.y;
+        return new Point(_x + this.x, _y = this.y);
+    }
 
-        return new Point(_x, _y);
+    public float percentError() {
+        return (float) ((Math.sqrt(Math.pow(_x,2) + Math.pow(_y,2)) - range) / range) * 100;
     }
     public float get_x() {
         return this.x;
