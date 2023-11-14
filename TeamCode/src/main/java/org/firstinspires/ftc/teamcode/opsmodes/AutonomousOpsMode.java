@@ -85,28 +85,28 @@ public class AutonomousOpsMode extends LinearOpMode {
         public double turnTarget = 0.0; // Angle in deg
         public double driveTime = 0.0;
         public double drivePower = 0.0;
-        public double xLocation = 0.0;
-        public double yLocation = 0.0;
+        public double xLocation = 0.0f;
+        public double yLocation = 0.0f;
 
         @Override
         public String toString()
         {
             return String.format(
                     Locale.US,
-                    "x loc=%.0f \n" +
-                            "y loc=%.0f \n" +
-                            "state=\"%s\" \n" +
-                            "delay=%.0f \n" +
-                            "alliance=\"%s\" \n" +
-                            "startPos=\"%s\" \n" +
-                            // "parkPos=\"%s\" \n" +
-                            "autostage=\"%s\" \n" +
-                            "xTarget=%.1f \n" +
-                            "yTarget=%.1f \n" +
-                            "turnTarget=%.0f \n" +
-                            "driveTime=%.0f \n" +
+                    "x loc=%.0f %n" +
+                            "y loc=%.0f %n" +
+                            // "state=\"%s\" %n" +
+                            "delay=%.0f %n" +
+                            "alliance=\"%s\" %n" +
+                            "startPos=\"%s\" %n" +
+                            // "parkPos=\"%s\" %n" +
+                            "autostage=\"%s\" %n" +
+                            "xTarget=%.1f %n" +
+                            "yTarget=%.1f %n" +
+                            "turnTarget=%.0f %n" +
+                            "driveTime=%.0f %n" +
                             "drivePower=%.1f",
-                    xLocation, yLocation, delay, alliance,startPos, /*parkPos,*/ autonomousStage, xTarget, yTarget, turnTarget, driveTime, drivePower);
+                    xLocation, yLocation, delay, alliance.toString(), startPos.toString(), /*parkPos,*/ autonomousStage.toString(), xTarget, yTarget, turnTarget, driveTime, drivePower);
         }
     }
 
@@ -120,13 +120,13 @@ public class AutonomousOpsMode extends LinearOpMode {
 
     HardwareController hardCont = new HardwareController();
     private Robot robot = new Robot(autoChoices.startPos);
-
+    public Point location;
 
 
     public void runOpMode() throws InterruptedException {
         while (autoChoices.state == RobotState.RUNNING) {
-            autoChoices.xLocation = robot.vision.location.get_x();
-            autoChoices.yLocation = robot.vision.location.get_y();
+            autoChoices.xLocation = (double) robot.vision.getLocation().get_x();
+            autoChoices.yLocation = (double) robot.vision.getLocation().get_y();
 
             // Update Telemetry
             telemetry.addLine(autoChoices.toString());
@@ -171,6 +171,8 @@ public class AutonomousOpsMode extends LinearOpMode {
 
             }
         }
+        telemetry.addLine("vision null uhh ohh");
+        telemetry.update();
     }
 
 }

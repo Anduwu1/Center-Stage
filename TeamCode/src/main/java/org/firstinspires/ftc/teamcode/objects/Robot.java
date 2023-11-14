@@ -20,12 +20,11 @@ import java.util.List;
 
 public class Robot {
     public Point position;
-//    /public Vision vision = new Vision();
+    public Vision vision;
 
     public AutonomousOpsMode.Alliance alliance;
 
     public static HardwareMap hardCont;
-    public Vision vision;
 
 
     public Robot(AutonomousOpsMode.StartPos start) {
@@ -33,8 +32,8 @@ public class Robot {
         vision = new Vision(this.hardCont);
 
         alliance = AutonomousOpsMode.Alliance.RED_ALLIANCE;
-        //vision = new Vision();
-        //vision.initVision();
+
+        vision.initVision();
         // Sets Robot Start Position
         // TODO: Verify that these locations are correct
         float x, y;

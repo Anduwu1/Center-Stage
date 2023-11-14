@@ -6,15 +6,13 @@ import org.firstinspires.ftc.robotcore.external.android.util.Size;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibrationIdentity;
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 public class Vision {
     public ArrayList<AprilTagData> aprilTags;
@@ -31,9 +29,10 @@ public class Vision {
             float co[] = { -0.0347492f, -0.0148858f,0, 0, -0.0072575f,  0.0121186f, -0.156374f, 0};
             CameraCalibration goof = new CameraCalibration(cci, new Size(640, 480), 499.542f, 499.542f, 341.04f,225.8f, co, false, false);
             aprilTag.init(640, 480, goof);
-            visionPortal = new VisionPortal.Builder().setCamera(hardCont.tryGet(WebcamName.class, "Webcam 1"))
+            visionPortal = new VisionPortal.Builder().setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                     .addProcessor(aprilTag)
                     .build();
+            visionPortal.liv
         } catch (Exception e){
             // REMOVE THIS TRY CATCH LATER
         }
@@ -56,10 +55,10 @@ public class Vision {
 
 
         for (AprilTagDetection detection : currentDetections) {
-            if(tmp != null) {
-                if(tmp.ftcPose.range > detection.ftcPose.range)
+            if (tmp != null) {
+                if (tmp.ftcPose.range > detection.ftcPose.range)
                     tmp = detection;
-            }else{
+            } else {
                 tmp = detection;
             }
         }
@@ -81,21 +80,26 @@ public class Vision {
         for (AprilTagDetection detection : currentDetections) {
             points.add(aprilTags.get(detection.id - 1).calculate((float) detection.ftcPose.y, (float) detection.ftcPose.bearing, (float) detection.ftcPose.elevation, (float) detection.ftcPose.yaw));
         }
-        location = getLocation();
     }
 
     public Point getLocation() {
-        float totalx = 0;
-        float totaly = 0;
+        updateAprilTags();
 
-        for (Point p :
-                points) {
-            totalx += p.get_x();
-            totaly += p.get_y();
+        if (points.isEmpty())
+            return new Point(-1, -1);
+
+        float totalX = 0;
+        float totalY = 0;
+
+        for (Point p : points) {
+            if (p != null) {
+                totalX += p.get_x();
+                totalY += p.get_y();
+            }
         }
 
         points.clear();
-        return new Point(totalx/points.size(), totaly/points.size());
+        return new Point(totalX / points.size(), totalY / points.size());
     }
     public void fillList(ArrayList<AprilTagData> tags) {
         // 1 - 3

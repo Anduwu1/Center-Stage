@@ -65,10 +65,14 @@ public class HardwareController{
         // but we may still want to test other functionality so this
         // makes sure that it doesn't crash
         //try{
-            arm.armServo = hardwareMap.get(Servo.class, "servoA");
-            bucket.bucketRotation = hardwareMap.get(Servo.class, RobotSettings.bucket.ROTATION_SERVO);
-            bucket.bucketTrapdoor = hardwareMap.get(Servo.class, RobotSettings.bucket.TRAPDOOR_SERVO);
-            intake.intakeMotor = hardwareMap.get(DcMotor.class, RobotSettings.intake.MOTOR);
+
+
+            // arm.armServo = hardwareMap.get(Servo.class, "servoA");
+            // bucket.bucketRotation = hardwareMap.get(Servo.class, RobotSettings.bucket.ROTATION_SERVO);
+            // bucket.bucketTrapdoor = hardwareMap.get(Servo.class, RobotSettings.bucket.TRAPDOOR_SERVO);
+            // intake.intakeMotor = hardwareMap.get(DcMotor.class, RobotSettings.intake.MOTOR);
+
+
         /*}catch(Exception e){
             // uhhh
             //telemetry.addLine("[HardwareMap] Error. errm.. Embarrassing");
