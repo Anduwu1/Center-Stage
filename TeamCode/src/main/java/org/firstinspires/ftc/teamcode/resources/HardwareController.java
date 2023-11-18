@@ -56,8 +56,13 @@ public class HardwareController{
         arm = new Arm();
         intake = new Intake();
 
+        bucket.bucketRotation = this.hardwareMap.get(Servo.class, bucket.ROTATION_SERVO);
+        bucket.bucketTrapdoor = this.hardwareMap.get(Servo.class, bucket.TRAPDOOR_SERVO);
+        arm.armServo = this.hardwareMap.get(Servo.class, arm.arm);
+
         try {
             drive = new SampleMecanumDrive(this.hardwareMap);
+
         }catch (Exception e){
 
         }
