@@ -75,6 +75,10 @@ public class MainOpsMode extends LinearOpMode {
         }
     }
 
+    public void setTrapdoorOpened() {
+        tX = 1f;
+    }
+
     public void toggleTrapdoor() {
         if(tX == .7f) {
             bState = BucketState.DROP;
@@ -103,24 +107,37 @@ public class MainOpsMode extends LinearOpMode {
         }
     }
 
+    public void armToTop() {
+        toggleBucket(BucketState.DROP);
+        armX = ARM_UP;
+    }
     public void toggleArm() {
         if(armX == ARM_UP) {
-            bState = BucketState.IN;
-            toggleBucket(bState);
+            toggleBucket(BucketState.IN);
             armX = ARM_DOWN;
         } else {
-            bState = BucketState.DROP;
-            toggleBucket(bState);
+            toggleBucket(BucketState.DROP);
             armX = ARM_UP;
         }
+    }
+
+    public void alignBot() {
+        // TODO: make this use the Hardware Controller to rotate the bot using the distance sensors then move the arm into place
+        hardwareController.align();
+        armToTop();
+
+        // If you still want trapdoor release to be manual remove this next line
+        setTrapdoorOpened();
     }
 
 
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+        // robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+
         hardwareController = new HardwareController(hardwareMap);
+
         // Init hardware Vars
         leftFrontDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LFDRIVE_MOTOR);
         leftBackDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LBDRIVE_MOTOR);
@@ -144,8 +161,10 @@ public class MainOpsMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            otherControls();
             updateDriveMotors();
             updateServos();
+
 
             telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
             telemetry.addData("Intake Locked", trapDoor);
@@ -276,5 +295,15 @@ public class MainOpsMode extends LinearOpMode {
         if(!trapDoor)
             intakeDrive.setPower(intakePower);
 
+    }
+
+    private boolean xPressed = false;
+    private void otherControls() {
+        if(gamepad1.x && !xPressed) {
+            xPressed = true;
+            alignBot();
+        } else if(!gamepad2.x) {
+            xPressed = false;
+        }
     }
 }
