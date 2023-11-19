@@ -217,6 +217,12 @@ public class MainOpsMode extends LinearOpMode {
         double lateral = gamepad1.left_stick_x;
         double yaw = gamepad1.right_stick_x;
 
+        // axial and yaw lock
+        boolean aylock = false;
+
+        // whether or not a is pressed
+        boolean aPressed = false;
+
         // Fine control using dpad and bumpers
         if (gamepad1.dpad_up)
             axial += 0.3;
@@ -232,6 +238,27 @@ public class MainOpsMode extends LinearOpMode {
             yaw += 0.6 * -1;
         if (gamepad1.right_bumper)
             yaw -= 0.6 * -1;
+
+        // Auto alignment
+        if (gamepad1.a && !aPressed && aylock) {
+            aylock = false;
+            aPressed = true;
+        } else if (gamepad1.a && !aPressed && !aylock) {
+            // set axial and yaw values using method for auto aligning
+            aPressed = true;
+        } else if (!gamepad1.a) {
+            aPressed = false;
+        } else if (aPressed && !aylock) {
+            // set axial and yaw values method for auto aligning
+            if (/* some method to tell if it is aligned */)
+                aylock = true;
+        }
+
+        // locks the movement of anything but lateral if robot is aligned with backdrop
+        if (aylock) {
+            axial = 0;
+            yaw = 0;
+        }
 
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
