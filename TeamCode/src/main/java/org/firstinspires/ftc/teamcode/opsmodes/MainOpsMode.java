@@ -269,7 +269,7 @@ public class MainOpsMode extends LinearOpMode {
             aPressed = false;
         } else if (aPressed && !aylock) {
             // set axial and yaw values method for auto aligning
-            if (/* some method to tell if it is aligned */)
+            if (!aylock /* some method to tell if it is aligned */)
                 aylock = true;
         }
 
