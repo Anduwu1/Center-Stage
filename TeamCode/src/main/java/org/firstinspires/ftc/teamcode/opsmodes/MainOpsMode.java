@@ -131,7 +131,7 @@ public class MainOpsMode extends LinearOpMode {
     }
 
 
-
+    private boolean aligning = false;
     @Override
     public void runOpMode() throws InterruptedException {
         // robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
@@ -161,9 +161,11 @@ public class MainOpsMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            otherControls();
-            updateDriveMotors();
-            updateServos();
+            if(!aligning) {
+                otherControls();
+                updateDriveMotors();
+                updateServos();
+            }
 
 
             telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
@@ -300,8 +302,10 @@ public class MainOpsMode extends LinearOpMode {
     private boolean xPressed = false;
     private void otherControls() {
         if(gamepad1.x && !xPressed) {
+            aligning = true;
             xPressed = true;
             alignBot();
+            aligning = false;
         } else if(!gamepad2.x) {
             xPressed = false;
         }
