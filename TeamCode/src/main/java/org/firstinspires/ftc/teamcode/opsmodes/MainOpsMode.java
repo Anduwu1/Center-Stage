@@ -161,11 +161,11 @@ public class MainOpsMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            if(!aligning) {
                 otherControls();
-                updateDriveMotors();
                 updateServos();
-            }
+                updateDriveMotors();
+
+
 
 
             telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
