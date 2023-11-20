@@ -92,12 +92,27 @@ public class HardwareController{
         }
     }
 
-    public void align() {
-        // TODO: Add alignment code
-        // Example distnace sensor distance stuff
-        // You have to choose what units you want, I would suggest inches because that's what everything uses
-        dsensors.left.getDistance(DistanceUnit.INCH);
-        dsensors.right.getDistance(DistanceUnit.INCH);
+    public boolean align() {
+        // TODO: figure out how to calculate the start pose
+
+        // get the distances
+        double leftD = dsensors.left.getDistance(DistanceUnit.INCH);
+        double rightD = dsensors.right.getDistance(DistanceUnit.INCH);
+
+        // set the robot's current position relative to backdrop
+        Pose2d startPose = new Pose2d(0,0,0);
+        drive.setPoseEstimate(startPose);
+
+        // tell it to go up against the backdrop
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
+                .splineTo(new Vector2d(0.0),0)
+                .build());
+
+        if (leftD == 0 && rightD == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

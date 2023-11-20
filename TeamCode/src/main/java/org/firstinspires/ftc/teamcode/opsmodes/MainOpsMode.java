@@ -121,13 +121,15 @@ public class MainOpsMode extends LinearOpMode {
         }
     }
 
-    public void alignBot() {
+    public boolean alignBot() {
         // TODO: make this use the Hardware Controller to rotate the bot using the distance sensors then move the arm into place
-        hardwareController.align();
+        boolean aligned = hardwareController.align();
         armToTop();
 
         // If you still want trapdoor release to be manual remove this next line
         setTrapdoorOpened();
+
+        return aligned;
     }
 
 
@@ -161,7 +163,6 @@ public class MainOpsMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            otherControls();
             updateDriveMotors();
             updateServos();
 
@@ -263,13 +264,12 @@ public class MainOpsMode extends LinearOpMode {
             aylock = false;
             aPressed = true;
         } else if (gamepad1.a && !aPressed && !aylock) {
-            // set axial and yaw values using method for auto aligning
+            alignBot();
             aPressed = true;
         } else if (!gamepad1.a) {
             aPressed = false;
         } else if (aPressed && !aylock) {
-            // set axial and yaw values method for auto aligning
-            if (!aylock /* some method to tell if it is aligned */)
+            if (alignBot())
                 aylock = true;
         }
 
@@ -322,15 +322,5 @@ public class MainOpsMode extends LinearOpMode {
         if(!trapDoor)
             intakeDrive.setPower(intakePower);
 
-    }
-
-    private boolean xPressed = false;
-    private void otherControls() {
-        if(gamepad1.x && !xPressed) {
-            xPressed = true;
-            alignBot();
-        } else if(!gamepad2.x) {
-            xPressed = false;
-        }
     }
 }
