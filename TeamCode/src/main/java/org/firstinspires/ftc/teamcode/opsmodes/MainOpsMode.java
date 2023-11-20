@@ -132,8 +132,6 @@ public class MainOpsMode extends LinearOpMode {
         return aligned;
     }
 
-
-
     @Override
     public void runOpMode() throws InterruptedException {
         // robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
@@ -163,9 +161,9 @@ public class MainOpsMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
             updateDriveMotors();
             updateServos();
-
 
             telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
             telemetry.addData("Intake Locked", trapDoor);
