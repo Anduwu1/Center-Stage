@@ -75,6 +75,10 @@ public class MainOpsMode extends LinearOpMode {
         }
     }
 
+    public void setTrapdoorOpened() {
+        tX = 1f;
+    }
+
     public void toggleTrapdoor() {
         if(tX == .7f) {
             bState = BucketState.DROP;
@@ -103,24 +107,37 @@ public class MainOpsMode extends LinearOpMode {
         }
     }
 
+    public void armToTop() {
+        toggleBucket(BucketState.DROP);
+        armX = ARM_UP;
+    }
     public void toggleArm() {
         if(armX == ARM_UP) {
-            bState = BucketState.IN;
-            toggleBucket(bState);
+            toggleBucket(BucketState.IN);
             armX = ARM_DOWN;
         } else {
-            bState = BucketState.DROP;
-            toggleBucket(bState);
+            toggleBucket(BucketState.DROP);
             armX = ARM_UP;
         }
     }
 
+    public boolean alignBot() {
+        // TODO: make this use the Hardware Controller to rotate the bot using the distance sensors then move the arm into place
+        boolean aligned = hardwareController.align();
+        armToTop();
 
+        // If you still want trapdoor release to be manual remove this next line
+        setTrapdoorOpened();
+
+        return aligned;
+    }
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+        // robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+
         hardwareController = new HardwareController(hardwareMap);
+
         // Init hardware Vars
         leftFrontDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LFDRIVE_MOTOR);
         leftBackDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LBDRIVE_MOTOR);
@@ -144,6 +161,7 @@ public class MainOpsMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
             updateDriveMotors();
             updateServos();
 
@@ -217,6 +235,12 @@ public class MainOpsMode extends LinearOpMode {
         double lateral = gamepad1.left_stick_x;
         double yaw = gamepad1.right_stick_x;
 
+        // axial and yaw lock
+        boolean aylock = false;
+
+        // whether or not a is pressed
+        boolean aPressed = false;
+
         // Fine control using dpad and bumpers
         if (gamepad1.dpad_up)
             axial += 0.3;
@@ -232,6 +256,26 @@ public class MainOpsMode extends LinearOpMode {
             yaw += 0.6 * -1;
         if (gamepad1.right_bumper)
             yaw -= 0.6 * -1;
+
+        // Auto alignment
+        if (gamepad1.a && !aPressed && aylock) {
+            aylock = false;
+            aPressed = true;
+        } else if (gamepad1.a && !aPressed && !aylock) {
+            alignBot();
+            aPressed = true;
+        } else if (!gamepad1.a) {
+            aPressed = false;
+        } else if (aPressed && !aylock) {
+            if (alignBot())
+                aylock = true;
+        }
+
+        // locks the movement of anything but lateral if robot is aligned with backdrop
+        if (aylock) {
+            axial = 0;
+            yaw = 0;
+        }
 
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
