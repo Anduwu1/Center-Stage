@@ -87,7 +87,7 @@ public class HardwareController{
      */
     public void driveTo(float xPos, float yPos){
         drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(xPos, yPos), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(xPos, yPos), Math.toRadians(0))
                 .build());
         //telemetry.addLine("If this shows up sooner than expected \" follow trajectory \" is asyncrohjnousl> i thinik");
         //telemetry.update();
