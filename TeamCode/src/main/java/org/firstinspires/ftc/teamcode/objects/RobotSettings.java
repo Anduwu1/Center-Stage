@@ -36,8 +36,8 @@ public class RobotSettings {
     public static final double HALF_FIELD_INCHES                = FULL_FIELD_INCHES / 2.0;
     public static final double FULL_TILE_INCHES                 = 23.75;
 
-    public static final double ROBOT_LENGTH                     = 0;
-    public static final double ROBOT_WIDTH                      = 0;
+    public static final double ROBOT_LENGTH                     = 17.0;
+    public static final double ROBOT_WIDTH                      = 17.0;
     public static final double DRIVE_BASE_LENGTH                = 0;
     public static final double DRIVE_BASE_WIDTH                 = 0;
 
