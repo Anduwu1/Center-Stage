@@ -115,4 +115,11 @@ public class HardwareController{
         }
     }
 
+    public double getLeftDistance() {
+        return dsensors.left.getDistance(DistanceUnit.INCH);
+    }
+
+    public double getRightDistance() {
+        return dsensors.right.getDistance(DistanceUnit.INCH);
+    }
 }

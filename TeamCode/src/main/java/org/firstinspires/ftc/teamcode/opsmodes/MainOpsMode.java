@@ -168,7 +168,8 @@ public class MainOpsMode extends LinearOpMode {
             telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
             telemetry.addData("Intake Locked", trapDoor);
             telemetry.addData("Bucket %", "%f", bucketX - 0.19f / (1.0f - 0.19f));
-
+            telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
+            telemetry.addLine("right distance: " + hardwareController.getRightDistance());
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
@@ -257,21 +258,35 @@ public class MainOpsMode extends LinearOpMode {
         if (gamepad1.right_bumper)
             yaw -= 0.6 * -1;
 
-        // Auto alignment
-        if (gamepad1.a && !aPressed && aylock) {
-            aylock = false;
-            aPressed = true;
-        } else if (gamepad1.a && !aPressed && !aylock) {
-            alignBot();
-            aPressed = true;
-        } else if (!gamepad1.a) {
-            aPressed = false;
-        } else if (aPressed && !aylock) {
-            if (alignBot())
-                aylock = true;
+//        // Auto alignment
+//        if (gamepad1.a && !aPressed && aylock) {
+//            aylock = false;
+//            aPressed = true;
+//        } else if (gamepad1.a && !aPressed && !aylock) {
+//            alignBot();
+//            aPressed = true;
+//        } else if (!gamepad1.a) {
+//            aPressed = false;
+//        } else if (aPressed && !aylock) {
+//            if (alignBot())
+//                aylock = true;
+//        }
+
+        // quick and dirty distance sensor code
+        if (gamepad1.a) {
+            if (Math.abs(hardwareController.getLeftDistance() - hardwareController.getRightDistance()) > 0.05) {
+                yaw = -(hardwareController.getLeftDistance() - hardwareController.getRightDistance()) / (hardwareController.getLeftDistance() * 7);
+                aylock = false;
+                if (hardwareController.getLeftDistance() >= 0.5 || hardwareController.getRightDistance() >= 0.5) {
+                    axial = -1 * ((hardwareController.getLeftDistance() + hardwareController.getRightDistance()) / 2) / 42;
+                    if (axial < -1)
+                        axial = -1;
+                    aylock = false;
+                }
+            }
         }
 
-        // locks the movement of anything but lateral if robot is aligned with backdrop
+        // locks the movement of anything but lateral if robot is aligned wi    th backdrop
         if (aylock) {
             axial = 0;
             yaw = 0;

@@ -12,7 +12,7 @@ public class ServoCalib extends LinearOpMode {
     Robot robot;
 
     // Float
-    float armPos = 0.75f, bucketPos = 0.0f, doorPos = 0.0f;
+    float armPos = 0.45f, bucketPos = 0.0f, doorPos = 0.0f;
 
     HardwareController.Servo_Type cur = HardwareController.Servo_Type.ARM_SERVO;
 
