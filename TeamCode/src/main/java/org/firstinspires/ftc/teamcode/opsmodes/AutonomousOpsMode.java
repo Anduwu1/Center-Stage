@@ -165,6 +165,9 @@ public class AutonomousOpsMode extends LinearOpMode {
         }
 
         hardCont.driveTo((float) xDif, (float) yDif);
+
+        autoChoices.xLocation = autoChoices.xTarget;
+        autoChoices.yLocation = autoChoices.yTarget;
     }
 
     public void runOpMode() throws InterruptedException {
@@ -190,6 +193,7 @@ public class AutonomousOpsMode extends LinearOpMode {
         }
 
         int teamPropPos = 0;
+
         waitForStart();
         while (opModeIsActive()) {
 
@@ -238,21 +242,33 @@ public class AutonomousOpsMode extends LinearOpMode {
                                 break;
                         }
 
-                        // TODO: Add Code for using KNOWN team prop location to drive to correct spike strip
+                        // TODO: Add Code for using KNOWN team prop location to drive to correct spike strip for +10 points
                         switch (teamPropPos) {
                             case 0:
                             default:
                             break;
                         }
                         moveToTarget();
+                        hardCont.eje   ctIntake();
                         autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
                         break;
                     case PARK_AT_BACKSTAGE:
-                        pTask.runTaskTick(stageState, hardCont);
+                        /* pTask.runTaskTick(stageState, hardCont);
                         if (pTask.isFinished()) {
 
                             autoChoices.autonomousStage = AutonomousState.DONE;
+                        }*/
+
+                        autoChoices.yTarget = RobotSettings.FULL_TILE_INCHES / 2;
+                        switch (autoChoices.alliance) {
+                            case RED_ALLIANCE:
+                                autoChoices.xTarget = RobotSettings.FULL_FIELD_INCHES - RobotSettings.FULL_TILE_INCHES / 2;
+                                break;
+                            default:
+                                autoChoices.xTarget = RobotSettings.FULL_TILE_INCHES / 2;
                         }
+
+                        moveToTarget();
                         break;
 
             }

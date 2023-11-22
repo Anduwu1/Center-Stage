@@ -180,36 +180,24 @@ public class MainOpsMode extends LinearOpMode {
     boolean open = true, trapDoor = false;
     private float armX = (float) ARM_DOWN;
     private void updateServos(){
-        // Trapdoor toggle
-        if(gamepad2.y && !yPressed) {
-            yPressed = true;
-            toggleTrapdoor();
-            telemetry.addLine("Toggling trapdoor");
-        } else if(!gamepad2.y) {
-            yPressed = false;
-            //telemetry.addLine("Button Pressed but not toggling");
-        }
 
-        // Bucket Toggle
-        if(gamepad2.b && !bPressed) {
-            bPressed = true;
-            toggleBucket();
-        } else if(!gamepad2.b) {
-            bPressed = false;
-        }
+        // Method for each button on controller 1
+        a1();
+        b1();
+        y1();
+        x1();
+
+        // On controller 2
+        a2();
+        b2();
+        y2();
+        x2();
 
         // Arm Toggle
         if (gamepad2.right_bumper && !rbPressed) { rbPressed = true; toggleArm(); } else if (!gamepad2.right_bumper){ rbPressed = false; }
 
         // Manual arm control
         armX -= gamepad2.left_stick_y / 800.0f;
-
-        // Arm clamp
-        if(armX > ARM_UP) armX = (float) ARM_UP;
-        if(armX < ARM_DOWN) armX = (float) ARM_DOWN;
-
-        // Arm location percenetage for telemetry
-        // float percent = (float) ((armX - Arm.ARM_DOWN) / (Arm.ARM_UP - Arm.ARM_DOWN));
 
         // Manual control of the bucket
         if(gamepad2.dpad_up) bucketX+=0.005f;
@@ -226,6 +214,10 @@ public class MainOpsMode extends LinearOpMode {
 
     }
 
+    double axial = 0;
+    double lateral = 0;
+    double yaw = 0;
+
     private void updateDriveMotors() {
         // Max motor speed
         double max;
@@ -234,12 +226,6 @@ public class MainOpsMode extends LinearOpMode {
         double axial = -gamepad1.left_stick_y;
         double lateral = gamepad1.left_stick_x;
         double yaw = gamepad1.right_stick_x;
-
-        // axial and yaw lock
-        boolean aylock = false;
-
-        // whether or not a is pressed
-        boolean aPressed = false;
 
         // Fine control using dpad and bumpers
         if (gamepad1.dpad_up)
@@ -252,30 +238,9 @@ public class MainOpsMode extends LinearOpMode {
             lateral += 0.3;
 
         // Bumpers Turn Bot Left and Right
-        if (gamepad1.left_bumper)
-            yaw += 0.6 * -1;
-        if (gamepad1.right_bumper)
-            yaw -= 0.6 * -1;
+        rb1();
+        lb1();
 
-        // Auto alignment
-        if (gamepad1.a && !aPressed && aylock) {
-            aylock = false;
-            aPressed = true;
-        } else if (gamepad1.a && !aPressed && !aylock) {
-            alignBot();
-            aPressed = true;
-        } else if (!gamepad1.a) {
-            aPressed = false;
-        } else if (aPressed && !aylock) {
-            if (alignBot())
-                aylock = true;
-        }
-
-        // locks the movement of anything but lateral if robot is aligned with backdrop
-        if (aylock) {
-            axial = 0;
-            yaw = 0;
-        }
 
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
@@ -311,14 +276,77 @@ public class MainOpsMode extends LinearOpMode {
         // Intake
         intakePower = 0;
 
-        if(gamepad1.right_trigger != 0)
-            intakePower = -1;
-
-        if(gamepad1.left_trigger != 0)
-            intakePower = 1;
+        lt1();
+        rt1();
 
         if(!trapDoor)
             intakeDrive.setPower(intakePower);
 
     }
+
+    public void a1() {
+        // Auto alignment
+        boolean aPressed = false;
+
+        // Axial and yaw lock
+        boolean aylock = false;
+
+        if (gamepad1.a && !aPressed && aylock) {
+            aylock = false;
+            aPressed = true;
+        } else if (gamepad1.a && !aPressed && !aylock) {
+            alignBot();
+            aPressed = true;
+        } else if (!gamepad1.a) {
+            aPressed = false;
+        } else if (aPressed && !aylock) {
+            if (alignBot())
+                aylock = true;
+        }
+
+        // locks the movement of anything but lateral if robot is aligned with backdrop
+        if (aylock) {
+            axial = 0;
+            yaw = 0;
+        }
+    }
+    public void b1() { }
+    public void y1() { }
+
+    public void x1() { }
+
+    public void rb1() {
+        if (gamepad1.right_bumper)
+            yaw -= 0.6 * -1;
+    }
+
+    public void lb1() {
+        if (gamepad1.left_bumper)
+            yaw += 0.6 * -1;
+    }
+
+    public void rt1() {
+        if(gamepad1.right_trigger != 0)
+            intakePower = -1;
+    }
+
+    public void lt1() {        if(gamepad1.left_trigger != 0)
+        intakePower = 1; }
+
+
+    public void a2() { }
+    public void b2() { }
+    public void y2() {
+        // Trapdoor toggle
+        if(gamepad2.y && !yPressed) {
+            yPressed = true;
+            toggleTrapdoor();
+        } else if(!gamepad2.y) {
+            yPressed = false;
+        }
+    }
+
+    public void x2() { }
+
+
 }
