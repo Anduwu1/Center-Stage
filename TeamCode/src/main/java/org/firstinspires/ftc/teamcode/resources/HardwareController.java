@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-
 /*
     Class for making the robot like
     do stuff
@@ -45,7 +44,7 @@ public class HardwareController{
 
     // Pass in a hardware map please
     @SuppressLint("SuspiciousIndentation")
-    public HardwareController(HardwareMap _hardwareMap) {
+    public HardwareController(HardwareMap _hardwareMap){
         this.hardwareMap = _hardwareMap;
 
         bucket = new Bucket();
@@ -62,8 +61,11 @@ public class HardwareController{
         dsensors.right = this.hardwareMap.get(DistanceSensor.class, dsensors.rightSense);
 
 
-        drive = new SampleMecanumDrive(this.hardwareMap);
+        try {
+            drive = new SampleMecanumDrive(this.hardwareMap);
+        }catch (Exception e){
 
+        }
     }
 
     /*
@@ -71,7 +73,7 @@ public class HardwareController{
      */
     public void driveTo(float xPos, float yPos){
         drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
-                .splineToConstantHeading(new Vector2d(xPos, yPos), Math.toRadians(0))
+                .splineTo(new Vector2d(xPos, yPos), Math.toRadians(0))
                 .build());
     }
 
@@ -113,8 +115,11 @@ public class HardwareController{
         }
     }
 
-    public void ejectIntake() throws InterruptedException {
-        intake.intakeMotor.setPower(.2);
+    public double getLeftDistance() {
+        return dsensors.left.getDistance(DistanceUnit.INCH);
     }
 
+    public double getRightDistance() {
+        return dsensors.right.getDistance(DistanceUnit.INCH);
+    }
 }
