@@ -249,7 +249,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                             break;
                         }
                         moveToTarget();
-                        hardCont.eje   ctIntake();
+                        hardCont.ejectIntake();
                         autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
                         break;
                     case PARK_AT_BACKSTAGE:
