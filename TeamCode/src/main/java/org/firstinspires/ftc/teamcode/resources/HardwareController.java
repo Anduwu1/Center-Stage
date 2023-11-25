@@ -120,4 +120,11 @@ public class HardwareController{
         intake.intakeMotor.setPower(.2);
     }
 
+    public double getRightDistance() {
+        return dsensors.right.getDistance(DistanceUnit.INCH);
+    }
+
+    public double getLeftDistance() {
+        return dsensors.left.getDistance(DistanceUnit.INCH);
+    }
 }
