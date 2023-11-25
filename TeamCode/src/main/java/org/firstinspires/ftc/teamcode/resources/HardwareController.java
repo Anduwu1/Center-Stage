@@ -48,20 +48,23 @@ public class HardwareController{
     public HardwareController(HardwareMap _hardwareMap) {
         this.hardwareMap = _hardwareMap;
 
+        // Create subsystems
         bucket = new Bucket();
         arm = new Arm();
         intake = new Intake();
         dsensors = new DistanceSensors();
 
+        // Init servos
         bucket.bucketRotation = this.hardwareMap.get(Servo.class, bucket.ROTATION_SERVO);
         bucket.bucketTrapdoor = this.hardwareMap.get(Servo.class, bucket.TRAPDOOR_SERVO);
 
         arm.armServo = this.hardwareMap.get(Servo.class, arm.arm);
 
+        // Init distance sensors
         dsensors.left = this.hardwareMap.get(DistanceSensor.class, dsensors.leftSense);
         dsensors.right = this.hardwareMap.get(DistanceSensor.class, dsensors.rightSense);
 
-
+        // Init drive
         drive = new SampleMecanumDrive(this.hardwareMap);
 
     }
@@ -71,7 +74,7 @@ public class HardwareController{
      */
     public void driveTo(float xPos, float yPos){
         drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
-                .splineToConstantHeading(new Vector2d(xPos, yPos), Math.toRadians(0))
+                .lineTo(new Vector2d(xPos, yPos))
                 .build());
     }
 
