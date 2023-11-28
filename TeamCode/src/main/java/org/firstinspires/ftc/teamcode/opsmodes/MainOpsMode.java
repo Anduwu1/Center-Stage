@@ -234,7 +234,7 @@ public class MainOpsMode extends LinearOpMode {
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
         double axial = -gamepad1.left_stick_y;
         double lateral = gamepad1.left_stick_x;
-        double yaw = gamepad1.right_stick_x;
+        double yaw = gamepad1.right_stick_x / 1.5;
 
         // axial and yaw lock
         boolean aylock = false;
@@ -254,9 +254,9 @@ public class MainOpsMode extends LinearOpMode {
 
         // Bumpers Turn Bot Left and Right
         if (gamepad1.left_bumper)
-            yaw += 0.6 * -1;
+            yaw += 0.3 * -1;
         if (gamepad1.right_bumper)
-            yaw -= 0.6 * -1;
+            yaw -= 0.3 * -1;
 
 //        // Auto alignment
 //        if (gamepad1.a && !aPressed && aylock) {
@@ -275,10 +275,10 @@ public class MainOpsMode extends LinearOpMode {
         // quick and dirty distance sensor code
         if (gamepad1.a) {
             if (Math.abs(hardwareController.getLeftDistance() - hardwareController.getRightDistance()) > 0.05) {
-                yaw = -(hardwareController.getLeftDistance() - hardwareController.getRightDistance()) / (hardwareController.getLeftDistance() * 7);
+                yaw = (hardwareController.getLeftDistance() - hardwareController.getRightDistance()) / (hardwareController.getLeftDistance() * 7);
                 aylock = false;
-                if (hardwareController.getLeftDistance() >= 0.5 || hardwareController.getRightDistance() >= 0.5) {
-                    axial = -1 * ((hardwareController.getLeftDistance() + hardwareController.getRightDistance()) / 2) / 42;
+                if (hardwareController.getLeftDistance() >= 2 || hardwareController.getRightDistance() >= 2) {
+                    axial = -1 * ((hardwareController.getLeftDistance() + hardwareController.getRightDistance()) / 2) / 50;
                     if (axial < -1)
                         axial = -1;
                     aylock = false;
@@ -326,10 +326,10 @@ public class MainOpsMode extends LinearOpMode {
         // Intake
         intakePower = 0;
 
-        if(gamepad1.right_trigger != 0)
+        if(gamepad2.right_trigger != 0)
             intakePower = -1;
 
-        if(gamepad1.left_trigger != 0)
+        if(gamepad2.left_trigger != 0)
             intakePower = 1;
 
         if(!trapDoor)
