@@ -45,10 +45,8 @@ public class AutoClickThisEXE extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        while (!opModeIsActive()) {
+        while (!opModeIsActive()) { }
 
-        }
-        //drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).strafeLeft(2).build());
         drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).forward(RobotSettings.FULL_TILE_INCHES*2).build());
     }
 }
