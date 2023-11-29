@@ -78,6 +78,11 @@ public class HardwareController{
                 .build());
     }
 
+    public void driveForward(float distance){
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
+                .forward(distance).build());
+    }
+
 
     public void servoMove(float to, @NonNull Servo_Type sT){
         switch (sT){
