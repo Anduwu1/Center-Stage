@@ -83,7 +83,26 @@ public class HardwareController{
                 .forward(distance).build());
     }
 
+    public void driveBackwards(float distance){
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
+                .back(distance).build());
+    }
 
+    public void driveLeft(float distance){
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
+                .strafeLeft(distance).build());
+    }
+
+    public void driveRight(float distance){
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
+                .strafeRight(distance).build());
+    }
+
+    /*
+        Servo stuff
+        (maybe rewrite later? the Servo_Type arg is kinda
+        icky imo)
+     */
     public void servoMove(float to, @NonNull Servo_Type sT){
         switch (sT){
             case ARM_SERVO:
