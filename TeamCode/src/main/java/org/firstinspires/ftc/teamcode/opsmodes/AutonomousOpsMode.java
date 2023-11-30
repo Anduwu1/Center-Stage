@@ -165,7 +165,7 @@ public class AutonomousOpsMode extends LinearOpMode {
         }
 
         //hardCont.driveTo((float) xDif, (float) yDif);
-        hardCont.driveForward((float) xDif);
+        hardCont.driveBackwards((float) xDif);
 
         autoChoices.xLocation = autoChoices.xTarget;
         autoChoices.yLocation = autoChoices.yTarget;
@@ -222,7 +222,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                             telemetry.addLine(msg);
                             // robot.speak(msg);
                         }*/
-                        // Currently the only other option is PARK
+                        // Currently the only other option is Place Purple Pixel
                         autoChoices.autonomousStage = AutonomousState.PLACE_PURPLE_PIXEL;
                         break;
                     case PLACE_PURPLE_PIXEL:
