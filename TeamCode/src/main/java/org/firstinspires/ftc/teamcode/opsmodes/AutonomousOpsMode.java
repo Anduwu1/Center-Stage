@@ -173,8 +173,8 @@ public class AutonomousOpsMode extends LinearOpMode {
                 break;
         }
 
-        //hardCont.driveTo((float) xDif, (float) yDif);
-        hardCont.driveBackwards((float) xDif);
+        hardCont.driveTo((float) xDif, (float) yDif);
+        //hardCont.driveBackwards((float) xDif);
 
         autoChoices.xLocation = autoChoices.xTarget;
         autoChoices.yLocation = autoChoices.yTarget;
@@ -237,6 +237,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                     case PLACE_PURPLE_PIXEL:
                         // Detect position
                         AprilTagPoseFtc pose = hardCont.getAprilTagWithId(PROP_ID);
+
                         if(pose.x > RIGHT_PROP_X_POS){
                             // Prop is at the far right (politically) (haha) (laugh)
 
