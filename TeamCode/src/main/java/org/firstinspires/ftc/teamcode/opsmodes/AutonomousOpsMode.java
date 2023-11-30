@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.resources.taskManagment.StageState;
 import org.firstinspires.ftc.teamcode.resources.tasks.ParkTask;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 // Default java stuff
@@ -133,6 +134,14 @@ public class AutonomousOpsMode extends LinearOpMode {
     private Robot robot;
     public Point location;
 
+    // PURPLE PIXEL PLACING STUFF
+    public final int PROP_ID = 420; // APRIL TAG ID
+    public final float LEFT_PROP_X_POS = 0.0f; // POSITION OF WHERE THE TEAM PROP NEEDS TO GREATER THAN
+                                               // BE FOR IT TO BE CONSIDERED "LEFT"
+    public final float CENTER_PROP_X_POS = 0.0f; // POSITION OF WHERE THE TEAM PROP NEEDS TO GREATER THAN
+                                                // BE FOR IT TO BE CONSIDERED "CENTER"
+    public final float RIGHT_PROP_X_POS = 0.0f; // POSITION OF WHERE THE TEAM PROP NEEDS TO GREATER THAN
+                                                // BE FOR IT TO BE CONSIDERED "RIGHT"
     private void moveToTarget() {
         double xDif = autoChoices.xLocation - autoChoices.xTarget; // target < location = +
         double yDif = autoChoices.yLocation - autoChoices.yTarget;
@@ -226,6 +235,19 @@ public class AutonomousOpsMode extends LinearOpMode {
                         autoChoices.autonomousStage = AutonomousState.PLACE_PURPLE_PIXEL;
                         break;
                     case PLACE_PURPLE_PIXEL:
+                        // Detect position
+                        AprilTagPoseFtc pose = hardCont.getAprilTagWithId(PROP_ID);
+                        if(pose.x > RIGHT_PROP_X_POS){
+                            // Prop is at the far right (politically) (haha) (laugh)
+
+                        }else if(pose.x > CENTER_PROP_X_POS){
+                            // Prop is at the far center (politically) (haha) (laugh) (again)
+
+                        }else{
+                            // Prop is at the far left (politic- bit unfunny now isn't it)
+
+                        }
+
                         // Sets Position of the vertical tape strip relative to the robots start position to be passed into RoadRunner
                         switch (autoChoices.alliance) {
                             case BLUE_ALLIANCE:

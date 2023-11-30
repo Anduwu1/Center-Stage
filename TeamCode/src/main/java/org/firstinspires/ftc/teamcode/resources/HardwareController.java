@@ -15,8 +15,13 @@ import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
+import org.firstinspires.ftc.teamcode.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
+
+import java.util.List;
 
 /*
     Class for making the robot like
@@ -35,6 +40,7 @@ public class HardwareController{
     private Arm arm;
     private Intake intake;
     private DistanceSensors dsensors;
+    private Camera camera;
 
     // Robot we're controlling
     public Robot robot;
@@ -53,6 +59,7 @@ public class HardwareController{
         arm = new Arm();
         intake = new Intake();
         dsensors = new DistanceSensors();
+        camera = new Camera(this.hardwareMap);
 
         // Init servos
         bucket.bucketRotation = this.hardwareMap.get(Servo.class, bucket.ROTATION_SERVO);
@@ -150,5 +157,21 @@ public class HardwareController{
 
     public double getLeftDistance() {
         return dsensors.left.getDistance(DistanceUnit.INCH);
+    }
+
+    // Camera stuff
+    public List<AprilTagDetection> getAllAprilTags(){
+        return camera.getAllVisibleAprilTags();
+    }
+
+    public AprilTagPoseFtc getAprilTagWithId(int id){
+        AprilTagPoseFtc tmp = new AprilTagPoseFtc(0,0,0,0,0,0,-100,0,0); // default
+        for(AprilTagDetection april : this.getAllAprilTags()){
+            if(april.id == id){
+                tmp = april.ftcPose;
+                break;
+            }
+        }
+        return tmp;
     }
 }
