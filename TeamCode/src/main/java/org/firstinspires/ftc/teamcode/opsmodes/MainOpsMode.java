@@ -254,9 +254,9 @@ public class MainOpsMode extends LinearOpMode {
 
         // Bumpers Turn Bot Left and Right
         if (gamepad1.left_bumper)
-            yaw += 0.6 * -1;
+            yaw += 0.3 * -1;
         if (gamepad1.right_bumper)
-            yaw -= 0.6 * -1;
+            yaw -= 0.3 * -1;
 
 //        // Auto alignment
 //        if (gamepad1.a && !aPressed && aylock) {
