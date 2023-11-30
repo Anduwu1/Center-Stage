@@ -38,7 +38,7 @@ import java.util.List;
  */
 
 @Autonomous(group="drive")
-public class AutonomousOpsMode extends LinearOpMode {
+public class    AutonomousOpsMode extends LinearOpMode {
 
     public enum RobotState {
         RUNNING,
@@ -173,8 +173,8 @@ public class AutonomousOpsMode extends LinearOpMode {
                 break;
         }
 
-        //hardCont.driveTo((float) xDif, (float) yDif);
-        hardCont.driveBackwards((float) xDif);
+        hardCont.driveTo((float) xDif, (float) yDif);
+        // hardCont.driveBackwards((float) xDif);
 
         autoChoices.xLocation = autoChoices.xTarget;
         autoChoices.yLocation = autoChoices.yTarget;

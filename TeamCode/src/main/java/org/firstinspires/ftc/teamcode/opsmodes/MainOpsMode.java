@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 
+import java.util.Locale;
+
 @TeleOp(name="Main OpMode")
 public class MainOpsMode extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
@@ -165,12 +167,21 @@ public class MainOpsMode extends LinearOpMode {
             updateDriveMotors();
             updateServos();
 
-            telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
-            telemetry.addData("Intake Locked", trapDoor);
-            telemetry.addData("Bucket %", "%f", bucketX - 0.19f / (1.0f - 0.19f));
+            //String motorData = String.format(
+            //        Locale.US,
+                       // "Left Front: %f%n" +
+                       //         "Left Rear: %f%n" +
+                       //         "Right Front: %f%n" +
+                       //         "Right Rear: %f%n" +
+                              //  leftFrontDrive.ge
+            //)
+            // telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
+            // telemetry.addData("Intake Locked", trapDoor);
+            // telemetry.addData("Bucket %", "%f", bucketX - 0.19f / (1.0f - 0.19f));
             telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
             telemetry.addLine("right distance: " + hardwareController.getRightDistance());
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addLine();
+            // telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
     }
@@ -185,7 +196,7 @@ public class MainOpsMode extends LinearOpMode {
         if(gamepad2.y && !yPressed) {
             yPressed = true;
             toggleTrapdoor();
-            telemetry.addLine("Toggling trapdoor");
+            // telemetry.addLine("Toggling trapdoor");
         } else if(!gamepad2.y) {
             yPressed = false;
             //telemetry.addLine("Button Pressed but not toggling");
@@ -286,7 +297,7 @@ public class MainOpsMode extends LinearOpMode {
             }
         }
 
-        // locks the movement of anything but lateral if robot is aligned wi    th backdrop
+        // locks the movement of anything but lateral if robot is aligned with backdrop
         if (aylock) {
             axial = 0;
             yaw = 0;
