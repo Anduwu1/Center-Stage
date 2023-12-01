@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.subsystems.Arm.ARM_UP;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -15,15 +16,18 @@ import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 
+import java.util.Arrays;
+import java.util.List;
+
 @TeleOp(name="Main OpMode")
 public class MainOpsMode extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     // Motors
-    private DcMotor leftFrontDrive = null;
-    private DcMotor leftBackDrive = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor rightBackDrive = null;
+    private DcMotorEx leftFrontDrive = null;
+    private DcMotorEx leftBackDrive = null;
+    private DcMotorEx rightFrontDrive = null;
+    private DcMotorEx rightBackDrive = null;
 
     private DcMotor intakeDrive = null;
     private enum ArmState {
@@ -139,10 +143,16 @@ public class MainOpsMode extends LinearOpMode {
         hardwareController = new HardwareController(hardwareMap);
 
         // Init hardware Vars
-        leftFrontDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LFDRIVE_MOTOR);
-        leftBackDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_LBDRIVE_MOTOR);
-        rightFrontDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_RFDRIVE_MOTOR);
-        rightBackDrive = hardwareMap.get(DcMotor.class, RobotSettings.BANA_RBDRIVE_MOTOR);
+        leftFrontDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_LFDRIVE_MOTOR);
+        leftBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_LBDRIVE_MOTOR);
+        rightFrontDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_RFDRIVE_MOTOR);
+        rightBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_RBDRIVE_MOTOR);
+        List<DcMotorEx> motors = Arrays.asList(leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive);
+
+        //set mode
+        for (DcMotorEx motor : motors) {
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
 
         intakeDrive = hardwareMap.get(DcMotor.class, "intake");
 
