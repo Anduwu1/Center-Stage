@@ -322,11 +322,7 @@ public class MainOpsMode extends LinearOpMode {
         // can turn on a mode to protect from banging into the backdrop
         if(gamepad2.x && !xPressed) {
             xPressed = true;
-            if (!aylock) {
-                aylock = true;
-            } else {
-                aylock = false;
-            }
+            aylock = !aylock;
         } else if (!gamepad2.x) {
             xPressed = false;
         }
