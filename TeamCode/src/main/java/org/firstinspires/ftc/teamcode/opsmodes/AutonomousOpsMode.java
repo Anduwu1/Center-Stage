@@ -38,7 +38,7 @@ import java.util.List;
  */
 
 @Autonomous(group="drive")
-public class    AutonomousOpsMode extends LinearOpMode {
+public class AutonomousOpsMode extends LinearOpMode {
 
     public enum RobotState {
         RUNNING,
@@ -237,6 +237,7 @@ public class    AutonomousOpsMode extends LinearOpMode {
                     case PLACE_PURPLE_PIXEL:
                         // Detect position
                         AprilTagPoseFtc pose = hardCont.getAprilTagWithId(PROP_ID);
+
                         if(pose.x > RIGHT_PROP_X_POS){
                             // Prop is at the far right (politically) (haha) (laugh)
 
