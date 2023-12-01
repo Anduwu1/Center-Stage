@@ -356,9 +356,9 @@ public class MainOpsMode extends LinearOpMode {
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
 
-        min = Math.min(leftFrontEx, rightFrontEx);
-        min = Math.min(min, rightBackEx);
-        min = Math.min(min, leftBackEx);
+        min = Math.min(leftFrontEx * leftFrontPower, rightFrontEx * rightFrontPower);
+        min = Math.min(min, rightBackEx * rightBackPower);
+        min = Math.min(min, leftBackEx * leftBackPower);
 
         if (max > 1.0) {
             leftFrontPower /= max;
