@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -64,6 +65,7 @@ public class HardwareController{
         // Init servos
         bucket.bucketRotation = this.hardwareMap.get(Servo.class, bucket.ROTATION_SERVO);
         bucket.bucketTrapdoor = this.hardwareMap.get(Servo.class, bucket.TRAPDOOR_SERVO);
+        intake.intakeMotor = this.hardwareMap.get(DcMotor.class, intake.MOTOR);
 
         arm.armServo = this.hardwareMap.get(Servo.class, arm.arm);
 

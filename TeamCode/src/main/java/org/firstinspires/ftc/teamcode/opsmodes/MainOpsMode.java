@@ -13,11 +13,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @TeleOp(name="Main OpMode")
 public class MainOpsMode extends LinearOpMode {
@@ -28,6 +30,11 @@ public class MainOpsMode extends LinearOpMode {
     private DcMotorEx leftBackDrive = null;
     private DcMotorEx rightFrontDrive = null;
     private DcMotorEx rightBackDrive = null;
+
+    private DcMotorEx leftFrontDriveEx = null;
+    private DcMotorEx leftBackDriveEx = null;
+    private DcMotorEx rightFrontDriveEx = null;
+    private DcMotorEx rightBackDriveEx = null;
 
     private DcMotor intakeDrive = null;
     private enum ArmState {
@@ -164,6 +171,11 @@ public class MainOpsMode extends LinearOpMode {
 
         intakeDrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        leftFrontDriveEx = (DcMotorEx) leftFrontDrive;
+        leftBackDriveEx = (DcMotorEx) leftBackDrive;
+        rightFrontDriveEx = (DcMotorEx) rightFrontDrive;
+        rightBackDriveEx = (DcMotorEx) rightBackDrive;
+
         // Wait for the game to start (driver presses PLAY)
         // telemetry.addData("Status", "Initialized");
         waitForStart();
@@ -175,12 +187,24 @@ public class MainOpsMode extends LinearOpMode {
             updateDriveMotors();
             updateServos();
 
-            telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
-            telemetry.addData("Intake Locked", trapDoor);
-            telemetry.addData("Bucket %", "%f", bucketX - 0.19f / (1.0f - 0.19f));
+            String motorData = String.format(
+                    Locale.US,
+                        "Left Front: %f%n" +
+                                "Left Rear: %f%n" +
+                                "Right Front: %f%n" +
+                                "Right Rear: %f%n",
+                    DriveConstants.encoderTicksToInches(leftFrontDriveEx.getVelocity()), DriveConstants.encoderTicksToInches(leftBackDriveEx.getVelocity()), DriveConstants.encoderTicksToInches(rightFrontDriveEx.getVelocity()), DriveConstants.encoderTicksToInches(rightBackDriveEx.getVelocity())
+
+            );
+
+
+            // telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
+            // telemetry.addData("Intake Locked", trapDoor);
+            // telemetry.addData("Bucket %", "%f", bucketX - 0.19f / (1.0f - 0.19f));
             telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
             telemetry.addLine("right distance: " + hardwareController.getRightDistance());
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addLine(motorData);
+            // telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
     }
@@ -195,7 +219,7 @@ public class MainOpsMode extends LinearOpMode {
         if(gamepad2.y && !yPressed) {
             yPressed = true;
             toggleTrapdoor();
-            telemetry.addLine("Toggling trapdoor");
+            // telemetry.addLine("Toggling trapdoor");
         } else if(!gamepad2.y) {
             yPressed = false;
             //telemetry.addLine("Button Pressed but not toggling");
@@ -240,6 +264,7 @@ public class MainOpsMode extends LinearOpMode {
     private void updateDriveMotors() {
         // Max motor speed
         double max;
+        double min;
 
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
         double axial = -gamepad1.left_stick_y;
@@ -296,7 +321,7 @@ public class MainOpsMode extends LinearOpMode {
             }
         }
 
-        // locks the movement of anything but lateral if robot is aligned wi    th backdrop
+        // locks the movement of anything but lateral if robot is aligned with backdrop
         if (aylock) {
             axial = 0;
             yaw = 0;
@@ -320,6 +345,10 @@ public class MainOpsMode extends LinearOpMode {
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
 
+        min = Math.min(leftFrontPower, rightFrontPower);
+        min = Math.min(min, rightBackPower);
+        min = Math.min(min, leftBackPower);
+
         if (max > 1.0) {
             leftFrontPower /= max;
             rightFrontPower /= max;
@@ -327,11 +356,19 @@ public class MainOpsMode extends LinearOpMode {
             rightBackPower /= max;
         }
 
+        double lro = leftBackPower / min;
+        double lfo = leftFrontPower / min;
+        double rro = rightBackPower / min;
+        double rfo = rightFrontPower / min;
+
         // Send calculated power to wheels
-        leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
-        leftBackDrive.setPower(leftBackPower);
-        rightBackDrive.setPower(rightBackPower);
+        // leftFrontDrive.setPower(leftFrontPower * .98);
+        leftFrontDrive.setPower(leftFrontPower / lfo);
+        rightFrontDrive.setPower(rightFrontPower / rfo);
+        leftBackDrive.setPower(leftBackPower / lro);
+        rightBackDrive.setPower(rightBackPower / rro);
+
+        // rightBackDrive.setPower(rightBackPower * .82);
 
         // Intake
         intakePower = 0;
