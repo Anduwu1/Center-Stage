@@ -30,12 +30,6 @@ public class MainOpsMode extends LinearOpMode {
     private DcMotorEx leftBackDrive = null;
     private DcMotorEx rightFrontDrive = null;
     private DcMotorEx rightBackDrive = null;
-
-    private DcMotorEx leftFrontDriveEx = null;
-    private DcMotorEx leftBackDriveEx = null;
-    private DcMotorEx rightFrontDriveEx = null;
-    private DcMotorEx rightBackDriveEx = null;
-
     private DcMotor intakeDrive = null;
     private enum ArmState {
         UP,
@@ -171,11 +165,6 @@ public class MainOpsMode extends LinearOpMode {
 
         intakeDrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        leftFrontDriveEx = (DcMotorEx) leftFrontDrive;
-        leftBackDriveEx = (DcMotorEx) leftBackDrive;
-        rightFrontDriveEx = (DcMotorEx) rightFrontDrive;
-        rightBackDriveEx = (DcMotorEx) rightBackDrive;
-
         // Wait for the game to start (driver presses PLAY)
         // telemetry.addData("Status", "Initialized");
         waitForStart();
@@ -193,7 +182,7 @@ public class MainOpsMode extends LinearOpMode {
                                 "Left Rear: %f%n" +
                                 "Right Front: %f%n" +
                                 "Right Rear: %f%n",
-                    DriveConstants.encoderTicksToInches(leftFrontDriveEx.getVelocity()), DriveConstants.encoderTicksToInches(leftBackDriveEx.getVelocity()), DriveConstants.encoderTicksToInches(rightFrontDriveEx.getVelocity()), DriveConstants.encoderTicksToInches(rightBackDriveEx.getVelocity())
+                    DriveConstants.encoderTicksToInches(leftFrontDrive.getVelocity()), DriveConstants.encoderTicksToInches(leftBackDrive.getVelocity()), DriveConstants.encoderTicksToInches(rightFrontDrive.getVelocity()), DriveConstants.encoderTicksToInches(rightBackDrive.getVelocity())
 
             );
 
@@ -213,7 +202,7 @@ public class MainOpsMode extends LinearOpMode {
     boolean rbPressed, bPressed, yPressed = false;
 
     boolean open = true, trapDoor = false;
-    private float armX = (float) ARM_DOWN;
+    private float armX = ARM_DOWN;
     private void updateServos(){
         // Trapdoor toggle
         if(gamepad2.y && !yPressed) {
@@ -234,14 +223,21 @@ public class MainOpsMode extends LinearOpMode {
         }
 
         // Arm Toggle
-        if (gamepad2.right_bumper && !rbPressed) { rbPressed = true; toggleArm(); } else if (!gamepad2.right_bumper){ rbPressed = false; }
+        if (gamepad2.right_bumper && !rbPressed) {
+            rbPressed = true; toggleArm();
+        }
+        else if (!gamepad2.right_bumper){
+            rbPressed = false;
+        }
 
         // Manual arm control
         armX -= gamepad2.left_stick_y / 800.0f;
 
         // Arm clamp
-        if(armX > ARM_UP) armX = (float) ARM_UP;
-        if(armX < ARM_DOWN) armX = (float) ARM_DOWN;
+        if(armX > ARM_UP)
+            armX = ARM_UP;
+        if(armX < ARM_DOWN)
+            armX = ARM_DOWN;
 
         // Arm location percenetage for telemetry
         // float percent = (float) ((armX - Arm.ARM_DOWN) / (Arm.ARM_UP - Arm.ARM_DOWN));
@@ -251,8 +247,10 @@ public class MainOpsMode extends LinearOpMode {
         if(gamepad2.dpad_down) bucketX-=0.005f;
 
         // Clamps the bucket servo position
-        if(bucketX > Bucket.DROP_POS) bucketX = Bucket.DROP_POS;
-        if(bucketX < Bucket.INTAKE_POS) bucketX = Bucket.INTAKE_POS;
+        if(bucketX > Bucket.DROP_POS)
+            bucketX = Bucket.DROP_POS;
+        if(bucketX < Bucket.INTAKE_POS)
+            bucketX = Bucket.INTAKE_POS;
 
         // Updates servos
         hardwareController.servoMove(bucketX, HardwareController.Servo_Type.BUCKET_SERVO);
