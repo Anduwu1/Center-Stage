@@ -286,6 +286,10 @@ public class MainOpsMode extends LinearOpMode {
             }
         }
 
+        if (gamepad2.x) {
+            axial = Math.abs(axial);
+        }
+
         // locks the movement of anything but lateral if robot is aligned wi    th backdrop
         if (aylock) {
             axial = 0;
