@@ -345,15 +345,20 @@ public class MainOpsMode extends LinearOpMode {
         leftBackPower *= DRIVE_SPEED;
         rightBackPower *= DRIVE_SPEED;
 
+        double leftFrontEx = DriveConstants.encoderTicksToInches(leftFrontDrive.getVelocity());
+        double rightFrontEx = DriveConstants.encoderTicksToInches(rightFrontDrive.getVelocity());
+        double leftBackEx = DriveConstants.encoderTicksToInches(leftBackDrive.getVelocity());
+        double rightBackEx = DriveConstants.encoderTicksToInches(rightBackDrive.getVelocity());
+
         // Normalize the values so no wheel power exceeds 100%
         // This ensures that the robot maintains the desired motion.
         max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
 
-        min = Math.min(leftFrontPower, rightFrontPower);
-        min = Math.min(min, rightBackPower);
-        min = Math.min(min, leftBackPower);
+        min = Math.min(leftFrontEx, rightFrontEx);
+        min = Math.min(min, rightBackEx);
+        min = Math.min(min, leftBackEx);
 
         if (max > 1.0) {
             leftFrontPower /= max;
@@ -362,10 +367,10 @@ public class MainOpsMode extends LinearOpMode {
             rightBackPower /= max;
         }
 
-        double lro = leftBackPower / min;
-        double lfo = leftFrontPower / min;
-        double rro = rightBackPower / min;
-        double rfo = rightFrontPower / min;
+        double lro = leftBackEx / min;
+        double lfo = leftFrontEx / min;
+        double rro = rightBackEx / min;
+        double rfo = rightFrontEx / min;
 
         // Send calculated power to wheels
         // leftFrontDrive.setPower(leftFrontPower * .98);
