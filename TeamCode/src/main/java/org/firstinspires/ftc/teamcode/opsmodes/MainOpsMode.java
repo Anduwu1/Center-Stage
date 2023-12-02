@@ -54,6 +54,7 @@ public class MainOpsMode extends LinearOpMode {
 
     // Constants
     private static final double DRIVE_SPEED = 1;
+    private static final int MAX_VELOCITY = 2200;
     // private static final double INTAKE_SPEED = 0.1;
     // Servo Constants
 
@@ -173,7 +174,7 @@ public class MainOpsMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            updateDriveMotorsSam();
+            updateDriveMotors();
             updateServos();
 
             String motorData = String.format(
@@ -260,7 +261,7 @@ public class MainOpsMode extends LinearOpMode {
 
     }
 
-    private void updateDriveMotorsSam() {
+    private void updateDriveMotors() {
         // Max motor speed
         double max;
 
@@ -317,32 +318,19 @@ public class MainOpsMode extends LinearOpMode {
             rightBackPower /= max;
         }
 
+        WheelValues wheelPowers = new WheelValues(leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
+
         // prevent forward movement of the motors if it gets too close to the wall
         if (gamepad1.x) {
-            //only prevent the left wheels from advancing if the left sensor is too close
-            if (hardwareController.getLeftDistance() < 4.0) {
-                if (rightFrontPower < 0)
-                    rightFrontPower = 0;
-                if (rightBackPower < 0)
-                    rightBackPower = 0;
-
-            }
-            //only prevent the right wheels from advancing if the right sensor is too close
-            if (hardwareController.getRightDistance() < 4.0) {
-                if (leftFrontPower < 0)
-                    leftFrontPower = 0;
-                if (leftBackPower < 0)
-                    leftBackPower = 0;
-            }
+            wheelPowers = adjustVelocityForBackdrop(wheelPowers);
         }
 
         // Send calculated power to wheels
-        leftFrontDrive.setVelocity(leftFrontPower * 2200);
-        rightFrontDrive.setVelocity(rightFrontPower * 2200);
-        leftBackDrive.setVelocity(leftBackPower * 2200);
-        rightBackDrive.setVelocity(rightBackPower * 2200);
+        leftFrontDrive.setVelocity(wheelPowers.leftFrontValue * MAX_VELOCITY);
+        rightFrontDrive.setVelocity(wheelPowers.rightFrontValue * MAX_VELOCITY);
+        leftBackDrive.setVelocity(wheelPowers.leftBackValue * MAX_VELOCITY);
+        rightBackDrive.setVelocity(wheelPowers.rightBackValue * MAX_VELOCITY);
 
-        // rightBackDrive.setPower(rightBackPower * .82);
 
         // Intake
         intakePower = 0;
@@ -356,5 +344,61 @@ public class MainOpsMode extends LinearOpMode {
         if(!trapDoor)
             intakeDrive.setPower(intakePower);
 
+    }
+
+    private WheelValues adjustVelocityForBackdrop(WheelValues wheelValues) {
+        double leftFrontPower = wheelValues.leftFrontValue;
+        double leftBackPower = wheelValues.leftBackValue;
+        double rightFrontPower = wheelValues.rightFrontValue;
+        double rightBackPower = wheelValues.rightBackValue;
+
+        float far_distance = 14.0f;
+        float close_distance = 2.0f;
+
+        // Linearly scale the power for the left wheels based on the left sensor distance
+        double leftDistance = hardwareController.getLeftDistance();
+        if (leftDistance < far_distance && leftDistance > close_distance) {
+            double scaledPower = (leftDistance - close_distance) / (far_distance - close_distance); // Scale from 2 inches (0 power) to 10 inches (1 power)
+            if (rightFrontPower < 0)
+                rightFrontPower *= scaledPower;
+            if (rightBackPower < 0)
+                rightBackPower *= scaledPower;
+        } else if (leftDistance <= close_distance) {
+            if (rightFrontPower < 0)
+                rightFrontPower = 0;
+            if (rightBackPower < 0)
+                rightBackPower = 0;
+        }
+
+        // Linearly scale the power for the right wheels based on the right sensor distance
+        double rightDistance = hardwareController.getRightDistance();
+        if (rightDistance < far_distance && rightDistance > 2.0) {
+            double scaledPower = (rightDistance - close_distance) / (far_distance - close_distance); // Scale from 2 inches (0 power) to 10 inches (1 power)
+            if (leftFrontPower < 0)
+                leftFrontPower *= scaledPower;
+            if (leftBackPower < 0)
+                leftBackPower *= scaledPower;
+        } else if (rightDistance <= close_distance) {
+            if (leftFrontPower < 0)
+                leftFrontPower = 0;
+            if (leftBackPower < 0)
+                leftBackPower = 0;
+        }
+
+        return new WheelValues(leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
+    }
+
+    private class WheelValues {
+        public double leftFrontValue;
+        public double rightFrontValue;
+        public double leftBackValue;
+        public double rightBackValue;
+
+        public WheelValues(double leftFrontValue, double leftBackValue, double rightFrontValue, double rightBackValue) {
+            this.leftFrontValue = leftFrontValue;
+            this.leftBackValue = leftBackValue;
+            this.rightFrontValue = rightFrontValue;
+            this.rightBackValue = rightBackValue;
+        }
     }
 }
