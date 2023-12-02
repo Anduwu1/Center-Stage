@@ -173,7 +173,7 @@ public class MainOpsMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            updateDriveMotors();
+            updateDriveMotorsSam();
             updateServos();
 
             String motorData = String.format(
@@ -387,13 +387,92 @@ public class MainOpsMode extends LinearOpMode {
             lfo = 1;
         if (rfo == 0)
             rfo = 1;
-        
+
         // Send calculated power to wheels
         // leftFrontDrive.setPower(leftFrontPower * .98);
         leftFrontDrive.setPower(leftFrontPower /*/ lfo*/  * .96);
         rightFrontDrive.setPower(rightFrontPower /*/ rfo*/);
         leftBackDrive.setPower(leftBackPower /*/ lro*/);
         rightBackDrive.setPower(rightBackPower /*/ rro*/ * .85);
+
+        // rightBackDrive.setPower(rightBackPower * .82);
+
+        // Intake
+        intakePower = 0;
+
+        if(gamepad1.right_trigger != 0)
+            intakePower = -1;
+
+        if(gamepad1.left_trigger != 0)
+            intakePower = 1;
+
+        if(!trapDoor)
+            intakeDrive.setPower(intakePower);
+
+    }
+
+    private void updateDriveMotorsSam() {
+        // Max motor speed
+        double max;
+
+        double axial = 0;
+        double lateral = 0;
+        double yaw = 0;
+
+        // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
+        if (Math.abs(gamepad1.left_stick_y) > 0.05)
+            axial = -gamepad1.left_stick_y;
+        if (Math.abs(gamepad1.left_stick_x) > 0.05)
+            lateral = gamepad1.left_stick_x;
+        if (Math.abs(gamepad1.right_stick_x) > 0.05)
+            yaw = gamepad1.right_stick_x;
+
+        // Fine control using dpad and bumpers
+        if (gamepad1.dpad_up)
+            axial += 0.3;
+        if (gamepad1.dpad_down)
+            axial -= 0.3;
+        if (gamepad1.dpad_left)
+            lateral -= 0.3;
+        if (gamepad1.dpad_right)
+            lateral += 0.3;
+
+        // Bumpers Turn Bot Left and Right
+        if (gamepad1.left_bumper)
+            yaw += 0.3 * -1;
+        if (gamepad1.right_bumper)
+            yaw -= 0.3 * -1;
+
+        // Combine the joystick requests for each axis-motion to determine each wheel's power.
+        // Set up a variable for each drive wheel to save the power level for telemetry.
+        double leftFrontPower = axial + lateral + yaw;
+        double rightFrontPower = axial - lateral - yaw;
+        double leftBackPower = axial - lateral + yaw;
+        double rightBackPower = axial + lateral - yaw;
+
+        leftFrontPower *= -DRIVE_SPEED;
+        rightFrontPower *= DRIVE_SPEED;
+        leftBackPower *= DRIVE_SPEED;
+        rightBackPower *= DRIVE_SPEED;
+
+        // Normalize the values so no wheel power exceeds 100%
+        // This ensures that the robot maintains the desired motion.
+        max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        // Send calculated power to wheels
+        leftFrontDrive.setPower(leftFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
+        leftBackDrive.setPower(leftBackPower);
+        rightBackDrive.setPower(rightBackPower);
 
         // rightBackDrive.setPower(rightBackPower * .82);
 
