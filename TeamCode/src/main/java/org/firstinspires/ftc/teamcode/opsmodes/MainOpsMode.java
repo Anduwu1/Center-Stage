@@ -190,10 +190,10 @@ public class MainOpsMode extends LinearOpMode {
 
             // telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
             // telemetry.addData("Intake Locked", trapDoor);
-            // telemetry.addData("Bucket %", "%f", bucketX - 0.19f / (1.0f - 0.19f));
-            telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
+            telemetry.addData("Bucket ", bucketX);
+            // telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
             telemetry.addLine("right distance: " + hardwareController.getRightDistance());
-            telemetry.addLine(motorData);
+            //telemetry.addLine(motorData);
             // telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
