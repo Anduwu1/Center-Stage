@@ -158,7 +158,7 @@ public class MainOpsMode extends LinearOpMode {
         intakeDrive = hardwareMap.get(DcMotor.class, "intake");
 
         // Set directions
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -182,17 +182,18 @@ public class MainOpsMode extends LinearOpMode {
                             "Left Rear: %f%n" +
                             "Right Front: %f%n" +
                             "Right Rear: %f%n",
-                    DriveConstants.encoderTicksToInches(leftFrontDrive.getVelocity()), DriveConstants.encoderTicksToInches(leftBackDrive.getVelocity()), DriveConstants.encoderTicksToInches(rightFrontDrive.getVelocity()), DriveConstants.encoderTicksToInches(rightBackDrive.getVelocity())
+                    leftFrontDrive.getVelocity(), leftBackDrive.getVelocity(), rightFrontDrive.getVelocity(), rightBackDrive.getVelocity()
+                    //DriveConstants.encoderTicksToInches(leftFrontDrive.getVelocity()), DriveConstants.encoderTicksToInches(leftBackDrive.getVelocity()), DriveConstants.encoderTicksToInches(rightFrontDrive.getVelocity()), DriveConstants.encoderTicksToInches(rightBackDrive.getVelocity())
 
             );
 
 
             // telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
             // telemetry.addData("Intake Locked", trapDoor);
-            // telemetry.addData("Bucket %", "%f", bucketX - 0.19f / (1.0f - 0.19f));
-            telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
+            telemetry.addData("Bucket ", bucketX);
+            // telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
             telemetry.addLine("right distance: " + hardwareController.getRightDistance());
-            telemetry.addLine(motorData);
+            //telemetry.addLine(motorData);
             // telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
@@ -347,7 +348,7 @@ public class MainOpsMode extends LinearOpMode {
         double leftBackPower = axial - lateral + yaw;
         double rightBackPower = axial + lateral - yaw;
 
-        leftFrontPower *= -DRIVE_SPEED;
+        leftFrontPower *= DRIVE_SPEED;
         rightFrontPower *= DRIVE_SPEED;
         leftBackPower *= DRIVE_SPEED;
         rightBackPower *= DRIVE_SPEED;
@@ -450,7 +451,7 @@ public class MainOpsMode extends LinearOpMode {
         double leftBackPower = axial - lateral + yaw;
         double rightBackPower = axial + lateral - yaw;
 
-        leftFrontPower *= -DRIVE_SPEED;
+        leftFrontPower *= DRIVE_SPEED;
         rightFrontPower *= DRIVE_SPEED;
         leftBackPower *= DRIVE_SPEED;
         rightBackPower *= DRIVE_SPEED;
@@ -469,28 +470,29 @@ public class MainOpsMode extends LinearOpMode {
         }
 
         // prevent forward movement of the motors if it gets too close to the wall
-        if (gamepad2.x) {
+        if (gamepad1.x) {
             //only prevent the left wheels from advancing if the left sensor is too close
-            if (hardwareController.getLeftDistance() < 0.5) {
-                if (leftFrontPower > 0)
-                    leftFrontPower = 0;
-                if (leftBackPower > 0)
-                    leftBackPower = 0;
+            if (hardwareController.getLeftDistance() < 4.0) {
+                if (rightFrontPower < 0)
+                    rightFrontPower = 0;
+                if (rightBackPower < 0)
+                    rightBackPower = 0;
+
             }
             //only prevent the right wheels from advancing if the right sensor is too close
-            if (hardwareController.getRightDistance() < 0.5) {
-                if (rightFrontPower > 0)
-                    rightFrontPower = 0;
-                if (rightBackPower > 0)
-                    rightFrontPower = 0;
+            if (hardwareController.getRightDistance() < 4.0) {
+                if (leftFrontPower < 0)
+                    leftFrontPower = 0;
+                if (leftBackPower < 0)
+                    leftBackPower = 0;
             }
         }
 
         // Send calculated power to wheels
-        leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
-        leftBackDrive.setPower(leftBackPower);
-        rightBackDrive.setPower(rightBackPower);
+        leftFrontDrive.setVelocity(leftFrontPower * 2200);
+        rightFrontDrive.setVelocity(rightFrontPower * 2200);
+        leftBackDrive.setVelocity(leftBackPower * 2200);
+        rightBackDrive.setVelocity(rightBackPower * 2200);
 
         // rightBackDrive.setPower(rightBackPower * .82);
 
