@@ -292,11 +292,11 @@ public class AutonomousOpsMode extends LinearOpMode {
                             break;
                         }
                         //moveToTarget();
-                        //hardCont.ejectIntake();
+                        hardCont.ejectIntake();
                         autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
                         break;
                     case PARK_AT_BACKSTAGE:
-
+                        sleep(1000);
                         leftFrontDrive.setVelocity(-1100);
                         rightBackDrive.setVelocity(-1100);
                         rightFrontDrive.setVelocity(-1100);
@@ -309,7 +309,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                         rightFrontDrive.setVelocity(-1100);
                         leftBackDrive.setVelocity(-1100);
 
-                        sleep(2000);
+                        sleep(2500);
 
                         leftFrontDrive.setVelocity(0);
                         rightBackDrive.setVelocity(0);
