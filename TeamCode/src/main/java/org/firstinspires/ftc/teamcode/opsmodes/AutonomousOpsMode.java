@@ -258,6 +258,16 @@ public class AutonomousOpsMode extends LinearOpMode {
                         rightFrontDrive.setVelocity(1100);
                         leftBackDrive.setVelocity(1100);
 
+                        sleep(1670);
+
+                        leftFrontDrive.setVelocity(0);
+                        rightBackDrive.setVelocity(0);
+                        rightFrontDrive.setVelocity(0);
+                        leftBackDrive.setVelocity(0);
+
+                        hardCont.ejectIntake();
+
+
                         // Sets Position of the vertical tape strip relative to the robots start position to be passed into RoadRunner
                         switch (autoChoices.alliance) {
                             case BLUE_ALLIANCE:
@@ -286,12 +296,26 @@ public class AutonomousOpsMode extends LinearOpMode {
                         autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
                         break;
                     case PARK_AT_BACKSTAGE:
-                        sleep(1680);
+
+                        leftFrontDrive.setVelocity(-1100);
+                        rightBackDrive.setVelocity(-1100);
+                        rightFrontDrive.setVelocity(-1100);
+                        leftBackDrive.setVelocity(-1100);
+
+                        sleep(1675);
+
+                        leftFrontDrive.setVelocity(1100);
+                        rightBackDrive.setVelocity(1100);
+                        rightFrontDrive.setVelocity(-1100);
+                        leftBackDrive.setVelocity(-1100);
+
+                        sleep(2000);
+
                         leftFrontDrive.setVelocity(0);
                         rightBackDrive.setVelocity(0);
                         rightFrontDrive.setVelocity(0);
                         leftBackDrive.setVelocity(0);
-                        hardCont.ejectIntake();
+
                         /* pTask.runTaskTick(stageState, hardCont);
                         if (pTask.isFinished()) {
 
