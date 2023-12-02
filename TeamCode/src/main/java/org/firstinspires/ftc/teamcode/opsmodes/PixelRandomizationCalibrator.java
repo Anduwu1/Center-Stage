@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.opsmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
-
+@TeleOp(name="PixelCalib")
 public class PixelRandomizationCalibrator extends LinearOpMode {
 
     HardwareController hardwareController;

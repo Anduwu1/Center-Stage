@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -19,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 import org.firstinspires.ftc.teamcode.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 
@@ -29,6 +31,7 @@ import java.util.List;
     do stuff
  */
 public class HardwareController{
+
 
     public enum Servo_Type{
         ARM_SERVO,
@@ -42,6 +45,7 @@ public class HardwareController{
     private Intake intake;
     private DistanceSensors dsensors;
     private Camera camera;
+    private Lift lift;
 
     // Robot we're controlling
     public Robot robot;
@@ -61,6 +65,7 @@ public class HardwareController{
         intake = new Intake();
         dsensors = new DistanceSensors();
         camera = new Camera(this.hardwareMap);
+        lift = new Lift();
 
         // Init servos
         bucket.bucketRotation = this.hardwareMap.get(Servo.class, bucket.ROTATION_SERVO);
@@ -68,6 +73,12 @@ public class HardwareController{
         intake.intakeMotor = this.hardwareMap.get(DcMotor.class, intake.MOTOR);
 
         arm.armServo = this.hardwareMap.get(Servo.class, arm.arm);
+
+        // Init lift
+        lift.liftMotor = this.hardwareMap.get(DcMotorEx.class, lift.liftName);
+        lift.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //lift.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Init distance sensors
         dsensors.left = this.hardwareMap.get(DistanceSensor.class, dsensors.leftSense);
@@ -105,6 +116,17 @@ public class HardwareController{
     public void driveRight(float distance){
         drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
                 .strafeRight(distance).build());
+    }
+
+    /*
+        Lift stuff lamo
+     */
+    public void liftGoToPosition(int pos){
+        lift.liftMotor.setTargetPosition(pos);
+    }
+
+    public int getLiftPos(){
+        return lift.liftMotor.getCurrentPosition();
     }
 
     /*
