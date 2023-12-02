@@ -5,6 +5,8 @@ import android.media.audiofx.DynamicsProcessing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import java.util.Locale;
 // New vision system
@@ -98,6 +100,7 @@ public class AutonomousOpsMode extends LinearOpMode {
         public double yLocation = 0.0f;
         public Orientation orientation = Orientation.WEST;
 
+
         @Override
         public String toString()
         {
@@ -133,6 +136,11 @@ public class AutonomousOpsMode extends LinearOpMode {
 
     private Robot robot;
     public Point location;
+
+    private DcMotorEx leftFrontDrive = null;
+    private DcMotorEx leftBackDrive = null;
+    private DcMotorEx rightFrontDrive = null;
+    private DcMotorEx rightBackDrive = null;
 
     // PURPLE PIXEL PLACING STUFF
     public final int PROP_ID = 420; // APRIL TAG ID
@@ -204,6 +212,15 @@ public class AutonomousOpsMode extends LinearOpMode {
 
         int teamPropPos = 0;
 
+        // Init hardware Vars
+        leftFrontDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_LFDRIVE_MOTOR);
+        leftBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_LBDRIVE_MOTOR);
+        rightFrontDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_RFDRIVE_MOTOR);
+        rightBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_RBDRIVE_MOTOR);
+
+        leftFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+
         waitForStart();
         while (opModeIsActive()) {
 
@@ -235,7 +252,10 @@ public class AutonomousOpsMode extends LinearOpMode {
                         autoChoices.autonomousStage = AutonomousState.PLACE_PURPLE_PIXEL;
                         break;
                     case PLACE_PURPLE_PIXEL:
-
+                        leftFrontDrive.setVelocity(1100);
+                        rightBackDrive.setVelocity(1100);
+                        rightFrontDrive.setVelocity(1100);
+                        leftBackDrive.setVelocity(1100);
 
                         // Sets Position of the vertical tape strip relative to the robots start position to be passed into RoadRunner
                         switch (autoChoices.alliance) {
@@ -260,11 +280,17 @@ public class AutonomousOpsMode extends LinearOpMode {
                             default:
                             break;
                         }
-                        moveToTarget();
-                        hardCont.ejectIntake();
+                        //moveToTarget();
+                        //hardCont.ejectIntake();
                         autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
                         break;
                     case PARK_AT_BACKSTAGE:
+                        sleep(2000);
+                        leftFrontDrive.setVelocity(0);
+                        rightBackDrive.setVelocity(0);
+                        rightFrontDrive.setVelocity(0);
+                        leftBackDrive.setVelocity(0);
+                        hardCont.ejectIntake();
                         /* pTask.runTaskTick(stageState, hardCont);
                         if (pTask.isFinished()) {
 
@@ -280,10 +306,15 @@ public class AutonomousOpsMode extends LinearOpMode {
                                 autoChoices.xTarget = RobotSettings.FULL_TILE_INCHES / 2;
                         }
 
-                        moveToTarget();
+                        //moveToTarget();
+                        autoChoices.autonomousStage = AutonomousState.DONE;
                         break;
+                case DONE:
+                    telemetry.addLine("Done.");
+                    break;
 
             }
+            telemetry.update();
         }
     }
 

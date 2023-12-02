@@ -64,7 +64,7 @@ public class HardwareController{
         arm = new Arm();
         intake = new Intake();
         dsensors = new DistanceSensors();
-        camera = new Camera(this.hardwareMap);
+        //camera = new Camera(this.hardwareMap);
         lift = new Lift();
 
         // Init servos
@@ -85,7 +85,7 @@ public class HardwareController{
         dsensors.right = this.hardwareMap.get(DistanceSensor.class, dsensors.rightSense);
 
         // Init drive
-        drive = new SampleMecanumDrive(this.hardwareMap);
+        //drive = new SampleMecanumDrive(this.hardwareMap);
 
     }
 
@@ -93,9 +93,9 @@ public class HardwareController{
         DRIVE STUFF
      */
     public void driveTo(float xPos, float yPos){
-        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
+        /*drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
                 .lineTo(new Vector2d(xPos, yPos))
-                .build());
+                .build());*/
     }
 
     public void driveForward(float distance){
