@@ -321,7 +321,7 @@ public class MainOpsMode extends LinearOpMode {
         leftFrontDrive.setPower(leftFrontPower);
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
-        rightBackDrive.setPower(rightBackPower);
+        rightBackDrive.setPower(rightBackPower * .85);
 
         // Intake
         intakePower = 0;
