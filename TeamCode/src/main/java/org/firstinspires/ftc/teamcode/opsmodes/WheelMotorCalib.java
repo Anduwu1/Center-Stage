@@ -34,13 +34,14 @@ public class WheelMotorCalib extends LinearOpMode {
         }
 
         waitForStart();
-
+        for (DcMotorEx motor : motors) {
+            motor.setTargetPosition(384);
+        }
+        
         hardwareController = new HardwareController(hardwareMap);
 
         while (opModeIsActive()) {
-            for (DcMotorEx motor : motors) {
-                motor.setTargetPosition(384);
-            }
+
             double leftDistance = hardwareController.getLeftDistance();
             double rightDistance = hardwareController.getRightDistance();
 
