@@ -33,13 +33,13 @@ import java.util.List;
 @Autonomous(group = "drive")
 public class AutomaticFeedforwardTuner extends LinearOpMode {
     public static double MAX_POWER = 0.7;
-    public static double DISTANCE = 72; // in
+    public static double DISTANCE = 100; // in
 
     @Override
     public void runOpMode() throws InterruptedException {
         if (DriveConstants.RUN_USING_ENCODER) {
-            // RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " +
-            //        "when using the built-in drive motor velocity PID.");
+            RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " +
+                    "when using the built-in drive motor velocity PID.");
         }
 
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -106,12 +106,7 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
         drive.setPoseEstimate(new Pose2d());
 
         double startTime = clock.seconds();
-        boolean sketchyMethod = false;
-//        while (!isStopRequested()) { Default  \/ Mine
-          while (!sketchyMethod) {
-              if(gamepad1.y) {
-                  sketchyMethod = true;
-              }
+        while (!isStopRequested()) {
             double elapsedTime = clock.seconds() - startTime;
             if (elapsedTime > rampTime) {
                 break;
