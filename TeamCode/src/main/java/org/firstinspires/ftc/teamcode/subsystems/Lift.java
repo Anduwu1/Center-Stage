@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class Lift {
-    public DcMotor liftMotor;
+    public DcMotorEx liftMotor;
 
     public String liftName = "lift";
 }

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -74,7 +75,7 @@ public class HardwareController{
         arm.armServo = this.hardwareMap.get(Servo.class, arm.arm);
 
         // Init lift
-        lift.liftMotor = this.hardwareMap.get(DcMotor.class, lift.liftName);
+        lift.liftMotor = this.hardwareMap.get(DcMotorEx.class, lift.liftName);
         lift.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //lift.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
