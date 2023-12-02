@@ -222,6 +222,7 @@ public class AutonomousOpsMode extends LinearOpMode {
         leftBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
+        autoChoices.autonomousStage = AutonomousState.PLACE_PURPLE_PIXEL;
         while (opModeIsActive()) {
 
             // switch for what we do
@@ -285,7 +286,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                         autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
                         break;
                     case PARK_AT_BACKSTAGE:
-                        sleep(2000);
+                        sleep(1680);
                         leftFrontDrive.setVelocity(0);
                         rightBackDrive.setVelocity(0);
                         rightFrontDrive.setVelocity(0);
