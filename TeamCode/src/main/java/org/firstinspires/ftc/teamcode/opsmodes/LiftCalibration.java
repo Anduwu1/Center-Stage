@@ -14,22 +14,28 @@ public class LiftCalibration extends LinearOpMode {
 
     float position = 0.0f;
 
+    boolean goTo = false;
+
     @Override
     public void runOpMode() throws InterruptedException {
         hardwareController = new HardwareController(hardwareMap);
         while(opModeIsActive()){
-            position += gamepad1.left_stick_y;
+            if(!goTo) {
+                position += gamepad1.left_stick_y;
 
-            // make this better if you want
-            // (awesome ap csa question)
-            if(position > 30.0f){
-                position = 30.0f;
-            }else if(position < 0.0f){
-                position = 0.0f;
+                // make this better if you want
+                // (awesome ap csa question)
+                if (position > 30.0f) {
+                    position = 30.0f;
+                } else if (position < 0.0f) {
+                    position = 0.0f;
+                }
             }
+            if(gamepad1.a && !goTo) goTo = true;
 
-            hardwareController.liftGoToPosition((int)position);
-
+            if(goTo)
+                hardwareController.liftGoToPosition((int)position);
+            if(!hardwareController.isLiftBusy()) goTo = false;
             sleep(250);
 
             telemetry.addData("Running to",  " %7d", position);

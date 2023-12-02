@@ -128,6 +128,10 @@ public class HardwareController{
         return lift.liftMotor.getCurrentPosition();
     }
 
+    public boolean isLiftBusy(){
+        return lift.liftMotor.isBusy();
+    }
+
     /*
         Servo stuff
         (maybe rewrite later? the Servo_Type arg is kinda
