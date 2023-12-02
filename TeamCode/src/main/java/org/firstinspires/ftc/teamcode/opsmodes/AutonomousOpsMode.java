@@ -173,8 +173,8 @@ public class AutonomousOpsMode extends LinearOpMode {
                 break;
         }
 
-        //hardCont.driveTo((float) xDif, (float) yDif);
-        hardCont.driveBackwards((float) xDif);
+        hardCont.driveTo((float) xDif, (float) yDif);
+        // hardCont.driveBackwards((float) xDif);
 
         autoChoices.xLocation = autoChoices.xTarget;
         autoChoices.yLocation = autoChoices.yTarget;

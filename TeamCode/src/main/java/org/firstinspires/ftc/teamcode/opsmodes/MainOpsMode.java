@@ -387,7 +387,7 @@ public class MainOpsMode extends LinearOpMode {
             lfo = 1;
         if (rfo == 0)
             rfo = 1;
-
+        
         // Send calculated power to wheels
         // leftFrontDrive.setPower(leftFrontPower * .98);
         leftFrontDrive.setPower(leftFrontPower /*/ lfo*/  * .96);
