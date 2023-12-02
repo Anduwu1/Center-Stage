@@ -235,19 +235,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                         autoChoices.autonomousStage = AutonomousState.PLACE_PURPLE_PIXEL;
                         break;
                     case PLACE_PURPLE_PIXEL:
-                        // Detect position
-                        AprilTagPoseFtc pose = hardCont.getAprilTagWithId(PROP_ID);
 
-                        if(pose.x > RIGHT_PROP_X_POS){
-                            // Prop is at the far right (politically) (haha) (laugh)
-
-                        }else if(pose.x > CENTER_PROP_X_POS){
-                            // Prop is at the far center (politically) (haha) (laugh) (again)
-
-                        }else{
-                            // Prop is at the far left (politic- bit unfunny now isn't it)
-
-                        }
 
                         // Sets Position of the vertical tape strip relative to the robots start position to be passed into RoadRunner
                         switch (autoChoices.alliance) {
