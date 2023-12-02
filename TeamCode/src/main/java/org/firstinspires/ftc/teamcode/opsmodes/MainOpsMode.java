@@ -260,158 +260,6 @@ public class MainOpsMode extends LinearOpMode {
 
     }
 
-    private void updateDriveMotors() {
-        // Max motor speed
-        double max;
-        double min;
-
-        double axial = 0;
-        double lateral = 0;
-        double yaw = 0;
-
-        // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-        if (Math.abs(gamepad1.left_stick_y) > 0.05)
-            axial = -gamepad1.left_stick_y;
-        if (Math.abs(gamepad1.left_stick_x) > 0.05)
-            lateral = gamepad1.left_stick_x;
-        if (Math.abs(gamepad1.right_stick_x) > 0.05)
-            yaw = gamepad1.right_stick_x;
-
-        // axial and yaw lock
-        boolean aylock = false;
-
-        // whether or not a is pressed
-        boolean aPressed = false;
-
-        // Fine control using dpad and bumpers
-        if (gamepad1.dpad_up)
-            axial += 0.3;
-        if (gamepad1.dpad_down)
-            axial -= 0.3;
-        if (gamepad1.dpad_left)
-            lateral -= 0.3;
-        if (gamepad1.dpad_right)
-            lateral += 0.3;
-
-        // Bumpers Turn Bot Left and Right
-        if (gamepad1.left_bumper)
-            yaw += 0.3 * -1;
-        if (gamepad1.right_bumper)
-            yaw -= 0.3 * -1;
-
-//        // Auto alignment
-//        if (gamepad1.a && !aPressed && aylock) {
-//            aylock = false;
-//            aPressed = true;
-//        } else if (gamepad1.a && !aPressed && !aylock) {
-//            alignBot();
-//            aPressed = true;
-//        } else if (!gamepad1.a) {
-//            aPressed = false;
-//        } else if (aPressed && !aylock) {
-//            if (alignBot())
-//                aylock = true;
-//        }
-
-        // quick and dirty distance sensor code
-        if (gamepad1.a) {
-            if (Math.abs(hardwareController.getLeftDistance() - hardwareController.getRightDistance()) > 0.05) {
-                yaw = -(hardwareController.getLeftDistance() - hardwareController.getRightDistance()) / (hardwareController.getLeftDistance() * 7);
-                aylock = false;
-                if (hardwareController.getLeftDistance() >= 2 || hardwareController.getRightDistance() >= 2) {
-                    axial = -1 * ((hardwareController.getLeftDistance() + hardwareController.getRightDistance()) / 2) / 42;
-                    if (axial < -1)
-                        axial = -1;
-                    aylock = false;
-                }
-            }
-        }
-
-        // can turn on a mode to protect from banging into the backdrop
-        if(gamepad2.x && !xPressed) {
-            xPressed = true;
-            aylock = !aylock;
-        } else if (!gamepad2.x) {
-            xPressed = false;
-        }
-
-        // locks the movement of anything but lateral if robot is aligned with backdrop
-        if (aylock) {
-            axial = -1 * Math.abs(axial);
-            yaw = 0;
-        }
-
-        // Combine the joystick requests for each axis-motion to determine each wheel's power.
-        // Set up a variable for each drive wheel to save the power level for telemetry.
-        double leftFrontPower = axial + lateral + yaw;
-        double rightFrontPower = axial - lateral - yaw;
-        double leftBackPower = axial - lateral + yaw;
-        double rightBackPower = axial + lateral - yaw;
-
-        leftFrontPower *= DRIVE_SPEED;
-        rightFrontPower *= DRIVE_SPEED;
-        leftBackPower *= DRIVE_SPEED;
-        rightBackPower *= DRIVE_SPEED;
-
-        double leftFrontEx = DriveConstants.encoderTicksToInches(leftFrontDrive.getVelocity());
-        double rightFrontEx = DriveConstants.encoderTicksToInches(rightFrontDrive.getVelocity());
-        double leftBackEx = DriveConstants.encoderTicksToInches(leftBackDrive.getVelocity());
-        double rightBackEx = DriveConstants.encoderTicksToInches(rightBackDrive.getVelocity());
-
-        // Normalize the values so no wheel power exceeds 100%
-        // This ensures that the robot maintains the desired motion.
-        max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-        max = Math.max(max, Math.abs(leftBackPower));
-        max = Math.max(max, Math.abs(rightBackPower));
-
-        min = Math.min(leftFrontEx * leftFrontPower, rightFrontEx * rightFrontPower);
-        min = Math.min(min, rightBackEx * rightBackPower);
-        min = Math.min(min, leftBackEx * leftBackPower);
-
-        if (max > 1.0) {
-            leftFrontPower /= max;
-            rightFrontPower /= max;
-            leftBackPower /= max;
-            rightBackPower /= max;
-        }
-
-        double lro = leftBackEx / min;
-        double lfo = leftFrontEx / min;
-        double rro = rightBackEx / min;
-        double rfo = rightFrontEx / min;
-
-        if (lro == 0)
-            lro = 1;
-        if (rro == 0)
-            rro = 1;
-        if (lfo == 0)
-            lfo = 1;
-        if (rfo == 0)
-            rfo = 1;
-
-        // Send calculated power to wheels
-        // leftFrontDrive.setPower(leftFrontPower * .98);
-        leftFrontDrive.setPower(leftFrontPower /*/ lfo*/  * .96);
-        rightFrontDrive.setPower(rightFrontPower /*/ rfo*/);
-        leftBackDrive.setPower(leftBackPower /*/ lro*/);
-        rightBackDrive.setPower(rightBackPower /*/ rro*/ * .85);
-
-        // rightBackDrive.setPower(rightBackPower * .82);
-
-        // Intake
-        intakePower = 0;
-
-        if(gamepad1.right_trigger != 0)
-            intakePower = -1;
-
-        if(gamepad1.left_trigger != 0)
-            intakePower = 1;
-
-        if(!trapDoor)
-            intakeDrive.setPower(intakePower);
-
-    }
-
     private void updateDriveMotorsSam() {
         // Max motor speed
         double max;
@@ -499,10 +347,10 @@ public class MainOpsMode extends LinearOpMode {
         // Intake
         intakePower = 0;
 
-        if(gamepad1.right_trigger != 0)
+        if(gamepad2.right_trigger != 0)
             intakePower = -1;
 
-        if(gamepad1.left_trigger != 0)
+        if(gamepad2.left_trigger != 0)
             intakePower = 1;
 
         if(!trapDoor)
