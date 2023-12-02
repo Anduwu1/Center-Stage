@@ -468,6 +468,24 @@ public class MainOpsMode extends LinearOpMode {
             rightBackPower /= max;
         }
 
+        // prevent forward movement of the motors if it gets too close to the wall
+        if (gamepad2.x) {
+            //only prevent the left wheels from advancing if the left sensor is too close
+            if (hardwareController.getLeftDistance() < 0.5) {
+                if (leftFrontPower > 0)
+                    leftFrontPower = 0;
+                if (leftBackPower > 0)
+                    leftBackPower = 0;
+            }
+            //only prevent the right wheels from advancing if the right sensor is too close
+            if (hardwareController.getRightDistance() < 0.5) {
+                if (rightFrontPower > 0)
+                    rightFrontPower = 0;
+                if (rightBackPower > 0)
+                    rightFrontPower = 0;
+            }
+        }
+
         // Send calculated power to wheels
         leftFrontDrive.setPower(leftFrontPower);
         rightFrontDrive.setPower(rightFrontPower);
