@@ -264,10 +264,17 @@ public class MainOpsMode extends LinearOpMode {
         double max;
         double min;
 
+        double axial = 0;
+        double lateral = 0;
+        double yaw = 0;
+
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-        double axial = -gamepad1.left_stick_y;
-        double lateral = gamepad1.left_stick_x;
-        double yaw = gamepad1.right_stick_x;
+        if (Math.abs(gamepad1.left_stick_y) > 0.05)
+            axial = -gamepad1.left_stick_y;
+        if (Math.abs(gamepad1.left_stick_x) > 0.05)
+            lateral = gamepad1.left_stick_x;
+        if (Math.abs(gamepad1.right_stick_x) > 0.05)
+            yaw = gamepad1.right_stick_x;
 
         // axial and yaw lock
         boolean aylock = false;
@@ -372,12 +379,21 @@ public class MainOpsMode extends LinearOpMode {
         double rro = rightBackEx / min;
         double rfo = rightFrontEx / min;
 
-        // Send calculated power to wheels
+        if (lro == 0)
+            lro = 1;
+        if (rro == 0)
+            rro = 1;
+        if (lfo == 0)
+            lfo = 1;
+        if (rfo == 0)
+            rfo = 1;
+
+            // Send calculated power to wheels
         // leftFrontDrive.setPower(leftFrontPower * .98);
-        leftFrontDrive.setPower(leftFrontPower / lfo);
-        rightFrontDrive.setPower(rightFrontPower / rfo);
-        leftBackDrive.setPower(leftBackPower / lro);
-        rightBackDrive.setPower(rightBackPower / rro);
+        leftFrontDrive.setPower(leftFrontPower /*/ lfo*/  * .96);
+        rightFrontDrive.setPower(rightFrontPower /*/ rfo*/);
+        leftBackDrive.setPower(leftBackPower /*/ lro*/);
+        rightBackDrive.setPower(rightBackPower /*/ rro*/ * .85);
 
         // rightBackDrive.setPower(rightBackPower * .82);
 
