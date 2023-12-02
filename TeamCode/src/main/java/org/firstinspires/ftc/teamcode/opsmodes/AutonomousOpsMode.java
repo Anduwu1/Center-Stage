@@ -253,19 +253,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                         autoChoices.autonomousStage = AutonomousState.PLACE_PURPLE_PIXEL;
                         break;
                     case PLACE_PURPLE_PIXEL:
-                        leftFrontDrive.setVelocity(1100);
-                        rightBackDrive.setVelocity(1100);
-                        rightFrontDrive.setVelocity(1100);
-                        leftBackDrive.setVelocity(1100);
-
-                        sleep(1670);
-
-                        leftFrontDrive.setVelocity(0);
-                        rightBackDrive.setVelocity(0);
-                        rightFrontDrive.setVelocity(0);
-                        leftBackDrive.setVelocity(0);
-
-                        hardCont.ejectIntake();
+                        // Place the purple pixel based on location
 
 
                         // Sets Position of the vertical tape strip relative to the robots start position to be passed into RoadRunner
@@ -292,29 +280,10 @@ public class AutonomousOpsMode extends LinearOpMode {
                             break;
                         }
                         //moveToTarget();
-                        hardCont.ejectIntake();
                         autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
                         break;
                     case PARK_AT_BACKSTAGE:
-                        sleep(1000);
-                        leftFrontDrive.setVelocity(-1100);
-                        rightBackDrive.setVelocity(-1100);
-                        rightFrontDrive.setVelocity(-1100);
-                        leftBackDrive.setVelocity(-1100);
 
-                        sleep(1675);
-
-                        leftFrontDrive.setVelocity(1100);
-                        rightBackDrive.setVelocity(1100);
-                        rightFrontDrive.setVelocity(-1100);
-                        leftBackDrive.setVelocity(-1100);
-
-                        sleep(2500);
-
-                        leftFrontDrive.setVelocity(0);
-                        rightBackDrive.setVelocity(0);
-                        rightFrontDrive.setVelocity(0);
-                        leftBackDrive.setVelocity(0);
 
                         /* pTask.runTaskTick(stageState, hardCont);
                         if (pTask.isFinished()) {

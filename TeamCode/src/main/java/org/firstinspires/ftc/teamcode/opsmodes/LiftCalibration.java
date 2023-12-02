@@ -19,6 +19,7 @@ public class LiftCalibration extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         hardwareController = new HardwareController(hardwareMap);
+        waitForStart();
         while(opModeIsActive()){
             if(!goTo) {
                 position += gamepad1.left_stick_y;

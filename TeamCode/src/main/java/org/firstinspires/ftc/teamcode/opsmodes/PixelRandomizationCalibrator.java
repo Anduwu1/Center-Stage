@@ -13,6 +13,7 @@ public class PixelRandomizationCalibrator extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         hardwareController = new HardwareController(hardwareMap);
+        waitForStart();
         while (opModeIsActive()) {
             // Get april tag pos
             AprilTagPoseFtc pose = hardwareController.getAprilTagWithId(420);
