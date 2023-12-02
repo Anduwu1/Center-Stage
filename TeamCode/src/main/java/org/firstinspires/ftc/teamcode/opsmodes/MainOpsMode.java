@@ -174,6 +174,10 @@ public class MainOpsMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+            if(!hardwareController.isLiftBusy()){
+                hardwareController.setLiftPower(0);
+            }
+
             updateDriveMotors();
             updateServos();
 
@@ -189,19 +193,21 @@ public class MainOpsMode extends LinearOpMode {
             );
 
 
+
+
             // telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
             // telemetry.addData("Intake Locked", trapDoor);
             telemetry.addData("Bucket ", bucketX);
             // telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
             telemetry.addLine("right distance: " + hardwareController.getRightDistance());
-            //telemetry.addLine(motorData);
+            telemetry.addLine(motorData);
             // telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
     }
 
     // Booleans that store if the buttons are pressed
-    boolean rbPressed, bPressed, yPressed, xPressed = false;
+    boolean rbPressed, bPressed, yPressed, xPressed = false, leftTrig;
 
     boolean open = true, trapDoor = false;
     private float armX = ARM_DOWN;
@@ -215,6 +221,17 @@ public class MainOpsMode extends LinearOpMode {
             yPressed = false;
             //telemetry.addLine("Button Pressed but not toggling");
         }
+
+        // Lift toggle
+        if(gamepad2.left_bumper){
+            if(!leftTrig) {
+                leftTrig = true;
+                toggleLift();
+            }
+        }else{
+            leftTrig = false;
+        }
+
 
         // Bucket Toggle
         if(gamepad2.b && !bPressed) {
@@ -344,6 +361,21 @@ public class MainOpsMode extends LinearOpMode {
         if(!trapDoor)
             intakeDrive.setPower(intakePower);
 
+    }
+
+    boolean up = false;
+    private void toggleLift(){
+
+        if(up){
+            hardwareController.setLiftPower(-1f);
+            hardwareController.liftGoToPosition(0);
+            up = false;
+        }else{
+            hardwareController.setLiftPower(1);
+            hardwareController.liftGoToPosition(1550);
+            up = true;
+        }
+        sleep(250);
     }
 
     private WheelValues adjustVelocityForBackdrop(WheelValues wheelValues) {

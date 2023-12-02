@@ -21,26 +21,34 @@ public class LiftCalibration extends LinearOpMode {
         hardwareController = new HardwareController(hardwareMap);
         waitForStart();
         while(opModeIsActive()){
+            if(!hardwareController.isLiftBusy()){
+                hardwareController.setLiftPower(0);
+                goTo = false;
+            }
             if(!goTo) {
-                position += gamepad1.left_stick_y;
+                position -= gamepad1.left_stick_y * 10.0f;
 
                 // make this better if you want
                 // (awesome ap csa question)
-                if (position > 30.0f) {
-                    position = 30.0f;
-                } else if (position < 0.0f) {
-                    position = 0.0f;
+                /*if (position > 1550.0f) {
+                    position = 1550.0f;
                 }
+                if (position < -0.01) {
+                    position = 0.0f;
+                }*/
             }
             if(gamepad1.a && !goTo) goTo = true;
 
-            if(goTo)
-                hardwareController.liftGoToPosition((int)position);
-            if(!hardwareController.isLiftBusy()) goTo = false;
+            if(goTo && !hardwareController.isLiftBusy()) {
+                hardwareController.setLiftPower(1);
+                hardwareController.liftGoToPosition((int) position);
+            }
+
             sleep(250);
 
-            telemetry.addData("Running to",  " %7d", position);
-            telemetry.addData("Currently at",  " at %7d", hardwareController.getLiftPos());
+            telemetry.addData("Running to",  " %7f", (float) position);
+            telemetry.addData("Currently at",  " at %7f", (float) hardwareController.getLiftPos());
+            telemetry.addData("Currently Moving?", goTo);
             telemetry.update();
         }
     }

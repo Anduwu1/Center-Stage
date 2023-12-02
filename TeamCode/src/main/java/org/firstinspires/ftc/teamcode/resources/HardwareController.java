@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -78,6 +79,9 @@ public class HardwareController{
         lift.liftMotor = this.hardwareMap.get(DcMotorEx.class, lift.liftName);
         lift.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lift.liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
         //lift.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Init distance sensors
@@ -131,6 +135,9 @@ public class HardwareController{
 
     public boolean isLiftBusy(){
         return lift.liftMotor.isBusy();
+    }
+    public void setLiftPower(float s){
+        lift.liftMotor.setPower(s);
     }
 
     /*

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import java.util.Arrays;
 import java.util.List;
 
-@TeleOp(name = "Wheel Calib")
+@TeleOp(name = "Wheel Calib POWER")
 public class WheelPowerCalib extends LinearOpMode {
     HardwareController hardwareController;
 
