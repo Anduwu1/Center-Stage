@@ -174,9 +174,9 @@ public class MainOpsMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            if(!hardwareController.isLiftBusy()){
+            /*if(!hardwareController.isLiftBusy()){
                 hardwareController.setLiftPower(0);
-            }
+            }*/
 
             updateDriveMotors();
             updateServos();
@@ -365,7 +365,6 @@ public class MainOpsMode extends LinearOpMode {
 
     boolean up = false;
     private void toggleLift(){
-
         if(up){
             hardwareController.setLiftPower(-1f);
             hardwareController.liftGoToPosition(0);
