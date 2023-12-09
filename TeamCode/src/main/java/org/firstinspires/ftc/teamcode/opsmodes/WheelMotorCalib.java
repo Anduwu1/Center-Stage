@@ -28,17 +28,15 @@ public class WheelMotorCalib extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_RBDRIVE_MOTOR);
         List<DcMotorEx> motors = Arrays.asList(leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive);
 
-        //set mode
+        waitForStart();
+
         for (DcMotorEx motor : motors) {
+            motor.setTargetPosition(384);
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
-        waitForStart();
-
         hardwareController = new HardwareController(hardwareMap);
-        for (DcMotorEx motor : motors) {
-            motor.setTargetPosition(384);
-        }
+
         while (opModeIsActive()) {
             telemetry.addData("leftFrontDrive", leftFrontDrive.getCurrentPosition());
             telemetry.addData("leftBackDrive", leftBackDrive.getCurrentPosition());
