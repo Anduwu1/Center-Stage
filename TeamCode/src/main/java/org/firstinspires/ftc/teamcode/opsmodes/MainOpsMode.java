@@ -271,6 +271,9 @@ public class MainOpsMode extends LinearOpMode {
         if(bucketX < Bucket.INTAKE_POS)
             bucketX = Bucket.INTAKE_POS;
 
+        if (gamepad1.a)
+            hardwareController.launchDrone();
+
         // Updates servos
         hardwareController.servoMove(bucketX, HardwareController.Servo_Type.BUCKET_SERVO);
         hardwareController.servoMove(tX, HardwareController.Servo_Type.DOOR_SERVO);

@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 import org.firstinspires.ftc.teamcode.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
+import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -37,7 +38,8 @@ public class HardwareController{
     public enum Servo_Type{
         ARM_SERVO,
         BUCKET_SERVO,
-        DOOR_SERVO
+        DOOR_SERVO,
+        DRONE_SERVO
     }
 
     // Subsystems
@@ -47,6 +49,7 @@ public class HardwareController{
     private DistanceSensors dsensors;
     private Camera camera;
     private Lift lift;
+    private Drone drone;
 
     // Robot we're controlling
     public Robot robot;
@@ -67,6 +70,7 @@ public class HardwareController{
         dsensors = new DistanceSensors();
         //camera = new Camera(this.hardwareMap);
         lift = new Lift();
+        drone = new Drone();
 
         // Init servos
         bucket.bucketRotation = this.hardwareMap.get(Servo.class, bucket.ROTATION_SERVO);
@@ -74,6 +78,7 @@ public class HardwareController{
         intake.intakeMotor = this.hardwareMap.get(DcMotor.class, intake.MOTOR);
 
         arm.armServo = this.hardwareMap.get(Servo.class, arm.arm);
+        drone.droneServo = this.hardwareMap.get(Servo.class, drone.drone);
 
         // Init lift
         lift.liftMotor = this.hardwareMap.get(DcMotorEx.class, lift.liftName);
@@ -90,6 +95,9 @@ public class HardwareController{
 
         // Init drive
         //drive = new SampleMecanumDrive(this.hardwareMap);
+
+        // Init drone
+        drone.init();
 
     }
 
@@ -180,6 +188,10 @@ public class HardwareController{
         } else {
             return false;
         }
+    }
+
+    public void launchDrone() {
+        drone.launch();
     }
 
     public void ejectIntake() throws InterruptedException {
