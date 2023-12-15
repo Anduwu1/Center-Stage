@@ -197,7 +197,8 @@ public class MainOpsMode extends LinearOpMode {
 
             // telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
             // telemetry.addData("Intake Locked", trapDoor);
-            telemetry.addData("Bucket ", bucketX);
+            //telemetry.addData("Bucket ", bucketX);
+            telemetry.addData("Drone ", hardwareController.getDrone().getPosition());
             // telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
             telemetry.addLine("right distance: " + hardwareController.getRightDistance());
             telemetry.addLine(motorData);
@@ -272,7 +273,9 @@ public class MainOpsMode extends LinearOpMode {
             bucketX = Bucket.INTAKE_POS;
 
         if (gamepad1.a)
-            hardwareController.launchDrone();
+            hardwareController.getDrone().launch();
+        else if (gamepad1.b)
+            hardwareController.getDrone().reset();
 
         // Updates servos
         hardwareController.servoMove(bucketX, HardwareController.Servo_Type.BUCKET_SERVO);

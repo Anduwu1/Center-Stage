@@ -97,7 +97,7 @@ public class HardwareController{
         //drive = new SampleMecanumDrive(this.hardwareMap);
 
         // Init drone
-        drone.init();
+        drone.reset();
 
     }
 
@@ -190,8 +190,8 @@ public class HardwareController{
         }
     }
 
-    public void launchDrone() {
-        drone.launch();
+    public Drone getDrone() {
+        return drone;
     }
 
     public void ejectIntake() throws InterruptedException {
