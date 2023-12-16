@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 import org.firstinspires.ftc.teamcode.subsystems.Camera;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -50,6 +51,7 @@ public class HardwareController{
     private Camera camera;
     private Lift lift;
     private Drone drone;
+    private Claw claw;
 
     // Robot we're controlling
     public Robot robot;
@@ -71,11 +73,13 @@ public class HardwareController{
         //camera = new Camera(this.hardwareMap);
         lift = new Lift();
         drone = new Drone();
+        claw = new Claw(this.hardwareMap.get(Servo.class, Claw.HARDWARE_NAME));
 
         // Init servos
         bucket.bucketRotation = this.hardwareMap.get(Servo.class, bucket.ROTATION_SERVO);
-        bucket.bucketTrapdoor = this.hardwareMap.get(Servo.class, bucket.TRAPDOOR_SERVO);
         intake.intakeMotor = this.hardwareMap.get(DcMotor.class, intake.MOTOR);
+
+
 
         arm.armServo = this.hardwareMap.get(Servo.class, arm.arm);
         drone.droneServo = this.hardwareMap.get(Servo.class, drone.drone);
@@ -158,9 +162,6 @@ public class HardwareController{
             case ARM_SERVO:
                 arm.armServo.setPosition(to);
                 break;
-            case DOOR_SERVO:
-                bucket.bucketTrapdoor.setPosition(to);
-                break;
             case BUCKET_SERVO:
                 bucket.bucketRotation.setPosition(to);
                 break;
@@ -192,6 +193,10 @@ public class HardwareController{
 
     public Drone getDrone() {
         return drone;
+    }
+
+    public Claw getClaw() {
+        return claw;
     }
 
     public void ejectIntake() throws InterruptedException {

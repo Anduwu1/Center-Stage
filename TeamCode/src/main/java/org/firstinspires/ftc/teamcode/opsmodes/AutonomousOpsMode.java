@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opsmodes;
 import android.media.audiofx.DynamicsProcessing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -38,7 +39,7 @@ import java.util.List;
 /*
     Class for all the Autonomous stuff
  */
-
+@Disabled
 @Autonomous(group="drive")
 public class AutonomousOpsMode extends LinearOpMode {
 

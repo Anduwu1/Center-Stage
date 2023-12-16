@@ -46,7 +46,6 @@ public class MainOpsMode extends LinearOpMode {
         DROP
     }
 
-    private boolean trapdoorOpened = false;
     private boolean bay1 = false;
     private boolean bay2 = false;
     private ArmState armState = ArmState.DOWN;
@@ -70,30 +69,6 @@ public class MainOpsMode extends LinearOpMode {
     float bucketX = Bucket.INTAKE_POS;
     private BucketState bState = BucketState.IN;
 
-    // TDoor
-    float tX = 1f;
-
-    public void toggleTrapdoor(BucketState bs) {
-        if(bs == BucketState.IN) {
-            tX = 1f;
-        } else {
-            tX = 0.7f;
-        }
-    }
-
-    public void setTrapdoorOpened() {
-        tX = 1f;
-    }
-
-    public void toggleTrapdoor() {
-        if(tX == .7f) {
-            bState = BucketState.DROP;
-            tX = 1f;
-        } else {
-            bState = BucketState.IN;
-            tX = .7f;
-        }
-    }
     public void toggleBucket(BucketState bs) {
         if (bs == BucketState.IN) {
             bucketX = Bucket.INTAKE_POS;
@@ -125,17 +100,6 @@ public class MainOpsMode extends LinearOpMode {
             toggleBucket(BucketState.DROP);
             armX = ARM_UP;
         }
-    }
-
-    public boolean alignBot() {
-        // TODO: make this use the Hardware Controller to rotate the bot using the distance sensors then move the arm into place
-        boolean aligned = hardwareController.align();
-        armToTop();
-
-        // If you still want trapdoor release to be manual remove this next line
-        setTrapdoorOpened();
-
-        return aligned;
     }
 
     @Override
@@ -216,7 +180,7 @@ public class MainOpsMode extends LinearOpMode {
         // Trapdoor toggle
         if(gamepad2.y && !yPressed) {
             yPressed = true;
-            toggleTrapdoor();
+            hardwareController.getClaw().toggleClaw();
             // telemetry.addLine("Toggling trapdoor");
         } else if(!gamepad2.y) {
             yPressed = false;
@@ -279,7 +243,6 @@ public class MainOpsMode extends LinearOpMode {
 
         // Updates servos
         hardwareController.servoMove(bucketX, HardwareController.Servo_Type.BUCKET_SERVO);
-        hardwareController.servoMove(tX, HardwareController.Servo_Type.DOOR_SERVO);
         hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
 
     }
@@ -364,8 +327,7 @@ public class MainOpsMode extends LinearOpMode {
         if(gamepad2.left_trigger != 0)
             intakePower = 1;
 
-        if(!trapDoor)
-            intakeDrive.setPower(intakePower);
+        intakeDrive.setPower(intakePower);
 
     }
 
