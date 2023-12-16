@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.opsmodes;
 // Basic stuff
 import android.media.audiofx.DynamicsProcessing;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilderKt;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -279,6 +282,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                             default:
                             break;
                         }
+                        movePixelToPos(1);
                         //moveToTarget();
                         autoChoices.autonomousStage = AutonomousState.PARK_AT_BACKSTAGE;
                         break;
@@ -309,6 +313,30 @@ public class AutonomousOpsMode extends LinearOpMode {
 
             }
             telemetry.update();
+        }
+    }
+
+    private void movePixelToPos(int i) {
+        // Trajectories
+        List<Trajectory> trajectories = new ArrayList<>();
+        // Go to position
+        switch(i){
+            // Left
+            case 1:
+                trajectories.add(hardCont.getDrive().trajectoryBuilder(new Pose2d()).forward(25).build());
+                trajectories.add(hardCont.getDrive().trajectoryBuilder((trajectories.get(trajectories.size() - 1).end())).strafeLeft(10).build());
+                break;
+            // Center
+            case 2:
+                break;
+            // Right
+            case 3:
+                break;
+            default:
+                break;
+        }
+        for(Trajectory t : trajectories){
+            hardCont.getDrive().followTrajectory(t);
         }
     }
 

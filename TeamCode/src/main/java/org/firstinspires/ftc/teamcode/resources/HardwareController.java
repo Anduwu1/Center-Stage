@@ -194,6 +194,10 @@ public class HardwareController{
         return drone;
     }
 
+    public SampleMecanumDrive getDrive(){
+        return drive;
+    }
+
     public void ejectIntake() throws InterruptedException {
         intake.intakeMotor.setPower(.2);
     }
