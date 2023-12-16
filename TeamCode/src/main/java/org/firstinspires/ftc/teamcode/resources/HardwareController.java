@@ -35,12 +35,6 @@ import java.util.List;
  */
 public class HardwareController{
 
-
-    public enum Servo_Type{
-        ARM_SERVO,
-        DRONE_SERVO
-    }
-
     // Subsystems
     private Bucket bucket;
     private Arm arm;
@@ -64,22 +58,17 @@ public class HardwareController{
         this.hardwareMap = _hardwareMap;
 
         // Create subsystems
-        arm = new Arm();
         intake = new Intake();
         dsensors = new DistanceSensors();
         //camera = new Camera(this.hardwareMap);
         lift = new Lift();
-        drone = new Drone();
+        drone = new Drone(this.hardwareMap.get(Servo.class, drone.drone));
         claw = new Claw(this.hardwareMap.get(Servo.class, Claw.HARDWARE_NAME));
         bucket = new Bucket(this.hardwareMap.get(Servo.class, Bucket.HARDWARE_NAME));
+        arm = new Arm(this.hardwareMap.get(Servo.class, Arm.HARDWARE_NAME));
 
         // Init servos
         intake.intakeMotor = this.hardwareMap.get(DcMotor.class, intake.MOTOR);
-
-
-
-        arm.armServo = this.hardwareMap.get(Servo.class, arm.arm);
-        drone.droneServo = this.hardwareMap.get(Servo.class, drone.drone);
 
         // Init lift
         lift.liftMotor = this.hardwareMap.get(DcMotorEx.class, lift.liftName);
@@ -96,9 +85,6 @@ public class HardwareController{
 
         // Init drive
         //drive = new SampleMecanumDrive(this.hardwareMap);
-
-        // Init drone
-        drone.reset();
 
     }
 
@@ -149,19 +135,6 @@ public class HardwareController{
         lift.liftMotor.setPower(s);
     }
 
-    /*
-        Servo stuff
-        (maybe rewrite later? the Servo_Type arg is kinda
-        icky imo)
-     */
-    public void servoMove(float to, @NonNull Servo_Type sT){
-        switch (sT){
-            case ARM_SERVO:
-                arm.armServo.setPosition(to);
-                break;
-        }
-    }
-
     public boolean align() {
         // TODO: figure out how to calculate the start pose
 
@@ -195,6 +168,10 @@ public class HardwareController{
 
     public Bucket getBucket() {
         return bucket;
+    }
+
+    public Arm getArm() {
+        return arm;
     }
 
     public SampleMecanumDrive getDrive(){

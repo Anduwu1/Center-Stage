@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.opsmodes;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Arm.ARM_DOWN;
-import static org.firstinspires.ftc.teamcode.subsystems.Arm.ARM_UP;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -66,12 +63,13 @@ public class MainOpsMode extends LinearOpMode {
     private IntakeState intakeState = IntakeState.IN;
 
     public void toggleArm() {
-        if(armX == ARM_UP) {
+        Arm arm = hardwareController.getArm();
+        if(arm.isUp()) {
             hardwareController.getBucket().moveToIntakePosition();
-            armX = ARM_DOWN;
+            arm.moveToDownPosition();
         } else {
             hardwareController.getBucket().moveToDropPosition();
-            armX = ARM_UP;
+            arm.moveToUpPosition();
         }
     }
 
@@ -147,7 +145,6 @@ public class MainOpsMode extends LinearOpMode {
     // Booleans that store if the buttons are pressed
     boolean rbPressed, bPressed, yPressed, xPressed = false, leftTrig;
 
-    private float armX = ARM_DOWN;
     private void updateServos(){
         // Trapdoor toggle
         if(gamepad2.y && !yPressed) {
@@ -187,13 +184,7 @@ public class MainOpsMode extends LinearOpMode {
         }
 
         // Manual arm control
-        armX -= gamepad2.left_stick_y / 800.0f;
-
-        // Arm clamp
-        if(armX > ARM_UP)
-            armX = ARM_UP;
-        if(armX < ARM_DOWN)
-            armX = ARM_DOWN;
+        hardwareController.getArm().adjustPosition(-gamepad2.left_stick_y / 800.0f);
 
         // Arm location percenetage for telemetry
         // float percent = (float) ((armX - Arm.ARM_DOWN) / (Arm.ARM_UP - Arm.ARM_DOWN));
@@ -208,10 +199,6 @@ public class MainOpsMode extends LinearOpMode {
             hardwareController.getDrone().launch();
         else if (gamepad1.b)
             hardwareController.getDrone().reset();
-
-        // Updates servos
-        hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
-
     }
 
     private void updateDriveMotors() {
