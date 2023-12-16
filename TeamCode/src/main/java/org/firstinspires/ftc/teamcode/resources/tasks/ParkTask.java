@@ -27,7 +27,7 @@ public class ParkTask extends AutoTask {
             // We need to start moving
             // Somehow(?) reset our position to a favorable area
             movingToParkPos = true;
-            controller.driveTo((float) (RobotSettings.FULL_TILE_INCHES * 1.5), 0);
+            // controller.driveTo((float) (RobotSettings.FULL_TILE_INCHES * 1.5), 0); //TODO move this code to autonomous section, because teleop doesn't care about it
             // Get our current alliance
             /*switch(controller.robot.alliance){
                 case RED_ALLIANCE:

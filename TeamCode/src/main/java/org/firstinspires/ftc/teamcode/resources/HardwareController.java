@@ -62,12 +62,14 @@ public class HardwareController{
         dsensors = new DistanceSensors();
         //camera = new Camera(this.hardwareMap);
         lift = new Lift();
-        drone = new Drone(this.hardwareMap.get(Servo.class, drone.drone));
+
+        // Servos
+        drone = new Drone(this.hardwareMap.get(Servo.class, Drone.HARDWARE_NAME));
         claw = new Claw(this.hardwareMap.get(Servo.class, Claw.HARDWARE_NAME));
         bucket = new Bucket(this.hardwareMap.get(Servo.class, Bucket.HARDWARE_NAME));
         arm = new Arm(this.hardwareMap.get(Servo.class, Arm.HARDWARE_NAME));
 
-        // Init servos
+        // Init intake
         intake.intakeMotor = this.hardwareMap.get(DcMotor.class, intake.MOTOR);
 
         // Init lift
@@ -86,35 +88,6 @@ public class HardwareController{
         // Init drive
         //drive = new SampleMecanumDrive(this.hardwareMap);
 
-    }
-
-    /*
-        DRIVE STUFF
-     */
-    public void driveTo(float xPos, float yPos){
-        /*drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
-                .lineTo(new Vector2d(xPos, yPos))
-                .build());*/
-    }
-
-    public void driveForward(float distance){
-        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
-                .forward(distance).build());
-    }
-
-    public void driveBackwards(float distance){
-        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
-                .back(distance).build());
-    }
-
-    public void driveLeft(float distance){
-        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
-                .strafeLeft(distance).build());
-    }
-
-    public void driveRight(float distance){
-        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
-                .strafeRight(distance).build());
     }
 
     /*

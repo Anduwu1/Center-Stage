@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Drone {
-    public static final String drone = "servoD";
+    public static final String HARDWARE_NAME = "servoD";
 
     private static final float DRONE_READY = 0.38f;
     private static final float DRONE_LAUNCHED = 0.65f;
