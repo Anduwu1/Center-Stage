@@ -199,6 +199,10 @@ public class HardwareController{
         return claw;
     }
 
+    public SampleMecanumDrive getDrive(){
+        return drive;
+    }
+
     public void ejectIntake() throws InterruptedException {
         intake.intakeMotor.setPower(.2);
     }
