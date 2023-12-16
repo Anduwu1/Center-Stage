@@ -25,11 +25,6 @@ public class RobotSettings {
     public static final String BANA_LBDRIVE_MOTOR = "leftRear";
     public static final String BANA_RBDRIVE_MOTOR = "rightRear";
 
-    // Subsystems
-    public static final Arm arm = new Arm();
-    public static final Bucket bucket = new Bucket();
-    public static final Intake intake = new Intake();
-
     // Field dimensions.
     // TODO: Verify that these measurements are correct
     public static final double FULL_FIELD_INCHES                = 141.0;

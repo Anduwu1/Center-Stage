@@ -1,37 +1,23 @@
 package org.firstinspires.ftc.teamcode.objects;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import static java.sql.Types.NULL;
-
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.android.util.Size;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibrationIdentity;
-import org.firstinspires.ftc.teamcode.opsmodes.AutonomousOpsMode;
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-import java.util.List;
+import org.firstinspires.ftc.teamcode.opsmodes.AutonomousOpsMode_OLD;
 
 public class Robot {
     public Point position;
     public Vision vision;
 
-    public AutonomousOpsMode.Alliance alliance;
+    public AutonomousOpsMode_OLD.Alliance alliance;
 
     public HardwareMap hardCont;
 
 
-    public Robot(AutonomousOpsMode.StartPos start, HardwareMap hM) {
+    public Robot(AutonomousOpsMode_OLD.StartPos start, HardwareMap hM) {
         this.hardCont = hM;
         vision = new Vision(this.hardCont);
 
-        alliance = AutonomousOpsMode.Alliance.RED_ALLIANCE;
+        alliance = AutonomousOpsMode_OLD.Alliance.RED_ALLIANCE;
 
         vision.initVision();
         // Sets Robot Start Position

@@ -38,8 +38,6 @@ public class HardwareController{
 
     public enum Servo_Type{
         ARM_SERVO,
-        BUCKET_SERVO,
-        DOOR_SERVO,
         DRONE_SERVO
     }
 
@@ -66,7 +64,6 @@ public class HardwareController{
         this.hardwareMap = _hardwareMap;
 
         // Create subsystems
-        bucket = new Bucket();
         arm = new Arm();
         intake = new Intake();
         dsensors = new DistanceSensors();
@@ -74,9 +71,9 @@ public class HardwareController{
         lift = new Lift();
         drone = new Drone();
         claw = new Claw(this.hardwareMap.get(Servo.class, Claw.HARDWARE_NAME));
+        bucket = new Bucket(this.hardwareMap.get(Servo.class, Bucket.HARDWARE_NAME));
 
         // Init servos
-        bucket.bucketRotation = this.hardwareMap.get(Servo.class, bucket.ROTATION_SERVO);
         intake.intakeMotor = this.hardwareMap.get(DcMotor.class, intake.MOTOR);
 
 
@@ -162,9 +159,6 @@ public class HardwareController{
             case ARM_SERVO:
                 arm.armServo.setPosition(to);
                 break;
-            case BUCKET_SERVO:
-                bucket.bucketRotation.setPosition(to);
-                break;
         }
     }
 
@@ -197,6 +191,10 @@ public class HardwareController{
 
     public Claw getClaw() {
         return claw;
+    }
+
+    public Bucket getBucket() {
+        return bucket;
     }
 
     public SampleMecanumDrive getDrive(){

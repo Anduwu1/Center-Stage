@@ -2,9 +2,12 @@ package org.firstinspires.ftc.teamcode.opsmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
+import org.firstinspires.ftc.teamcode.subsystems.Bucket;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
 
 @TeleOp(name="Servo Calib")
 public class ServoCalib extends LinearOpMode {
@@ -13,8 +16,10 @@ public class ServoCalib extends LinearOpMode {
 
     // Float
     float armPos = 0.45f, bucketPos = 0.0f, doorPos = 0.0f;
-
-    HardwareController.Servo_Type cur = HardwareController.Servo_Type.ARM_SERVO;
+    int servoNumber = 0; //0 -> ARM, 1-> BUCKET, 2-> CLAW
+    Servo armServo;
+    Servo bucketServo;
+    Servo clawServo;
 
     boolean changeDown = false;
 
@@ -22,6 +27,8 @@ public class ServoCalib extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        clawServo = this.hardwareMap.get(Servo.class, Claw.HARDWARE_NAME);
+        bucketServo = this.hardwareMap.get(Servo.class, Bucket.HARDWARE_NAME);
 
         waitForStart();
 
@@ -33,17 +40,9 @@ public class ServoCalib extends LinearOpMode {
             // Switch type
             if (gamepad1.dpad_right) {
                 if (changeDown == false) {
-                    // There is a WAY better way to do this
-                    // but im lazy so
-                    if (cur == HardwareController.Servo_Type.ARM_SERVO) {
-                        cur = HardwareController.Servo_Type.BUCKET_SERVO;
-                    }
-                    else if (cur == HardwareController.Servo_Type.BUCKET_SERVO) {
-                        cur = HardwareController.Servo_Type.DOOR_SERVO;
-                    }
-                    else if (cur == HardwareController.Servo_Type.DOOR_SERVO) {
-                        cur = HardwareController.Servo_Type.ARM_SERVO;
-                    }
+                    servoNumber++;
+                    if (servoNumber > 2)
+                        servoNumber = 0;
                 }
                 changeDown = true;
             } else {
@@ -62,26 +61,26 @@ public class ServoCalib extends LinearOpMode {
             telemetry.addData("BUCKET", "%f", bucketPos);
             telemetry.addData("DOOR", "%f", doorPos);
             telemetry.addLine("=======================");
-            switch (cur) {
-                case ARM_SERVO:
-
+            switch (servoNumber) {
+                case 0: //ARM
                     if (gamepad1.dpad_up) armPos += diff;
                     if (gamepad1.dpad_down) armPos -= diff;
-                    hardwareController.servoMove(armPos, cur);
+                    //hardwareController.getArm() //TODO fix once the arm is refactored
                     telemetry.addLine("CURRENT IS ARM");
                     break;
-                case DOOR_SERVO:
-                    if (gamepad1.dpad_up) doorPos += diff;
-                    if (gamepad1.dpad_down) doorPos -= diff;
-                    hardwareController.servoMove(doorPos, cur);
-                    telemetry.addLine("CURRENT IS DOOR");
-                    break;
-                case BUCKET_SERVO:
+                case 1:
                     if (gamepad1.dpad_up) bucketPos += diff;
                     if (gamepad1.dpad_down) bucketPos -= diff;
-                    hardwareController.servoMove(bucketPos, cur);
+                    bucketServo.setPosition(bucketPos);
                     telemetry.addLine("CURRENT IS BUCKET");
                     break;
+                case 2:
+                    if (gamepad1.dpad_up) doorPos += diff;
+                    if (gamepad1.dpad_down) doorPos -= diff;
+                    clawServo.setPosition(doorPos);
+                    telemetry.addLine("CURRENT IS DOOR");
+                    break;
+
             }
             telemetry.update();
         }

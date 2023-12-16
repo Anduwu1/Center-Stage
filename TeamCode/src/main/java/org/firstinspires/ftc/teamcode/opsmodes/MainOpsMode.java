@@ -65,39 +65,12 @@ public class MainOpsMode extends LinearOpMode {
     private int inState = 1;
     private IntakeState intakeState = IntakeState.IN;
 
-    // Bucket
-    float bucketX = Bucket.INTAKE_POS;
-    private BucketState bState = BucketState.IN;
-
-    public void toggleBucket(BucketState bs) {
-        if (bs == BucketState.IN) {
-            bucketX = Bucket.INTAKE_POS;
-            // toggleTrapdoor(bs);
-        }
-        else {
-            bucketX = Bucket.DROP_POS;
-            // toggleTrapdoor(bs);
-        }
-    }
-
-    public void toggleBucket() {
-        if (bucketX == Bucket.DROP_POS) {
-            bucketX = Bucket.INTAKE_POS;
-        } else {
-            bucketX = Bucket.DROP_POS;
-        }
-    }
-
-    public void armToTop() {
-        toggleBucket(BucketState.DROP);
-        armX = ARM_UP;
-    }
     public void toggleArm() {
         if(armX == ARM_UP) {
-            toggleBucket(BucketState.IN);
+            hardwareController.getBucket().moveToIntakePosition();
             armX = ARM_DOWN;
         } else {
-            toggleBucket(BucketState.DROP);
+            hardwareController.getBucket().moveToDropPosition();
             armX = ARM_UP;
         }
     }
@@ -174,7 +147,6 @@ public class MainOpsMode extends LinearOpMode {
     // Booleans that store if the buttons are pressed
     boolean rbPressed, bPressed, yPressed, xPressed = false, leftTrig;
 
-    boolean open = true, trapDoor = false;
     private float armX = ARM_DOWN;
     private void updateServos(){
         // Trapdoor toggle
@@ -201,7 +173,7 @@ public class MainOpsMode extends LinearOpMode {
         // Bucket Toggle
         if(gamepad2.b && !bPressed) {
             bPressed = true;
-            toggleBucket();
+            hardwareController.getBucket().toggleBucket();
         } else if(!gamepad2.b) {
             bPressed = false;
         }
@@ -227,14 +199,10 @@ public class MainOpsMode extends LinearOpMode {
         // float percent = (float) ((armX - Arm.ARM_DOWN) / (Arm.ARM_UP - Arm.ARM_DOWN));
 
         // Manual control of the bucket
-        if(gamepad2.dpad_up) bucketX+=0.005f;
-        if(gamepad2.dpad_down) bucketX-=0.005f;
-
-        // Clamps the bucket servo position
-        if(bucketX > Bucket.DROP_POS)
-            bucketX = Bucket.DROP_POS;
-        if(bucketX < Bucket.INTAKE_POS)
-            bucketX = Bucket.INTAKE_POS;
+        if(gamepad2.dpad_up)
+            hardwareController.getBucket().adjustPosition(0.005);
+        if(gamepad2.dpad_down)
+            hardwareController.getBucket().adjustPosition(-0.005);
 
         if (gamepad1.a)
             hardwareController.getDrone().launch();
@@ -242,7 +210,6 @@ public class MainOpsMode extends LinearOpMode {
             hardwareController.getDrone().reset();
 
         // Updates servos
-        hardwareController.servoMove(bucketX, HardwareController.Servo_Type.BUCKET_SERVO);
         hardwareController.servoMove(armX, HardwareController.Servo_Type.ARM_SERVO);
 
     }
