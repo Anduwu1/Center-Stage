@@ -25,19 +25,14 @@ public class MainOpsMode extends LinearOpMode {
     private DcMotorEx leftBackDrive = null;
     private DcMotorEx rightFrontDrive = null;
     private DcMotorEx rightBackDrive = null;
-    private DcMotor intakeDrive = null;
 
     // Constants
     private static final double DRIVE_SPEED = 1;
     private static final int MAX_VELOCITY = 2200;
-    // private static final double INTAKE_SPEED = 0.1;
     // Servo Constants
 
     private HardwareController hardwareController;
     private Robot robot;
-
-    // Intake
-    private double intakePower = 0;
 
     public void toggleArm() {
         Arm arm = hardwareController.getArm();
@@ -68,15 +63,11 @@ public class MainOpsMode extends LinearOpMode {
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 
-        intakeDrive = hardwareMap.get(DcMotor.class, "intake");
-
         // Set directions
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-
-        intakeDrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         // telemetry.addData("Status", "Initialized");
@@ -250,7 +241,7 @@ public class MainOpsMode extends LinearOpMode {
 
 
         // Intake
-        intakePower = 0;
+        double intakePower = 0;
 
         if(gamepad2.right_trigger != 0)
             intakePower = -1;
@@ -258,7 +249,7 @@ public class MainOpsMode extends LinearOpMode {
         if(gamepad2.left_trigger != 0)
             intakePower = 1;
 
-        intakeDrive.setPower(intakePower);
+        hardwareController.getIntake().setPower(intakePower);
 
     }
 

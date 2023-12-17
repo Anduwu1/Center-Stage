@@ -56,7 +56,7 @@ public class HardwareController{
         this.hardwareMap = _hardwareMap;
 
         // Create subsystems
-        intake = new Intake();
+
 
         //camera = new Camera(this.hardwareMap);
         lift = new Lift();
@@ -68,8 +68,10 @@ public class HardwareController{
         arm = new Arm(hardwareMap.get(Servo.class, Arm.HARDWARE_NAME));
         dsensors = new Distance(hardwareMap.get(DistanceSensor.class, Distance.HARDWARE_NAME_LEFT), hardwareMap.get(DistanceSensor.class, Distance.HARDWARE_NAME_RIGHT));
 
-        // Init intake
-        intake.intakeMotor = this.hardwareMap.get(DcMotor.class, intake.MOTOR);
+        // motors
+        DcMotor intakeMotor = hardwareMap.get(DcMotor.class, Intake.HARDWARE_NAME);
+        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        intake = new Intake(intakeMotor);
 
         // Init lift
         lift.liftMotor = this.hardwareMap.get(DcMotorEx.class, lift.liftName);
@@ -123,12 +125,12 @@ public class HardwareController{
         return dsensors;
     }
 
-    public SampleMecanumDrive getDrive(){
-        return drive;
+    public Intake getIntake() {
+        return intake;
     }
 
-    public void ejectIntake() throws InterruptedException {
-        intake.intakeMotor.setPower(.2);
+    public SampleMecanumDrive getDrive(){
+        return drive;
     }
 
     // Camera stuff
