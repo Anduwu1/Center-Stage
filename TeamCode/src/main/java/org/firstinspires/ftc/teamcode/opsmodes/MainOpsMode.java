@@ -256,12 +256,12 @@ public class MainOpsMode extends LinearOpMode {
     boolean up = false;
     private void toggleLift(){
         if(up){
-            hardwareController.setLiftPower(-1f);
-            hardwareController.liftGoToPosition(0);
+            hardwareController.getLift().setLiftPower(-1f);
+            hardwareController.getLift().liftGoToPosition(0);
             up = false;
         }else{
-            hardwareController.setLiftPower(1);
-            hardwareController.liftGoToPosition(1550);
+            hardwareController.getLift().setLiftPower(1);
+            hardwareController.getLift().liftGoToPosition(1550);
             up = true;
         }
         sleep(250);

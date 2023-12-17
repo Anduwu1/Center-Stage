@@ -59,7 +59,7 @@ public class HardwareController{
 
 
         //camera = new Camera(this.hardwareMap);
-        lift = new Lift();
+
 
         // Servos
         drone = new Drone(hardwareMap.get(Servo.class, Drone.HARDWARE_NAME));
@@ -69,40 +69,12 @@ public class HardwareController{
         dsensors = new Distance(hardwareMap.get(DistanceSensor.class, Distance.HARDWARE_NAME_LEFT), hardwareMap.get(DistanceSensor.class, Distance.HARDWARE_NAME_RIGHT));
 
         // motors
-        DcMotor intakeMotor = hardwareMap.get(DcMotor.class, Intake.HARDWARE_NAME);
-        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        intake = new Intake(intakeMotor);
-
-        // Init lift
-        lift.liftMotor = this.hardwareMap.get(DcMotorEx.class, lift.liftName);
-        lift.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift.liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //lift.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        intake = new Intake(hardwareMap.get(DcMotor.class, Intake.HARDWARE_NAME));
+        lift = new Lift(this.hardwareMap.get(DcMotorEx.class, Lift.HARDWARE_NAME));
 
         // Init drive
         //drive = new SampleMecanumDrive(this.hardwareMap);
 
-    }
-
-    /*
-        Lift stuff lamo
-     */
-    public void liftGoToPosition(int pos){
-        lift.liftMotor.setTargetPosition(pos);
-    }
-
-    public int getLiftPos(){
-        return lift.liftMotor.getCurrentPosition();
-    }
-
-    public boolean isLiftBusy(){
-        return lift.liftMotor.isBusy();
-    }
-    public void setLiftPower(float s){
-        lift.liftMotor.setPower(s);
     }
 
     public Drone getDrone() {
@@ -127,6 +99,10 @@ public class HardwareController{
 
     public Intake getIntake() {
         return intake;
+    }
+
+    public Lift getLift() {
+        return lift;
     }
 
     public SampleMecanumDrive getDrive(){

@@ -21,8 +21,8 @@ public class LiftCalibration extends LinearOpMode {
         hardwareController = new HardwareController(hardwareMap);
         waitForStart();
         while(opModeIsActive()){
-            if(!hardwareController.isLiftBusy()){
-                hardwareController.setLiftPower(0);
+            if(!hardwareController.getLift().isLiftBusy()){
+                hardwareController.getLift().setLiftPower(0);
                 goTo = false;
             }
             if(!goTo) {
@@ -39,15 +39,15 @@ public class LiftCalibration extends LinearOpMode {
             }
             if(gamepad1.a && !goTo) goTo = true;
 
-            if(goTo && !hardwareController.isLiftBusy()) {
-                hardwareController.setLiftPower(1);
-                hardwareController.liftGoToPosition((int) position);
+            if(goTo && !hardwareController.getLift().isLiftBusy()) {
+                hardwareController.getLift().setLiftPower(1);
+                hardwareController.getLift().liftGoToPosition((int) position);
             }
 
             sleep(250);
 
             telemetry.addData("Running to",  " %7f", (float) position);
-            telemetry.addData("Currently at",  " at %7f", (float) hardwareController.getLiftPos());
+            telemetry.addData("Currently at",  " at %7f", (float) hardwareController.getLift().getLiftPos());
             telemetry.addData("Currently Moving?", goTo);
             telemetry.update();
         }
