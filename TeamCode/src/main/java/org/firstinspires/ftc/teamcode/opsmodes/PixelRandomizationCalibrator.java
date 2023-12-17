@@ -16,7 +16,7 @@ public class PixelRandomizationCalibrator extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             // Get april tag pos
-            AprilTagPoseFtc pose = hardwareController.getAprilTagWithId(420);
+            AprilTagPoseFtc pose = hardwareController.getAprilTag().getAprilTagWithId(420);
             if(pose.range < 0){
                 telemetry.addLine("APRIL TAG WITH ID 420 NOT FOUND");
             }else{

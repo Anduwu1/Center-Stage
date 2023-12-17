@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.AprilTag;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 import org.firstinspires.ftc.teamcode.subsystems.Camera;
@@ -42,6 +43,7 @@ public class HardwareController{
     private Lift lift;
     private Drone drone;
     private Claw claw;
+    private AprilTag aprilTag;
 
     // Robot we're controlling
     public Robot robot;
@@ -56,10 +58,7 @@ public class HardwareController{
         this.hardwareMap = _hardwareMap;
 
         // Create subsystems
-
-
         //camera = new Camera(this.hardwareMap);
-
 
         // Servos
         drone = new Drone(hardwareMap.get(Servo.class, Drone.HARDWARE_NAME));
@@ -71,6 +70,8 @@ public class HardwareController{
         // motors
         intake = new Intake(hardwareMap.get(DcMotor.class, Intake.HARDWARE_NAME));
         lift = new Lift(this.hardwareMap.get(DcMotorEx.class, Lift.HARDWARE_NAME));
+
+        aprilTag = new AprilTag(camera);
 
         // Init drive
         //drive = new SampleMecanumDrive(this.hardwareMap);
@@ -105,23 +106,11 @@ public class HardwareController{
         return lift;
     }
 
+    public AprilTag getAprilTag() {
+        return aprilTag;
+    }
+
     public SampleMecanumDrive getDrive(){
         return drive;
-    }
-
-    // Camera stuff
-    public List<AprilTagDetection> getAllAprilTags(){
-        return camera.getAllVisibleAprilTags();
-    }
-
-    public AprilTagPoseFtc getAprilTagWithId(int id){
-        AprilTagPoseFtc tmp = new AprilTagPoseFtc(0,0,0,0,0,0,-100,0,0); // default
-        for(AprilTagDetection april : this.getAllAprilTags()){
-            if(april.id == id){
-                tmp = april.ftcPose;
-                break;
-            }
-        }
-        return tmp;
     }
 }

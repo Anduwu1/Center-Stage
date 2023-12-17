@@ -1,0 +1,31 @@
+package org.firstinspires.ftc.teamcode.subsystems;
+
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
+
+import java.util.List;
+
+public class AprilTag {
+
+    private final Camera camera;
+
+    public AprilTag(Camera camera) {
+        this.camera = camera;
+    }
+
+    // Camera stuff
+    public List<AprilTagDetection> getAllAprilTags(){
+        return camera.getAllVisibleAprilTags();
+    }
+
+    public AprilTagPoseFtc getAprilTagWithId(int id){
+        AprilTagPoseFtc tmp = new AprilTagPoseFtc(0,0,0,0,0,0,-100,0,0); // default
+        for(AprilTagDetection april : this.getAllAprilTags()){
+            if(april.id == id){
+                tmp = april.ftcPose;
+                break;
+            }
+        }
+        return tmp;
+    }
+}
