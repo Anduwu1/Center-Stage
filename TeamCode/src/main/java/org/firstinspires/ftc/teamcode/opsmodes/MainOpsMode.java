@@ -10,9 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.HardwareController;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,25 +26,6 @@ public class MainOpsMode extends LinearOpMode {
     private DcMotorEx rightFrontDrive = null;
     private DcMotorEx rightBackDrive = null;
     private DcMotor intakeDrive = null;
-    private enum ArmState {
-        UP,
-        DOWN
-    }
-
-    public enum IntakeState {
-        IN,
-        OUT
-    }
-
-    public enum BucketState {
-        IN,
-        DROP
-    }
-
-    private boolean bay1 = false;
-    private boolean bay2 = false;
-    private ArmState armState = ArmState.DOWN;
-
 
     // Constants
     private static final double DRIVE_SPEED = 1;
@@ -59,8 +38,6 @@ public class MainOpsMode extends LinearOpMode {
 
     // Intake
     private double intakePower = 0;
-    private int inState = 1;
-    private IntakeState intakeState = IntakeState.IN;
 
     public void toggleArm() {
         Arm arm = hardwareController.getArm();
@@ -135,7 +112,7 @@ public class MainOpsMode extends LinearOpMode {
             //telemetry.addData("Bucket ", bucketX);
             telemetry.addData("Drone ", hardwareController.getDrone().getPosition());
             // telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
-            telemetry.addLine("right distance: " + hardwareController.getRightDistance());
+            telemetry.addLine("right distance: " + hardwareController.getDistanceSensors().getRightDistance());
             telemetry.addLine(motorData);
             // telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
@@ -309,7 +286,7 @@ public class MainOpsMode extends LinearOpMode {
         float close_distance = 2.0f;
 
         // Linearly scale the power for the left wheels based on the left sensor distance
-        double leftDistance = hardwareController.getLeftDistance();
+        double leftDistance = hardwareController.getDistanceSensors().getLeftDistance();
         if (leftDistance < far_distance && leftDistance > close_distance) {
             double scaledPower = (leftDistance - close_distance) / (far_distance - close_distance); // Scale from 2 inches (0 power) to 10 inches (1 power)
             if (rightFrontPower < 0)
@@ -324,7 +301,7 @@ public class MainOpsMode extends LinearOpMode {
         }
 
         // Linearly scale the power for the right wheels based on the right sensor distance
-        double rightDistance = hardwareController.getRightDistance();
+        double rightDistance = hardwareController.getDistanceSensors().getRightDistance();
         if (rightDistance < far_distance && rightDistance > 2.0) {
             double scaledPower = (rightDistance - close_distance) / (far_distance - close_distance); // Scale from 2 inches (0 power) to 10 inches (1 power)
             if (leftFrontPower < 0)

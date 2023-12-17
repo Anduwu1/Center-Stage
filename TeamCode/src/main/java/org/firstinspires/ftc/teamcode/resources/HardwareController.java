@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.resources;
 
 import android.annotation.SuppressLint;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -20,7 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 import org.firstinspires.ftc.teamcode.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
+import org.firstinspires.ftc.teamcode.subsystems.Distance;
 import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
@@ -39,7 +37,7 @@ public class HardwareController{
     private Bucket bucket;
     private Arm arm;
     private Intake intake;
-    private DistanceSensors dsensors;
+    private Distance dsensors;
     private Camera camera;
     private Lift lift;
     private Drone drone;
@@ -59,15 +57,16 @@ public class HardwareController{
 
         // Create subsystems
         intake = new Intake();
-        dsensors = new DistanceSensors();
+
         //camera = new Camera(this.hardwareMap);
         lift = new Lift();
 
         // Servos
-        drone = new Drone(this.hardwareMap.get(Servo.class, Drone.HARDWARE_NAME));
-        claw = new Claw(this.hardwareMap.get(Servo.class, Claw.HARDWARE_NAME));
-        bucket = new Bucket(this.hardwareMap.get(Servo.class, Bucket.HARDWARE_NAME));
-        arm = new Arm(this.hardwareMap.get(Servo.class, Arm.HARDWARE_NAME));
+        drone = new Drone(hardwareMap.get(Servo.class, Drone.HARDWARE_NAME));
+        claw = new Claw(hardwareMap.get(Servo.class, Claw.HARDWARE_NAME));
+        bucket = new Bucket(hardwareMap.get(Servo.class, Bucket.HARDWARE_NAME));
+        arm = new Arm(hardwareMap.get(Servo.class, Arm.HARDWARE_NAME));
+        dsensors = new Distance(hardwareMap.get(DistanceSensor.class, Distance.HARDWARE_NAME_LEFT), hardwareMap.get(DistanceSensor.class, Distance.HARDWARE_NAME_RIGHT));
 
         // Init intake
         intake.intakeMotor = this.hardwareMap.get(DcMotor.class, intake.MOTOR);
@@ -80,10 +79,6 @@ public class HardwareController{
         lift.liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //lift.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // Init distance sensors
-        dsensors.left = this.hardwareMap.get(DistanceSensor.class, dsensors.leftSense);
-        dsensors.right = this.hardwareMap.get(DistanceSensor.class, dsensors.rightSense);
 
         // Init drive
         //drive = new SampleMecanumDrive(this.hardwareMap);
@@ -108,29 +103,6 @@ public class HardwareController{
         lift.liftMotor.setPower(s);
     }
 
-    public boolean align() {
-        // TODO: figure out how to calculate the start pose
-
-        // get the distances
-        double leftD = dsensors.left.getDistance(DistanceUnit.INCH);
-        double rightD = dsensors.right.getDistance(DistanceUnit.INCH);
-
-        // set the robot's current position relative to backdrop
-        Pose2d startPose = new Pose2d(0,0,0);
-        drive.setPoseEstimate(startPose);
-
-        // tell it to go up against the backdrop
-        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(0.0),0)
-                .build());
-
-        if (leftD == 0 && rightD == 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public Drone getDrone() {
         return drone;
     }
@@ -147,20 +119,16 @@ public class HardwareController{
         return arm;
     }
 
+    public Distance getDistanceSensors() {
+        return dsensors;
+    }
+
     public SampleMecanumDrive getDrive(){
         return drive;
     }
 
     public void ejectIntake() throws InterruptedException {
         intake.intakeMotor.setPower(.2);
-    }
-
-    public double getRightDistance() {
-        return dsensors.right.getDistance(DistanceUnit.INCH);
-    }
-
-    public double getLeftDistance() {
-        return dsensors.left.getDistance(DistanceUnit.INCH);
     }
 
     // Camera stuff

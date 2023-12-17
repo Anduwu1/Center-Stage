@@ -16,8 +16,8 @@ public class DistanceSensorCalib extends LinearOpMode {
         hardwareController = new HardwareController(hardwareMap);
 
         while (opModeIsActive()) {
-            double leftDistance = hardwareController.getLeftDistance();
-            double rightDistance = hardwareController.getRightDistance();
+            double leftDistance = hardwareController.getDistanceSensors().getLeftDistance();
+            double rightDistance = hardwareController.getDistanceSensors().getRightDistance();
 
             telemetry.addLine("left distance sensor: " + leftDistance + " in");
             telemetry.addLine("right distance sensor: " + rightDistance + " in");
