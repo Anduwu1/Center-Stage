@@ -3,14 +3,12 @@ package org.firstinspires.ftc.teamcode.opsmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
+import org.firstinspires.ftc.teamcode.subsystems.Lift;
 
 @TeleOp(name="LiftCalib")
 public class LiftCalibration extends LinearOpMode {
 
-    HardwareController hardwareController;
+    private Lift lift;
 
     float position = 0.0f;
 
@@ -18,11 +16,11 @@ public class LiftCalibration extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardwareController = new HardwareController(hardwareMap);
+        lift = new Lift(hardwareMap);
         waitForStart();
         while(opModeIsActive()){
-            if(!hardwareController.getLift().isLiftBusy()){
-                hardwareController.getLift().setLiftPower(0);
+            if(!lift.isLiftBusy()){
+                lift.setLiftPower(0);
                 goTo = false;
             }
             if(!goTo) {
@@ -39,15 +37,15 @@ public class LiftCalibration extends LinearOpMode {
             }
             if(gamepad1.a && !goTo) goTo = true;
 
-            if(goTo && !hardwareController.getLift().isLiftBusy()) {
-                hardwareController.getLift().setLiftPower(1);
-                hardwareController.getLift().liftGoToPosition((int) position);
+            if(goTo && !lift.isLiftBusy()) {
+                lift.setLiftPower(1);
+                lift.liftGoToPosition((int) position);
             }
 
             sleep(250);
 
             telemetry.addData("Running to",  " %7f", (float) position);
-            telemetry.addData("Currently at",  " at %7f", (float) hardwareController.getLift().getLiftPos());
+            telemetry.addData("Currently at",  " at %7f", (float) lift.getLiftPos());
             telemetry.addData("Currently Moving?", goTo);
             telemetry.update();
         }

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.resources.taskManagment;
 
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
 
 public abstract class AutoTask {
     protected String taskName;
@@ -10,7 +9,7 @@ public abstract class AutoTask {
         this.taskName = name;
     }
 
-    public abstract void runTaskTick(StageState state, HardwareController controller);
+    public abstract void runTaskTick(StageState state);
 
     public void setTaskName(String newTaskName){
         this.taskName = newTaskName;

@@ -4,13 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Bucket;
+import org.firstinspires.ftc.teamcode.subsystems.Camera;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Distance;
+import org.firstinspires.ftc.teamcode.subsystems.Drone;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Lift;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,27 +34,28 @@ public class MainOpsMode extends LinearOpMode {
     private static final int MAX_VELOCITY = 2200;
     // Servo Constants
 
-    private HardwareController hardwareController;
-    private Robot robot;
+    // Subsystems
+    private Bucket bucket;
+    private Arm arm;
+    private Intake intake;
+    private Distance dsensors;
+    private Camera camera;
+    private Lift lift;
+    private Drone drone;
+    private Claw claw;
 
-    public void toggleArm() {
-        Arm arm = hardwareController.getArm();
-        if(arm.isUp()) {
-            hardwareController.getBucket().moveToIntakePosition();
-            arm.moveToDownPosition();
-        } else {
-            hardwareController.getBucket().moveToDropPosition();
-            arm.moveToUpPosition();
-        }
-    }
+    private void initHardware() {
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        // robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+        //init subsystems
+        drone = new Drone(hardwareMap);
+        claw = new Claw(hardwareMap);
+        bucket = new Bucket(hardwareMap);
+        arm = new Arm(hardwareMap);
+        dsensors = new Distance(hardwareMap);
+        intake = new Intake(hardwareMap);
+        lift = new Lift(hardwareMap);
 
-        hardwareController = new HardwareController(hardwareMap);
-
-        // Init hardware Vars
+        // Init drive motors
         leftFrontDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_LFDRIVE_MOTOR);
         leftBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_LBDRIVE_MOTOR);
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_RFDRIVE_MOTOR);
@@ -68,6 +72,12 @@ public class MainOpsMode extends LinearOpMode {
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+    }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+       initHardware();
 
         // Wait for the game to start (driver presses PLAY)
         // telemetry.addData("Status", "Initialized");
@@ -101,12 +111,22 @@ public class MainOpsMode extends LinearOpMode {
             // telemetry.addData("Arm Open %", "%f", armX / (ARM_UP - ARM_DOWN));
             // telemetry.addData("Intake Locked", trapDoor);
             //telemetry.addData("Bucket ", bucketX);
-            telemetry.addData("Drone ", hardwareController.getDrone().getPosition());
+            telemetry.addData("Drone ", drone.getPosition());
             // telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
-            telemetry.addLine("right distance: " + hardwareController.getDistanceSensors().getRightDistance());
+            telemetry.addLine("right distance: " + dsensors.getRightDistance());
             telemetry.addLine(motorData);
             // telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
+        }
+    }
+
+    private void toggleArm() {
+        if(arm.isUp()) {
+            bucket.moveToIntakePosition();
+            arm.moveToDownPosition();
+        } else {
+            bucket.moveToDropPosition();
+            arm.moveToUpPosition();
         }
     }
 
@@ -117,7 +137,7 @@ public class MainOpsMode extends LinearOpMode {
         // Trapdoor toggle
         if(gamepad2.y && !yPressed) {
             yPressed = true;
-            hardwareController.getClaw().toggleClaw();
+            claw.toggleClaw();
             // telemetry.addLine("Toggling trapdoor");
         } else if(!gamepad2.y) {
             yPressed = false;
@@ -138,7 +158,7 @@ public class MainOpsMode extends LinearOpMode {
         // Bucket Toggle
         if(gamepad2.b && !bPressed) {
             bPressed = true;
-            hardwareController.getBucket().toggleBucket();
+            bucket.toggleBucket();
         } else if(!gamepad2.b) {
             bPressed = false;
         }
@@ -152,21 +172,21 @@ public class MainOpsMode extends LinearOpMode {
         }
 
         // Manual arm control
-        hardwareController.getArm().adjustPosition(-gamepad2.left_stick_y / 800.0f);
+        arm.adjustPosition(-gamepad2.left_stick_y / 800.0f);
 
         // Arm location percenetage for telemetry
         // float percent = (float) ((armX - Arm.ARM_DOWN) / (Arm.ARM_UP - Arm.ARM_DOWN));
 
         // Manual control of the bucket
         if(gamepad2.dpad_up)
-            hardwareController.getBucket().adjustPosition(0.005);
+            bucket.adjustPosition(0.005);
         if(gamepad2.dpad_down)
-            hardwareController.getBucket().adjustPosition(-0.005);
+            bucket.adjustPosition(-0.005);
 
         if (gamepad1.a)
-            hardwareController.getDrone().launch();
+            drone.launch();
         else if (gamepad1.b)
-            hardwareController.getDrone().reset();
+            drone.reset();
     }
 
     private void updateDriveMotors() {
@@ -249,19 +269,20 @@ public class MainOpsMode extends LinearOpMode {
         if(gamepad2.left_trigger != 0)
             intakePower = 1;
 
-        hardwareController.getIntake().setPower(intakePower);
+        intake.setPower(intakePower);
 
     }
 
     boolean up = false;
     private void toggleLift(){
-        if(up){
-            hardwareController.getLift().setLiftPower(-1f);
-            hardwareController.getLift().liftGoToPosition(0);
+        if(up) {
+            lift.setLiftPower(-1f);
+            lift.liftGoToPosition(0);
             up = false;
-        }else{
-            hardwareController.getLift().setLiftPower(1);
-            hardwareController.getLift().liftGoToPosition(1550);
+        }
+        else {
+            lift.setLiftPower(1);
+            lift.liftGoToPosition(1550);
             up = true;
         }
         sleep(250);
@@ -277,7 +298,7 @@ public class MainOpsMode extends LinearOpMode {
         float close_distance = 2.0f;
 
         // Linearly scale the power for the left wheels based on the left sensor distance
-        double leftDistance = hardwareController.getDistanceSensors().getLeftDistance();
+        double leftDistance = dsensors.getLeftDistance();
         if (leftDistance < far_distance && leftDistance > close_distance) {
             double scaledPower = (leftDistance - close_distance) / (far_distance - close_distance); // Scale from 2 inches (0 power) to 10 inches (1 power)
             if (rightFrontPower < 0)
@@ -292,7 +313,7 @@ public class MainOpsMode extends LinearOpMode {
         }
 
         // Linearly scale the power for the right wheels based on the right sensor distance
-        double rightDistance = hardwareController.getDistanceSensors().getRightDistance();
+        double rightDistance = dsensors.getRightDistance();
         if (rightDistance < far_distance && rightDistance > 2.0) {
             double scaledPower = (rightDistance - close_distance) / (far_distance - close_distance); // Scale from 2 inches (0 power) to 10 inches (1 power)
             if (leftFrontPower < 0)

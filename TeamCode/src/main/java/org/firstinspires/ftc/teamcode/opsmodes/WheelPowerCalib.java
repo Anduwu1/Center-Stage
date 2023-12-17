@@ -7,15 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
 
 import java.util.Arrays;
 import java.util.List;
 
 @TeleOp(name = "Wheel Calib POWER")
 public class WheelPowerCalib extends LinearOpMode {
-    HardwareController hardwareController;
-
     private DcMotorEx leftFrontDrive = null;
     private DcMotorEx leftBackDrive = null;
     private DcMotorEx rightFrontDrive = null;
@@ -34,7 +31,6 @@ public class WheelPowerCalib extends LinearOpMode {
 
         waitForStart();
         ElapsedTime runtime = new ElapsedTime();
-        hardwareController = new HardwareController(hardwareMap);
 
         for(DcMotorEx motor : motors){
             motor.setPower(1);

@@ -4,24 +4,19 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Bucket;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
 
 @Autonomous(group="drive")
 public class AutonomousOpsMode extends LinearOpMode {
 
-    HardwareController hardwareController;
+    Claw claw;
 
     SampleMecanumDrive drive;
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
-        hardwareController = new HardwareController(hardwareMap);
+        claw = new Claw(hardwareMap);
         waitForStart();
         movePixelToPos(1);
         while (!isStopRequested() && opModeIsActive()) ;
@@ -42,14 +37,14 @@ public class AutonomousOpsMode extends LinearOpMode {
                 Trajectory goLeft = drive.trajectoryBuilder(moveForward.end()).strafeLeft(13).build();
                 drive.followTrajectory(moveForward);
                 drive.followTrajectory(goLeft);
-                hardwareController.getClaw().open();
+                claw.open();
                 Trajectory moveBack = drive.trajectoryBuilder(goLeft.end()).back(6).build();
                 drive.followTrajectory(moveBack);
                 break;
             // Center
             case 2:
                 drive.followTrajectory(moveForward);
-                hardwareController.getClaw().open();
+                claw.open();
                 Trajectory moveBackCenter = drive.trajectoryBuilder(moveForward.end()).back(6).build();
                 drive.followTrajectory(moveBackCenter);
                 break;
@@ -58,7 +53,7 @@ public class AutonomousOpsMode extends LinearOpMode {
                 Trajectory goRight = drive.trajectoryBuilder(moveForward.end()).strafeRight(13).build();
                 drive.followTrajectory(moveForward);
                 drive.followTrajectory(goRight);
-                hardwareController.getClaw().open();
+                claw.open();
                 Trajectory moveBackRight = drive.trajectoryBuilder(goRight.end()).back(6).build();
                 drive.followTrajectory(moveBackRight);
                 break;

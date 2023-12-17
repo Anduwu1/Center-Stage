@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.resources.tasks;
 
-import org.firstinspires.ftc.teamcode.objects.RobotSettings;
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import org.firstinspires.ftc.teamcode.resources.taskManagment.AutoTask;
 import org.firstinspires.ftc.teamcode.resources.taskManagment.StageState;
 
@@ -14,7 +12,7 @@ public class ParkTask extends AutoTask {
     }
 
     @Override
-    public void runTaskTick(StageState state, HardwareController controller) {
+    public void runTaskTick(StageState state) {
         if(this.taskFinished) return; // Just in case someone calls this function even after its finished
                                       // in theory this shouldn't happen but you know just in case
         // General steps:

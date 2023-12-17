@@ -6,14 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
 
 import java.util.Arrays;
 import java.util.List;
 
 @TeleOp(name = "Wheel Calib")
 public class WheelMotorCalib extends LinearOpMode {
-    HardwareController hardwareController;
 
     private DcMotorEx leftFrontDrive = null;
     private DcMotorEx leftBackDrive = null;
@@ -34,8 +32,6 @@ public class WheelMotorCalib extends LinearOpMode {
             motor.setTargetPosition(384);
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
-
-        hardwareController = new HardwareController(hardwareMap);
 
         while (opModeIsActive()) {
             telemetry.addData("leftFrontDrive", leftFrontDrive.getCurrentPosition());

@@ -5,13 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.objects.Robot;
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 
 @TeleOp(name="Servo Calib")
 public class ServoCalib extends LinearOpMode {
-    HardwareController hardwareController;
     Robot robot;
 
     // Float
@@ -34,7 +32,6 @@ public class ServoCalib extends LinearOpMode {
 
 
         //robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
-        hardwareController = new HardwareController(hardwareMap);
         while (opModeIsActive()) {
 
             // Switch type

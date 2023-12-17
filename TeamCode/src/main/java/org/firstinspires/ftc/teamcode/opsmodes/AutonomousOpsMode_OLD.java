@@ -14,25 +14,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import java.util.Locale;
 // New vision system
-import org.checkerframework.checker.units.qual.A;
-import org.checkerframework.checker.units.qual.C;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.android.util.Size;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.objects.AprilTagData;
 import org.firstinspires.ftc.teamcode.objects.Point;
-import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibrationIdentity;
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
-import org.firstinspires.ftc.teamcode.resources.taskManagment.AutoTask;
 import org.firstinspires.ftc.teamcode.resources.taskManagment.StageState;
 import org.firstinspires.ftc.teamcode.resources.tasks.ParkTask;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 
 // Default java stuff
 import java.io.IOException;
@@ -135,9 +122,7 @@ public class AutonomousOpsMode_OLD extends LinearOpMode {
     ParkTask pTask = new ParkTask();
 
     StageState stageState = new StageState();
-
-    HardwareController hardCont;
-
+    private SampleMecanumDrive drive;
     private Robot robot;
     public Point location;
 
@@ -193,7 +178,7 @@ public class AutonomousOpsMode_OLD extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(autoChoices.startPos, hardwareMap);
-        hardCont = new HardwareController(hardwareMap);
+        drive = new SampleMecanumDrive(hardwareMap);
 
         switch (autoChoices.alliance) {
             case BLUE_ALLIANCE:
@@ -323,8 +308,8 @@ public class AutonomousOpsMode_OLD extends LinearOpMode {
         switch(i){
             // Left
             case 1:
-                trajectories.add(hardCont.getDrive().trajectoryBuilder(new Pose2d()).forward(25).build());
-                trajectories.add(hardCont.getDrive().trajectoryBuilder((trajectories.get(trajectories.size() - 1).end())).strafeLeft(10).build());
+                trajectories.add(drive.trajectoryBuilder(new Pose2d()).forward(25).build());
+                trajectories.add(drive.trajectoryBuilder((trajectories.get(trajectories.size() - 1).end())).strafeLeft(10).build());
                 break;
             // Center
             case 2:
@@ -336,7 +321,7 @@ public class AutonomousOpsMode_OLD extends LinearOpMode {
                 break;
         }
         for(Trajectory t : trajectories){
-            hardCont.getDrive().followTrajectory(t);
+            drive.followTrajectory(t);
         }
     }
 

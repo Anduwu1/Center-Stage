@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.resources.tasks;
 
-import org.firstinspires.ftc.teamcode.resources.HardwareController;
 import org.firstinspires.ftc.teamcode.resources.taskManagment.AutoTask;
 import org.firstinspires.ftc.teamcode.resources.taskManagment.StageState;
 
@@ -11,7 +10,7 @@ public class SpikeTask extends AutoTask {
     }
 
     @Override
-    public void runTaskTick(StageState state, HardwareController controller) {
+    public void runTaskTick(StageState state) {
         
     }
 }

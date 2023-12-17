@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 
@@ -9,8 +11,8 @@ public class AprilTag {
 
     private final Camera camera;
 
-    public AprilTag(Camera camera) {
-        this.camera = camera;
+    public AprilTag(HardwareMap hardwareMap) {
+        this.camera = new Camera(hardwareMap);
     }
 
     // Camera stuff
