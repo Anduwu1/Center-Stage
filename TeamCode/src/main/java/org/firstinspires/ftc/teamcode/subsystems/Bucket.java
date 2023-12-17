@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -15,8 +16,8 @@ public class Bucket {
     private double position = POSITION_INTAKE;
     private boolean isIntakePosition;
 
-    public Bucket(Servo servo) {
-        this.servo = servo;
+    public Bucket(HardwareMap hardwareMap) {
+        this.servo = hardwareMap.get(Servo.class, Bucket.HARDWARE_NAME);
         this.isIntakePosition = true;
         servo.setPosition(position); //init the position to intake
     }

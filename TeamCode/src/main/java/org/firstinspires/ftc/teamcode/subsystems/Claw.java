@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw {
@@ -11,8 +12,8 @@ public class Claw {
 
     private final Servo servo;
 
-    public Claw(Servo servo) {
-        this.servo = servo;
+    public Claw(HardwareMap hardwareMap) {
+        this.servo = hardwareMap.get(Servo.class, Claw.HARDWARE_NAME);
         this.isOpen = false;
     }
 

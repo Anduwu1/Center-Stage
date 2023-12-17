@@ -61,15 +61,15 @@ public class HardwareController{
         //camera = new Camera(this.hardwareMap);
 
         // Servos
-        drone = new Drone(hardwareMap.get(Servo.class, Drone.HARDWARE_NAME));
-        claw = new Claw(hardwareMap.get(Servo.class, Claw.HARDWARE_NAME));
-        bucket = new Bucket(hardwareMap.get(Servo.class, Bucket.HARDWARE_NAME));
-        arm = new Arm(hardwareMap.get(Servo.class, Arm.HARDWARE_NAME));
-        dsensors = new Distance(hardwareMap.get(DistanceSensor.class, Distance.HARDWARE_NAME_LEFT), hardwareMap.get(DistanceSensor.class, Distance.HARDWARE_NAME_RIGHT));
+        drone = new Drone(hardwareMap);
+        claw = new Claw(hardwareMap);
+        bucket = new Bucket(hardwareMap);
+        arm = new Arm(hardwareMap);
+        dsensors = new Distance(hardwareMap);
 
         // motors
-        intake = new Intake(hardwareMap.get(DcMotor.class, Intake.HARDWARE_NAME));
-        lift = new Lift(this.hardwareMap.get(DcMotorEx.class, Lift.HARDWARE_NAME));
+        intake = new Intake(hardwareMap);
+        lift = new Lift(hardwareMap);
 
         aprilTag = new AprilTag(camera);
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Drone {
@@ -10,8 +11,8 @@ public class Drone {
 
     private final Servo servo;
 
-    public Drone(Servo servo) {
-        this.servo = servo;
+    public Drone(HardwareMap hardwareMap) {
+        this.servo = hardwareMap.get(Servo.class, Drone.HARDWARE_NAME);
         this.servo.setPosition(DRONE_READY);
     }
 

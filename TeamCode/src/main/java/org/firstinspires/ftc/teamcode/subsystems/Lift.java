@@ -3,18 +3,19 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Lift {
     public static String HARDWARE_NAME = "lift";
 
     private DcMotorEx motor;
 
-    public Lift(DcMotorEx motor) {
+    public Lift(HardwareMap hardwareMap) {
+        motor = hardwareMap.get(DcMotorEx.class, Lift.HARDWARE_NAME);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.motor = motor;
     }
 
     public void liftGoToPosition(int pos){

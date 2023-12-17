@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -13,9 +14,9 @@ public class Distance {
     private DistanceSensor left;
     private DistanceSensor right;
 
-    public Distance(DistanceSensor left, DistanceSensor right) {
-        this.left = left;
-        this.right = right;
+    public Distance(HardwareMap hardwareMap) {
+        this.left = hardwareMap.get(DistanceSensor.class, Distance.HARDWARE_NAME_LEFT);
+        this.right =hardwareMap.get(DistanceSensor.class, Distance.HARDWARE_NAME_RIGHT);;
     }
 
     /**

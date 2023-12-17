@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Arm {
@@ -12,8 +13,8 @@ public class Arm {
     private double position = POSITION_DOWN;
     private boolean isUp;
 
-    public Arm(Servo servo) {
-        this.servo = servo;
+    public Arm(HardwareMap hardwareMap) {
+        this.servo = hardwareMap.get(Servo.class, Arm.HARDWARE_NAME);
         this.isUp = false;
     }
 
