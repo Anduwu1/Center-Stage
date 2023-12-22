@@ -10,6 +10,9 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+
+
 @TeleOp(name="OpenCV - Calibrate")
 public class CalibrateOpenCVOpsMode extends LinearOpMode implements OpenCvCamera.AsyncCameraOpenListener {
 
@@ -27,6 +30,7 @@ public class CalibrateOpenCVOpsMode extends LinearOpMode implements OpenCvCamera
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         camera.openCameraDeviceAsync(this);
         camera.setPipeline(calibratePipeline);
+
         waitForStart();
         while (opModeIsActive())
         {

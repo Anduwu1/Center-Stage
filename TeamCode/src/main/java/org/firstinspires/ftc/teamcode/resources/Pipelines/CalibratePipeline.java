@@ -17,12 +17,15 @@ public class CalibratePipeline extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input)
     {
-        Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
+        Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_BGR2RGB);
+
 
         int size = 30;
         Rect rect = new Rect(((input.width() - size) / 2), (input.height() - size) / 2, size, size);
         Imgproc.rectangle(input, rect, new Scalar(0, 255, 0), 1, 8, 0);
         values = hsvMat.get(input.height() / 2, input.width() / 2);
+        Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2RGB);
+
         return input;
     }
 
