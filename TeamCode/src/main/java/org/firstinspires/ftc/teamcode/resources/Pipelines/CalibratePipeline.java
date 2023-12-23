@@ -29,14 +29,14 @@ public class CalibratePipeline extends OpenCvPipeline {
                 input,
                 String.format(
                         Locale.US,
-                        "HSV, (%f, %f, %f)",
-                        values[0], values[1], values[2]
+                        "HSV, (%d, %d, %d)",
+                        (int) values[0], (int) values[1], (int) values[2]
                 ),
-                new Point(input.width() / 2, input.height()/2 - size),
+                new Point(0, 20),
                 Imgproc.FONT_HERSHEY_SIMPLEX,
-                10.0,
+                .75,
                 new Scalar(0, 0, 0),
-                1
+                2
         );
 
         return input;
