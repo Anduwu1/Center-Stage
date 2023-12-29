@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
@@ -25,6 +26,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 
 import java.util.List;
+
+import kotlin.Unit;
 
 /*
     Class for making the robot like
@@ -132,6 +135,8 @@ public class HardwareController{
     public boolean isLiftBusy(){
         return lift.liftMotor.isBusy();
     }
+
+    public double getLiftCurrent() { return  lift.liftMotor.getCurrent(CurrentUnit.AMPS); }
 
     /*
         Servo stuff

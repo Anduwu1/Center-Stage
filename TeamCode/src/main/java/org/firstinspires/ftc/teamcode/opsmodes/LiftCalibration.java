@@ -40,6 +40,7 @@ public class LiftCalibration extends LinearOpMode {
 
             telemetry.addData("Running to",  " %7d", position);
             telemetry.addData("Currently at",  " at %7d", hardwareController.getLiftPos());
+            telemetry.addData("Current draw:", " %7d", hardwareController.getLiftCurrent());
             telemetry.update();
         }
     }
