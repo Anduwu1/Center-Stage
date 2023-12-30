@@ -4,6 +4,11 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.objects.Robot;
+import org.firstinspires.ftc.teamcode.objects.RobotSettings;
+import org.firstinspires.ftc.teamcode.resources.OpenCVManager;
+import org.firstinspires.ftc.teamcode.resources.Pipelines.AutoPipeLine;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 
@@ -13,13 +18,34 @@ public class AutonomousOpsMode extends LinearOpMode {
     Claw claw;
 
     SampleMecanumDrive drive;
+
+    OpenCVManager camMan;
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
         claw = new Claw(hardwareMap);
-        waitForStart();
-        movePixelToPos(1);
-        while (!isStopRequested() && opModeIsActive()) ;
+        camMan = new OpenCVManager(hardwareMap);
+        AutoPipeLine pipe = new AutoPipeLine();
+        camMan.setPipeline(pipe);
+
+        int pixelPos = 0;
+        while(!isStarted()){
+            // Get pos
+            pixelPos = (int)pipe.getX();
+        }
+        // Move to position based on pixelPos
+        if(pixelPos > RobotSettings.PIXEL_RIGHT){
+            movePixelToPos(3);
+        }else if(pixelPos > RobotSettings.PIXEL_CENTER){
+            movePixelToPos(2);
+        }else{
+            movePixelToPos(1);
+        }
+
+        while (!isStopRequested() && opModeIsActive()){
+            telemetry.addData("X:","%f", pipe.getX());
+            telemetry.update();
+        }
     }
 
 
