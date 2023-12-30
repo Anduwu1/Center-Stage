@@ -115,6 +115,9 @@ public class MainOpsMode extends LinearOpMode {
             // telemetry.addLine("left distance: " + hardwareController.getLeftDistance());
             telemetry.addLine("right distance: " + dsensors.getRightDistance());
             telemetry.addLine(motorData);
+            telemetry.addData("Lift current draw:", " %7f", lift.getLiftCurrentDraw());
+            telemetry.addData("Lift position: ", "%4d", lift.getLiftPos());
+            telemetry.addData("Lift target position: ", "%4d", lift.getTargetPos());
             // telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
@@ -146,12 +149,9 @@ public class MainOpsMode extends LinearOpMode {
 
         // Lift toggle
         if(gamepad2.left_bumper){
-            if(!leftTrig) {
-                leftTrig = true;
-                toggleLift();
-            }
-        }else{
-            leftTrig = false;
+            double y = gamepad2.right_stick_y;
+            y *= 10;
+            lift.adjustLift((int)y);
         }
 
 
@@ -273,20 +273,19 @@ public class MainOpsMode extends LinearOpMode {
 
     }
 
-    boolean up = false;
-    private void toggleLift(){
-        if(up) {
-            lift.setLiftPower(-1f);
-            lift.liftGoToPosition(0);
-            up = false;
-        }
-        else {
-            lift.setLiftPower(1);
-            lift.liftGoToPosition(1550);
-            up = true;
-        }
-        sleep(250);
-    }
+//    boolean up = false;
+//    private void toggleLift(){
+//        if(up) {
+//            lift.setLiftPower(-1f);
+//            lift.liftToTop();
+//            up = false;
+//        } else {
+//            lift.setLiftPower(1);
+//            lift.liftRobot();
+//            up = true;
+//        }
+//        sleep(250);
+//    }
 
     private WheelValues adjustVelocityForBackdrop(WheelValues wheelValues) {
         double leftFrontPower = wheelValues.leftFrontValue;
