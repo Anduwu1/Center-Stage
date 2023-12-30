@@ -52,4 +52,10 @@ public class RobotSettings {
     // Locations
     public static final float BACKSTAGE_BLUE                    = 22.0f;
     public static final float BACKSTAGE_RED                     = (float) (FULL_FIELD_INCHES - 22.0f);
+
+
+    // Positions of the pixel for autnomous
+    public static final int PIXEL_LEFT = 0;                            // Fill value in with real value later
+    public static final int PIXEL_CENTER = 100;                        // Fill value in with real value later
+    public static final int PIXEL_RIGHT = 200;                         // Fill value in with real value later
 }

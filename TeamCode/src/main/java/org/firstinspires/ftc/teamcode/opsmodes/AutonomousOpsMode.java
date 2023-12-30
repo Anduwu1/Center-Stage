@@ -5,6 +5,8 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.objects.Robot;
+import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.OpenCVManager;
 import org.firstinspires.ftc.teamcode.resources.Pipelines.AutoPipeLine;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
@@ -25,10 +27,22 @@ public class AutonomousOpsMode extends LinearOpMode {
         camMan = new OpenCVManager(hardwareMap);
         AutoPipeLine pipe = new AutoPipeLine();
         camMan.setPipeline(pipe);
-        waitForStart();
-       // movePixelToPos(1);
+
+        int pixelPos = 0;
+        while(!isStarted()){
+            // Get pos
+            pixelPos = (int)pipe.getX();
+        }
+        // Move to position based on pixelPos
+        if(pixelPos > RobotSettings.PIXEL_RIGHT){
+            movePixelToPos(3);
+        }else if(pixelPos > RobotSettings.PIXEL_CENTER){
+            movePixelToPos(2);
+        }else{
+            movePixelToPos(1);
+        }
+
         while (!isStopRequested() && opModeIsActive()){
-            telemetry.addLine("WOW!");
             telemetry.addData("X:","%f", pipe.getX());
             telemetry.update();
         }
