@@ -149,9 +149,10 @@ public class MainOpsMode extends LinearOpMode {
 
         // Lift toggle
         if(gamepad2.left_bumper){
-            double y = gamepad2.right_stick_y;
-            y *= 10;
-            lift.adjustLift((int)y);
+            // adjust the lift based on the right stick y
+            double adjustment = gamepad2.right_stick_y * -50;
+            if (Math.abs(adjustment) > 1)
+                lift.adjustLift((int)adjustment);
         }
 
 
@@ -272,20 +273,6 @@ public class MainOpsMode extends LinearOpMode {
         intake.setPower(intakePower);
 
     }
-
-//    boolean up = false;
-//    private void toggleLift(){
-//        if(up) {
-//            lift.setLiftPower(-1f);
-//            lift.liftToTop();
-//            up = false;
-//        } else {
-//            lift.setLiftPower(1);
-//            lift.liftRobot();
-//            up = true;
-//        }
-//        sleep(250);
-//    }
 
     private WheelValues adjustVelocityForBackdrop(WheelValues wheelValues) {
         double leftFrontPower = wheelValues.leftFrontValue;
