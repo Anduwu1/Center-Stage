@@ -141,7 +141,7 @@ public class AutonomousOpsMode extends LinearOpMode {
         drive.followTrajectory(moveBackBg);
         arm.moveToUpPosition();
         bucket.moveToDropPosition();
-        sleep(1000);
+        sleep(2000);
         while(distance.getLeftDistance() > 2 && distance.getRightDistance() > 2){
             rightBackDrive.setPower(-0.1);
             leftBackDrive.setPower(-0.1);
