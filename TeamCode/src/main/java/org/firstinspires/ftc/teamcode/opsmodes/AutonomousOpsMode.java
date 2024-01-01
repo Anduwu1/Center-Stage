@@ -159,7 +159,9 @@ public class AutonomousOpsMode extends LinearOpMode {
         Trajectory moveBackBg = drive.trajectoryBuilder(start.end()).back(66).build();
         drive.followTrajectory(moveBackBg);
         arm.moveToUpPosition();
-        bucket.moveToDropPositionAndWait();
+        bucket.moveToDropPosition();
+        //bucket.moveToDropPositionAndWait();
+        sleep(2500);
         while(distance.getLeftDistance() > 2 && distance.getRightDistance() > 2){
             rightBackDrive.setPower(-0.1);
             leftBackDrive.setPower(-0.1);
@@ -169,9 +171,9 @@ public class AutonomousOpsMode extends LinearOpMode {
 
         // move left/right based on position of team prop position
         if (position == Position.LEFT)
-            drive.followTrajectory(drive.trajectoryBuilder(moveBackBg.end()).strafeLeft(6).build());
-        else if (position == Position.RIGHT)
             drive.followTrajectory(drive.trajectoryBuilder(moveBackBg.end()).strafeRight(6).build());
+        else if (position == Position.RIGHT)
+            drive.followTrajectory(drive.trajectoryBuilder(moveBackBg.end()).strafeLeft(10).build());
 
         // Drop em
         claw.open();
