@@ -5,29 +5,51 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.OpenCVManager;
 import org.firstinspires.ftc.teamcode.resources.Pipelines.AutoPipeLine;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Distance;
 
 @Autonomous(group="drive")
 public class AutonomousOpsMode extends LinearOpMode {
 
     Claw claw;
+    Arm arm;
+    Bucket bucket;
 
+    Distance distance;
     SampleMecanumDrive drive;
+
+
+    // Drive
+    private DcMotorEx leftBackDrive = null;
+    private DcMotorEx rightBackDrive = null;
 
     OpenCVManager camMan;
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
         claw = new Claw(hardwareMap);
+        arm = new Arm(hardwareMap);
+        bucket = new Bucket(hardwareMap);
         camMan = new OpenCVManager(hardwareMap);
+        distance = new Distance(hardwareMap);
+        // Motors
+        leftBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_LBDRIVE_MOTOR);
+        rightBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_RBDRIVE_MOTOR);
+        // Opencv
         AutoPipeLine pipe = new AutoPipeLine();
         camMan.setPipeline(pipe);
+
+        // Set speed
+
 
         int pixelPos = 0;
         while(!isStarted()){
@@ -49,7 +71,7 @@ public class AutonomousOpsMode extends LinearOpMode {
             pos = "LEFT";
             movePixelToPos(1);
         }
-        // Do whatever else
+        //  time
 
         // idle
         while (!isStopRequested() && opModeIsActive()){
@@ -66,37 +88,48 @@ public class AutonomousOpsMode extends LinearOpMode {
         or just general cleanup
      */
     private void movePixelToPos(int i) {
-        Trajectory moveForward = drive.trajectoryBuilder(new Pose2d()).forward(25).build();
+        Trajectory moveForward = drive.trajectoryBuilder(new Pose2d()).forward(27).build();
         // Go to position
         switch(i){
             // Left
             case 1:
-                Trajectory goLeft = drive.trajectoryBuilder(moveForward.end()).strafeLeft(13).build();
                 drive.followTrajectory(moveForward);
-                drive.followTrajectory(goLeft);
+                Trajectory rotateL90Left = drive.trajectoryBuilder(moveForward.end()).splineTo(new Vector2d(moveForward.end().getX() + 0.01, moveForward.end().getY() - 0.01) , Math.toRadians(90.0)).build();
+                drive.followTrajectory(rotateL90Left);
+                moveForward = drive.trajectoryBuilder(rotateL90Left.end()).forward(5).build();
+                drive.followTrajectory(moveForward);
                 claw.open();
-                Trajectory moveBack = drive.trajectoryBuilder(goLeft.end()).back(6).build();
+                Trajectory moveBack = drive.trajectoryBuilder(moveForward.end()).back(25).build();
                 drive.followTrajectory(moveBack);
+                claw.close();
+                driveToBackdrop(moveBack);
                 break;
             // Center
             case 2:
                 Trajectory moveForwardCenter = drive.trajectoryBuilder(new Pose2d()).forward(31).build();
                 drive.followTrajectory(moveForwardCenter);
                 claw.open();
-                Trajectory moveBackCenter = drive.trajectoryBuilder(moveForward.end()).back(6).build();
+                Trajectory moveBackCenter = drive.trajectoryBuilder(moveForward.end()).back(4.5).build();
                 drive.followTrajectory(moveBackCenter);
+                claw.close();
+                Trajectory rotateL90Center = drive.trajectoryBuilder(moveForward.end()).splineTo(new Vector2d(moveForward.end().getX() + 0.01, moveForward.end().getY() - 0.01) , Math.toRadians(90.0)).build();
+                drive.followTrajectory(rotateL90Center);
+                moveBackCenter = drive.trajectoryBuilder(rotateL90Center.end()).back(20).build();
+                drive.followTrajectory(moveBackCenter);
+                driveToBackdrop(moveBackCenter);
                 break;
             // Right
             case 3:
                 drive.followTrajectory(moveForward);
-                Trajectory rotateL90 = drive.trajectoryBuilder(moveForward.end()).splineTo(new Vector2d(moveForward.end().getX(), moveForward.end().getY()), Math.toRadians(90.0)).build();
+                Trajectory rotateL90 = drive.trajectoryBuilder(moveForward.end()).splineTo(new Vector2d(moveForward.end().getX() + 0.01, moveForward.end().getY() - 0.01) , Math.toRadians(90.0)).build();
                 drive.followTrajectory(rotateL90);
                 Trajectory moveBackRight = drive.trajectoryBuilder(rotateL90.end()).back(20).build();
                 drive.followTrajectory(moveBackRight);
                 claw.open();
                 moveBackRight = drive.trajectoryBuilder(moveBackRight.end()).back(5).build();
                 drive.followTrajectory(moveBackRight);
-
+                claw.close();
+                driveToBackdrop(moveBackRight);
                 break;
             default:
                 break;
@@ -104,6 +137,20 @@ public class AutonomousOpsMode extends LinearOpMode {
     }
 
     private void driveToBackdrop(Trajectory start){
-
+        Trajectory moveBackBg = drive.trajectoryBuilder(start.end()).back(66).build();
+        drive.followTrajectory(moveBackBg);
+        arm.moveToUpPosition();
+        bucket.moveToDropPosition();
+        sleep(1000);
+        while(distance.getLeftDistance() > 2 && distance.getRightDistance() > 2){
+            rightBackDrive.setPower(-0.1);
+            leftBackDrive.setPower(-0.1);
+        }
+        rightBackDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        // Move L/R depending on teamprop pos
+        // [code here]
+        // Drop em
+        claw.open();
     }
 }
