@@ -34,7 +34,7 @@ public class AutoPipeLine extends OpenCvPipeline {
     int elementType = Imgproc.CV_SHAPE_RECT;
 
 
-    float x = 0.0f;
+    int x = 0;
 
 
     public AutoPipeLine(){
@@ -43,6 +43,7 @@ public class AutoPipeLine extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
+        //Core.flip(input, input, 1);
         // For mask
         Mat mask = new Mat(input.rows(), input.cols(), CvType.CV_8U, Scalar.all(0));
 
@@ -78,7 +79,7 @@ public class AutoPipeLine extends OpenCvPipeline {
 
             Moments moment = Imgproc.moments(largest);
 
-            x = (float) (moment.get_m10() / moment.get_m00());
+            x = (int) (moment.get_m10() / moment.get_m00());
 
             Imgproc.putText(
                     hsvThresholdMat,
@@ -111,7 +112,7 @@ public class AutoPipeLine extends OpenCvPipeline {
         return index;
     }
 
-    public float getX() {
+    public int getX() {
         return x;
     }
 }

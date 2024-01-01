@@ -55,7 +55,7 @@ public class RobotSettings {
 
 
     // Positions of the pixel for autnomous
-    public static final int PIXEL_LEFT = 0;                            // Fill value in with real value later
-    public static final int PIXEL_CENTER = 100;                        // Fill value in with real value later
-    public static final int PIXEL_RIGHT = 200;                         // Fill value in with real value later
+    public static final int PIXEL_LEFT = 133;                            // Fill value in with real value later
+    public static final int PIXEL_CENTER = 332;                        // Fill value in with real value later
+    public static final int PIXEL_RIGHT = 332;                         // Fill value in with real value later
 }

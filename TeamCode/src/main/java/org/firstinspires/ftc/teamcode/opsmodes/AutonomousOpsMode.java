@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opsmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -31,19 +32,29 @@ public class AutonomousOpsMode extends LinearOpMode {
         int pixelPos = 0;
         while(!isStarted()){
             // Get pos
-            pixelPos = (int)pipe.getX();
+            pixelPos = pipe.getX();
+            telemetry.addData("X:","%d", pixelPos);
+            telemetry.update();
+
         }
+        String pos = "None";
         // Move to position based on pixelPos
-        if(pixelPos > RobotSettings.PIXEL_RIGHT){
+        if(pixelPos > RobotSettings.PIXEL_CENTER){
+            pos = "RIGHT";
             movePixelToPos(3);
-        }else if(pixelPos > RobotSettings.PIXEL_CENTER){
+        }else if(pixelPos > RobotSettings.PIXEL_LEFT){
+            pos = "CENTER";
             movePixelToPos(2);
         }else{
+            pos = "LEFT";
             movePixelToPos(1);
         }
+        // Do whatever else
 
+        // idle
         while (!isStopRequested() && opModeIsActive()){
-            telemetry.addData("X:","%f", pipe.getX());
+            telemetry.addData("X:","%d", pipe.getX());
+            telemetry.addLine(pos);
             telemetry.update();
         }
     }
@@ -69,22 +80,30 @@ public class AutonomousOpsMode extends LinearOpMode {
                 break;
             // Center
             case 2:
-                drive.followTrajectory(moveForward);
+                Trajectory moveForwardCenter = drive.trajectoryBuilder(new Pose2d()).forward(31).build();
+                drive.followTrajectory(moveForwardCenter);
                 claw.open();
                 Trajectory moveBackCenter = drive.trajectoryBuilder(moveForward.end()).back(6).build();
                 drive.followTrajectory(moveBackCenter);
                 break;
             // Right
             case 3:
-                Trajectory goRight = drive.trajectoryBuilder(moveForward.end()).strafeRight(13).build();
                 drive.followTrajectory(moveForward);
-                drive.followTrajectory(goRight);
-                claw.open();
-                Trajectory moveBackRight = drive.trajectoryBuilder(goRight.end()).back(6).build();
+                Trajectory rotateL90 = drive.trajectoryBuilder(moveForward.end()).splineTo(new Vector2d(moveForward.end().getX(), moveForward.end().getY()), Math.toRadians(90.0)).build();
+                drive.followTrajectory(rotateL90);
+                Trajectory moveBackRight = drive.trajectoryBuilder(rotateL90.end()).back(20).build();
                 drive.followTrajectory(moveBackRight);
+                claw.open();
+                moveBackRight = drive.trajectoryBuilder(moveBackRight.end()).back(5).build();
+                drive.followTrajectory(moveBackRight);
+
                 break;
             default:
                 break;
         }
+    }
+
+    private void driveToBackdrop(Trajectory start){
+
     }
 }
