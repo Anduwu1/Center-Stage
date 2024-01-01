@@ -62,4 +62,20 @@ public class Bucket {
         servo.setPosition(position);
         isIntakePosition = false;
     }
+
+    /**
+     * Similar to moveToDropPosition, but blocks and doesn't return until the movement is completed
+     */
+    public void moveToDropPositionAndWait() {
+        position = POSITION_DROP;
+        servo.setPosition(position);
+        isIntakePosition = false;
+        while (Math.abs(servo.getPosition() - position) > 5) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

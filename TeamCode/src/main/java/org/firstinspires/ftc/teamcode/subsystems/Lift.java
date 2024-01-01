@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 public class Lift {
     public static String HARDWARE_NAME = "lift";
-    private static int TOP_POSITION = 1550;
+    private static int TOP_POSITION = 3960;
 
     private DcMotorEx motor;
     private int position = 1;
@@ -27,8 +27,8 @@ public class Lift {
             runOnce = true;
         }
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(1.0);
-        position -= increment;
+        motor.setPower(0.7);
+        position += increment;
         if (position > TOP_POSITION)
             position = TOP_POSITION;
         if (position < 0)

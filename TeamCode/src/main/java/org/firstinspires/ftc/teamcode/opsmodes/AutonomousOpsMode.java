@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.OpenCVManager;
 import org.firstinspires.ftc.teamcode.resources.Pipelines.AutoPipeLine;
@@ -19,6 +18,27 @@ import org.firstinspires.ftc.teamcode.subsystems.Distance;
 
 @Autonomous(group="drive")
 public class AutonomousOpsMode extends LinearOpMode {
+
+    private enum Position {
+        LEFT(1),
+        CENTER(2),
+        RIGHT(3);
+
+        private int id;
+
+        Position(int position) {
+            this.id = position;
+        }
+
+        public static Position fromId(int id) {
+            for (Position position : values()) {
+                if (position.id == id) {
+                    return position;
+                }
+            }
+            throw new IllegalArgumentException("No enum constant with id " + id);
+        }
+    }
 
     Claw claw;
     Arm arm;
@@ -63,13 +83,13 @@ public class AutonomousOpsMode extends LinearOpMode {
         // Move to position based on pixelPos
         if(pixelPos > RobotSettings.PIXEL_CENTER){
             pos = "RIGHT";
-            movePixelToPos(3);
+            movePixelToPos(Position.RIGHT);
         }else if(pixelPos > RobotSettings.PIXEL_LEFT){
             pos = "CENTER";
-            movePixelToPos(2);
+            movePixelToPos(Position.CENTER);
         }else{
             pos = "LEFT";
-            movePixelToPos(1);
+            movePixelToPos(Position.LEFT);
         }
         //  time
 
@@ -87,12 +107,11 @@ public class AutonomousOpsMode extends LinearOpMode {
         AutoAction class maybe
         or just general cleanup
      */
-    private void movePixelToPos(int i) {
+    private void movePixelToPos(Position position) {
         Trajectory moveForward = drive.trajectoryBuilder(new Pose2d()).forward(27).build();
         // Go to position
-        switch(i){
-            // Left
-            case 1:
+        switch(position){
+            case LEFT:
                 drive.followTrajectory(moveForward);
                 Trajectory rotateL90Left = drive.trajectoryBuilder(moveForward.end()).splineTo(new Vector2d(moveForward.end().getX() + 0.01, moveForward.end().getY() - 0.01) , Math.toRadians(90.0)).build();
                 drive.followTrajectory(rotateL90Left);
@@ -102,10 +121,10 @@ public class AutonomousOpsMode extends LinearOpMode {
                 Trajectory moveBack = drive.trajectoryBuilder(moveForward.end()).back(25).build();
                 drive.followTrajectory(moveBack);
                 claw.close();
-                driveToBackdrop(moveBack);
+                driveToBackdrop(moveBack, position);
                 break;
-            // Center
-            case 2:
+
+            case CENTER:
                 Trajectory moveForwardCenter = drive.trajectoryBuilder(new Pose2d()).forward(31).build();
                 drive.followTrajectory(moveForwardCenter);
                 claw.open();
@@ -116,10 +135,10 @@ public class AutonomousOpsMode extends LinearOpMode {
                 drive.followTrajectory(rotateL90Center);
                 moveBackCenter = drive.trajectoryBuilder(rotateL90Center.end()).back(20).build();
                 drive.followTrajectory(moveBackCenter);
-                driveToBackdrop(moveBackCenter);
+                driveToBackdrop(moveBackCenter, position);
                 break;
-            // Right
-            case 3:
+
+            case RIGHT:
                 drive.followTrajectory(moveForward);
                 Trajectory rotateL90 = drive.trajectoryBuilder(moveForward.end()).splineTo(new Vector2d(moveForward.end().getX() + 0.01, moveForward.end().getY() - 0.01) , Math.toRadians(90.0)).build();
                 drive.followTrajectory(rotateL90);
@@ -129,27 +148,31 @@ public class AutonomousOpsMode extends LinearOpMode {
                 moveBackRight = drive.trajectoryBuilder(moveBackRight.end()).back(5).build();
                 drive.followTrajectory(moveBackRight);
                 claw.close();
-                driveToBackdrop(moveBackRight);
+                driveToBackdrop(moveBackRight, position);
                 break;
             default:
                 break;
         }
     }
 
-    private void driveToBackdrop(Trajectory start){
+    private void driveToBackdrop(Trajectory start, Position position){
         Trajectory moveBackBg = drive.trajectoryBuilder(start.end()).back(66).build();
         drive.followTrajectory(moveBackBg);
         arm.moveToUpPosition();
-        bucket.moveToDropPosition();
-        sleep(2000);
+        bucket.moveToDropPositionAndWait();
         while(distance.getLeftDistance() > 2 && distance.getRightDistance() > 2){
             rightBackDrive.setPower(-0.1);
             leftBackDrive.setPower(-0.1);
         }
         rightBackDrive.setPower(0);
         leftBackDrive.setPower(0);
-        // Move L/R depending on teamprop pos
-        // [code here]
+
+        // move left/right based on position of team prop position
+        if (position == Position.LEFT)
+            drive.followTrajectory(drive.trajectoryBuilder(moveBackBg.end()).strafeLeft(6).build());
+        else if (position == Position.RIGHT)
+            drive.followTrajectory(drive.trajectoryBuilder(moveBackBg.end()).strafeRight(6).build());
+
         // Drop em
         claw.open();
     }
