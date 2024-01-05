@@ -30,7 +30,7 @@ public class MainOpsMode extends LinearOpMode {
     private DcMotorEx rightBackDrive = null;
 
     // Constants
-    private static final double DRIVE_SPEED = 1;
+    private static final double DRIVE_SPEED = 0.8;
     private static final int MAX_VELOCITY = 2200;
     // Servo Constants
 
@@ -199,11 +199,11 @@ public class MainOpsMode extends LinearOpMode {
         double yaw = 0;
 
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-        if (Math.abs(gamepad1.left_stick_y) > 0.05)
+        if (Math.abs(gamepad1.left_stick_y) > 0.1)
             axial = -gamepad1.left_stick_y;
-        if (Math.abs(gamepad1.left_stick_x) > 0.05)
+        if (Math.abs(gamepad1.left_stick_x) > 0.1)
             lateral = gamepad1.left_stick_x;
-        if (Math.abs(gamepad1.right_stick_x) > 0.05)
+        if (Math.abs(gamepad1.right_stick_x) > 0.1)
             yaw = gamepad1.right_stick_x;
 
         // Fine control using dpad and bumpers
