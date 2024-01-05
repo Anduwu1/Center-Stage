@@ -31,7 +31,7 @@ public class ServoCalib extends LinearOpMode {
         waitForStart();
 
 
-        //robot = new Robot(AutonomousOpsMode.StartPos.BACKSTAGE, hardwareMap);
+        //robot = new Robot(Auto_RED_FAR_SIDE.StartPos.BACKSTAGE, hardwareMap);
         while (opModeIsActive()) {
 
             // Switch type
