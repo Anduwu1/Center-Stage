@@ -19,6 +19,11 @@ public class RoadRunnerHelper {
     }
 
     // Move functions
+
+    /**
+     * I dare you to guess what this does
+     * @param dist
+     */
     public void forward(double dist){
         Trajectory traj;
         if(prev == null){

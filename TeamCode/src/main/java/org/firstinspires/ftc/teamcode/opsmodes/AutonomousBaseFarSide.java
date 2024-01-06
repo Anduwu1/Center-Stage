@@ -47,8 +47,7 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
     }
 
     private void driveToBackdrop(Trajectory start, Position position){
-        Trajectory moveBackBg = drive.trajectoryBuilder(start.end()).back(66).build();
-        drive.followTrajectory(moveBackBg);
+        driveHelper.reverse(66);
         arm.moveToUpPosition();
         bucket.moveToDropPosition();
         //bucket.moveToDropPositionAndWait();
@@ -62,9 +61,9 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
         // move left/right based on position of team prop position
         if (position == Position.LEFT)
-            drive.followTrajectory(drive.trajectoryBuilder(moveBackBg.end()).strafeRight(6).build());
+            driveHelper.strafeRight(6);
         else if (position == Position.RIGHT)
-            drive.followTrajectory(drive.trajectoryBuilder(moveBackBg.end()).strafeLeft(10).build());
+            driveHelper.strafeLeft(10);
 
         // Drop em
         claw.open();
