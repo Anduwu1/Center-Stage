@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.roadrunner.drive;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -173,6 +175,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public void followTrajectory(Trajectory trajectory) {
+        //telemetry.addData("Pos", trajectory.end().)
         followTrajectoryAsync(trajectory);
         waitForIdle();
     }

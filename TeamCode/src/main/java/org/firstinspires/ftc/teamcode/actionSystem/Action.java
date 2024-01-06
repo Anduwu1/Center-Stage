@@ -6,8 +6,9 @@ public abstract class Action {
 
     }
 
+
     public enum ActionUrgency{
-        LOW, // example: Read april tags for position (low becuase we already have great encoders)
+        LOW, // example: Read april tags for position (low because we already have great encoders)
         NORMAL, // ex. Move to a position
         HIGH, // ex. Use vision to detect obstacles
         URGENT  // ex. We are about to hit something, MOVE

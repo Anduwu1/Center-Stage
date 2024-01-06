@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.objects;
 
 public enum Marker {
-    RED(1, 40, 170, 180),
+    RED(1, 60, 170, 180),
     BLUE(60, 100, 100, 100);
 
     Marker(int hueMin, int hueMax, int hueWrapAroundMin, int hueWrapAroundMax) {

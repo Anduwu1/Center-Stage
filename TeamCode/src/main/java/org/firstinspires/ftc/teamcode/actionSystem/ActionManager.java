@@ -34,7 +34,7 @@ public class ActionManager {
      * Returns a summary of action in queue, presumably for use in telemetry
      * @return summary
      */
-    public String getSummary(){
+    public String toString(){
        String sum = new String("IN PROG");
 
        return sum;

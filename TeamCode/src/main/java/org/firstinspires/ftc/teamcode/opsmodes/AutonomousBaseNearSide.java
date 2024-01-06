@@ -20,7 +20,7 @@ public abstract class AutonomousBaseNearSide extends AutonomousBase {
         moveForward = drive.trajectoryBuilder(rotateL90Left.end()).forward(AutonomousConstants.RedFarSide.LeftForwardForPixelPlace).build();
         drive.followTrajectory(moveForward);
         claw.open();
-        Trajectory moveBack = drive.trajectoryBuilder(moveForward.end()).back(AutonomousConstants.RedFarSide.LeftBackwardToReachBackDropFunctionHandOff).build();
+        Trajectory moveBack = drive.trajectoryBuilder(moveForward.end()).back(AutonomousConstants.RedFarSide.LeftBack).build();
         drive.followTrajectory(moveBack);
         claw.close();
         driveToBackdrop(moveBack, Position.LEFT);

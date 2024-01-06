@@ -58,14 +58,25 @@ public abstract class AutonomousBase extends LinearOpMode {
         camMan.setPipeline(pipe);
 
         int pixelPos = 0;
+        String pos = "None";
         while(!isStarted()){
             // Get pos
             pixelPos = pipe.getX();
             telemetry.addData("X:","%d", pixelPos);
+            if(pixelPos > RobotSettings.PIXEL_CENTER){
+                pos = "RIGHT";
+            }
+            else if(pixelPos > RobotSettings.PIXEL_LEFT){
+                pos = "CENTER";
+            }
+            else{
+                pos = "LEFT";
+            }
+            telemetry.addData("Projected position","%s" ,pos);
             telemetry.update();
 
         }
-        String pos = "None";
+
         // Move to position based on pixelPos
         if(pixelPos > RobotSettings.PIXEL_CENTER){
             pos = "RIGHT";

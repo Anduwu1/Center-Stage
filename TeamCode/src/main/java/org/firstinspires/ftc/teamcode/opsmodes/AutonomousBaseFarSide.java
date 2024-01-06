@@ -3,38 +3,42 @@ package org.firstinspires.ftc.teamcode.opsmodes;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.AutonomousConstants;
-import org.firstinspires.ftc.teamcode.resources.OpenCVManager;
-import org.firstinspires.ftc.teamcode.resources.Pipelines.AutoPipeLine;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.Bucket;
-import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.Distance;
 
 @Disabled
 public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
     @Override
     public void markerOnLeft() {
-        Trajectory moveForward = drive.trajectoryBuilder(new Pose2d()).forward(AutonomousConstants.RedFarSide.BaseMoveForward).build();
+        Trajectory traj = drive.trajectoryBuilder(new Pose2d()).forward(AutonomousConstants.RedFarSide.BaseMoveForward).build();
 
-        drive.followTrajectory(moveForward);
-        Trajectory rotateL90Left = drive.trajectoryBuilder(moveForward.end()).splineTo(new Vector2d(moveForward.end().getX() + 0.01, moveForward.end().getY() - 0.01) , Math.toRadians(90.0)).build();
-        drive.followTrajectory(rotateL90Left);
-        moveForward = drive.trajectoryBuilder(rotateL90Left.end()).forward(AutonomousConstants.RedFarSide.LeftForwardForPixelPlace).build();
-        drive.followTrajectory(moveForward);
+        drive.followTrajectory(traj);
+
+        traj = drive.trajectoryBuilder(traj.end()).splineTo(new Vector2d(traj.end().getX() + 0.01, traj.end().getY() - 0.01) , Math.toRadians(90.0)).build();
+        drive.followTrajectory(traj);
+
+        traj = drive.trajectoryBuilder(traj.end()).forward(5).build();
+        drive.followTrajectory(traj);
+
         claw.open();
-        Trajectory moveBack = drive.trajectoryBuilder(moveForward.end()).back(AutonomousConstants.RedFarSide.LeftBackwardToReachBackDropFunctionHandOff).build();
-        drive.followTrajectory(moveBack);
+
+        traj = drive.trajectoryBuilder(traj.end()).back(5).build();
+        drive.followTrajectory(traj);
+
         claw.close();
-        driveToBackdrop(moveBack, Position.LEFT);
+
+        traj = drive.trajectoryBuilder(traj.end()).splineTo(new Vector2d(traj.end().getX() + 0.01, traj.end().getY() - 0.01) , Math.toRadians(-90.0)).build();
+        drive.followTrajectory(traj);
+
+        traj = drive.trajectoryBuilder(traj.end()).forward(18).build();
+        drive.followTrajectory(traj);
+
+        traj = drive.trajectoryBuilder(traj.end()).splineTo(new Vector2d(traj.end().getX() + 0.01, traj.end().getY() - 0.01) , Math.toRadians(90.0)).build();
+        drive.followTrajectory(traj);
+
+        //driveToBackdrop(moveBack, Position.LEFT);
     }
 
     @Override

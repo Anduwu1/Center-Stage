@@ -66,8 +66,8 @@ public class DriveConstants {
      */
     public static double MAX_VEL = 20;//38; //MAX_VEL from RoadRunner was 42, this is 90%
     public static double MAX_ACCEL = 20;
-    public static double MAX_ANG_VEL = Math.toRadians(5);//Math.toRadians(60);
-    public static double MAX_ANG_ACCEL = Math.toRadians(5);//Math.toRadians(60);
+    public static double MAX_ANG_VEL = Math.toRadians(1);//Math.toRadians(60);
+    public static double MAX_ANG_ACCEL = Math.toRadians(1);//Math.toRadians(60);
 
     /*
      * Adjust the orientations here to match your robot. See the FTC SDK documentation for details.

@@ -14,7 +14,7 @@ public class AutonomousConstants {
 
         // Left stuff
         public static final int LeftForwardForPixelPlace = 5;
-        public static final int LeftBackwardToReachBackDropFunctionHandOff = 25;
+        public static final int LeftBack = 5;
 
         // Center stuff
         public static final int CenterMoveForward = 31;
