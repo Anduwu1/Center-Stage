@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.resources.Pipelines;
 
+import org.firstinspires.ftc.teamcode.objects.Marker;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class AutoPipeLine extends OpenCvPipeline {
+    private Marker marker;
     Mat hsvMat = new Mat();
     Mat hierarchyMat = new Mat();
     Mat mask = new Mat();
@@ -36,9 +38,8 @@ public class AutoPipeLine extends OpenCvPipeline {
 
     int x = 0;
 
-
-    public AutoPipeLine(){
-
+    public AutoPipeLine(Marker marker){
+        this.marker = marker;
     }
 
     @Override
