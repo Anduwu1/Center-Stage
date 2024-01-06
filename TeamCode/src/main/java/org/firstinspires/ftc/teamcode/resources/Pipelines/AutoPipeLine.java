@@ -24,17 +24,10 @@ public class AutoPipeLine extends OpenCvPipeline {
     Mat hierarchyMat = new Mat();
     Mat mask = new Mat();
 
-    float redHueMin = 1;
-    float redHueMax = 40;
-    float redWrapAround = 170;
-    float redWrapAroundMax = 180;
-
-
     //configurations
     int erosionKernelSize = 2;
     int dilationKernelSize = 8;
     int elementType = Imgproc.CV_SHAPE_RECT;
-
 
     int x = 0;
 
@@ -52,13 +45,13 @@ public class AutoPipeLine extends OpenCvPipeline {
 
         // Get RED
         Mat hsvThresholdMat = new Mat();
-        Scalar lowHSV = new Scalar(redHueMin, 100, 100); // FILL IN WITH VALS
-        Scalar highHSV = new Scalar(redHueMax, 255, 255);
+        Scalar lowHSV = new Scalar(marker.getHueMin(), 100, 100); // FILL IN WITH VALS
+        Scalar highHSV = new Scalar(marker.getHueMax(), 255, 255);
 
         Core.inRange(hsvMat, lowHSV, highHSV, hsvThresholdMat);
 
-        lowHSV = new Scalar(redWrapAround, 100, 100); // FILL IN WITH VALS
-        highHSV = new Scalar(redWrapAroundMax, 255, 255);
+        lowHSV = new Scalar(marker.getHueWrapAroundMin(), 100, 100); // FILL IN WITH VALS
+        highHSV = new Scalar(marker.getHueWrapAroundMax(), 255, 255);
 
         Core.inRange(hsvMat, lowHSV, highHSV, hsvThresholdMat);
 
