@@ -12,31 +12,14 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
     @Override
     public void markerOnLeft() {
-        Trajectory traj = drive.trajectoryBuilder(new Pose2d()).forward(AutonomousConstants.RedFarSide.BaseMoveForward).build();
-
-        drive.followTrajectory(traj);
-
-        traj = drive.trajectoryBuilder(traj.end()).splineTo(new Vector2d(traj.end().getX() + 0.01, traj.end().getY() - 0.01) , Math.toRadians(90.0)).build();
-        drive.followTrajectory(traj);
-
-        traj = drive.trajectoryBuilder(traj.end()).forward(5).build();
-        drive.followTrajectory(traj);
-
+        driveHelper.Forward(AutonomousConstants.RedFarSide.BaseMoveForward);
+        driveHelper.Turn(90);
+        driveHelper.Forward(5);
         claw.open();
-
-        traj = drive.trajectoryBuilder(traj.end()).back(5).build();
-        drive.followTrajectory(traj);
-
-        claw.close();
-
-        traj = drive.trajectoryBuilder(traj.end()).splineTo(new Vector2d(traj.end().getX() + 0.01, traj.end().getY() - 0.01) , Math.toRadians(0)).build();
-        drive.followTrajectory(traj);
-
-        traj = drive.trajectoryBuilder(traj.end()).forward(18).build();
-        drive.followTrajectory(traj);
-
-        traj = drive.trajectoryBuilder(traj.end()).splineTo(new Vector2d(traj.end().getX() + 0.01, traj.end().getY() - 0.01) , Math.toRadians(90.0)).build();
-        drive.followTrajectory(traj);
+        driveHelper.Reverse(5);
+        driveHelper.Turn(0);
+        driveHelper.Forward(18);
+        driveHelper.Turn(90);
 
         //driveToBackdrop(moveBack, Position.LEFT);
     }

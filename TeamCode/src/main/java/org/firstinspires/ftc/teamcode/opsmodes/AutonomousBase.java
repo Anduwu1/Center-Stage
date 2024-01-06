@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.objects.Marker;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.OpenCVManager;
 import org.firstinspires.ftc.teamcode.resources.Pipelines.AutoPipeLine;
+import org.firstinspires.ftc.teamcode.resources.RoadRunnerHelper;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
@@ -42,6 +43,8 @@ public abstract class AutonomousBase extends LinearOpMode {
 
     protected OpenCVManager camMan;
 
+    protected RoadRunnerHelper driveHelper;
+
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
@@ -56,6 +59,8 @@ public abstract class AutonomousBase extends LinearOpMode {
         // Opencv
         pipe = new AutoPipeLine(getMarker());
         camMan.setPipeline(pipe);
+        // Road runner helper
+        driveHelper = new RoadRunnerHelper(drive);
 
         int pixelPos = 0;
         String pos = "None";
