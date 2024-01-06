@@ -19,7 +19,7 @@ public class RoadRunnerHelper {
     }
 
     // Move functions
-    public void Forward(double dist){
+    public void forward(double dist){
         Trajectory traj;
         if(prev == null){
             traj = drive.trajectoryBuilder(new Pose2d()).forward(dist).build();
@@ -30,7 +30,7 @@ public class RoadRunnerHelper {
         prev = traj;
     }
 
-    public void Reverse(double dist){
+    public void reverse(double dist){
         Trajectory traj;
         if(prev == null){
             traj = drive.trajectoryBuilder(new Pose2d()).back(dist).build();
@@ -45,7 +45,7 @@ public class RoadRunnerHelper {
      * Turn to angle (World relative)
      * @param angle Turn angle
      */
-    public void Turn(double angle)  {
+    public void turn(double angle)  {
         Trajectory traj;
         if(prev == null){
             throw new RotateWithoutPreviousPathException();
@@ -57,7 +57,7 @@ public class RoadRunnerHelper {
     }
 
     // Strafe
-    public void StrafeRight(double dist){
+    public void strafeRight(double dist){
         Trajectory traj;
         if(prev == null){
             traj = drive.trajectoryBuilder(new Pose2d()).strafeRight(dist + (dist * 0.13)).build();
@@ -68,7 +68,7 @@ public class RoadRunnerHelper {
         prev = traj;
     }
 
-    public void StrafeLeft(double dist){
+    public void strafeLeft(double dist){
         Trajectory traj;
         if(prev == null){
             traj = drive.trajectoryBuilder(new Pose2d()).strafeLeft(dist + (dist * 0.1)).build();
@@ -77,6 +77,16 @@ public class RoadRunnerHelper {
         }
         drive.followTrajectory(traj);
         prev = traj;
+    }
+
+
+    /**
+     * Clears the current path to start a new one
+     * I don't know when you would use this but
+     * why not maybe some edge case
+     */
+    public void resetPath(){
+        prev = null;
     }
 
 }

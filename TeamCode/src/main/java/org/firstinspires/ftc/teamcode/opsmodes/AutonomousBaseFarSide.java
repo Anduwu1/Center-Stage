@@ -12,47 +12,38 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
     @Override
     public void markerOnLeft() {
-        driveHelper.Forward(AutonomousConstants.RedFarSide.BaseMoveForward);
-        driveHelper.Turn(90);
-        driveHelper.Forward(5);
+        driveHelper.forward(AutonomousConstants.RedFarSide.BaseMoveForward);
+        driveHelper.turn(90);
+        driveHelper.forward(5);
         claw.open();
         intake.slowlyEject();
-        driveHelper.Reverse(5);
+        driveHelper.reverse(5);
         intake.stop();
-        driveHelper.StrafeRight(22);
+        driveHelper.strafeRight(22);
 
         //driveToBackdrop(moveBack, Position.LEFT);
     }
 
     @Override
     public void markerOnCenter() {
-        Trajectory moveForward = drive.trajectoryBuilder(new Pose2d()).forward(AutonomousConstants.RedFarSide.BaseMoveForward).build();
-        Trajectory moveForwardCenter = drive.trajectoryBuilder(new Pose2d()).forward(AutonomousConstants.RedFarSide.CenterMoveForward).build();
-        drive.followTrajectory(moveForwardCenter);
-        claw.open();
-        Trajectory moveBackCenter = drive.trajectoryBuilder(moveForward.end()).back(AutonomousConstants.RedFarSide.CenterMoveBack).build();
-        drive.followTrajectory(moveBackCenter);
-        claw.close();
-        Trajectory rotateL90Center = drive.trajectoryBuilder(moveForward.end()).splineTo(new Vector2d(moveForward.end().getX() + 0.01, moveForward.end().getY() - 0.01) , Math.toRadians(90.0)).build();
-        drive.followTrajectory(rotateL90Center);
-        moveBackCenter = drive.trajectoryBuilder(rotateL90Center.end()).back(AutonomousConstants.RedFarSide.CenterReachBackDropFunctionHandOff).build();
-        drive.followTrajectory(moveBackCenter);
-        driveToBackdrop(moveBackCenter, Position.CENTER);
+        driveHelper.forward(AutonomousConstants.RedFarSide.CenterMoveForward);
+        driveHelper.reverse(AutonomousConstants.RedFarSide.CenterMoveBack);
+        driveHelper.turn(90);
+        driveHelper.reverse(AutonomousConstants.RedFarSide.CenterReachBackDropFunctionHandOff);
+
+        //driveToBackdrop(moveBackCenter, Position.CENTER);
     }
 
     @Override
     public void markerOnRight() {
-        Trajectory moveForward = drive.trajectoryBuilder(new Pose2d()).forward(AutonomousConstants.RedFarSide.BaseMoveForward).build();
-        drive.followTrajectory(moveForward);
-        Trajectory rotateL90 = drive.trajectoryBuilder(moveForward.end()).splineTo(new Vector2d(moveForward.end().getX() + 0.01, moveForward.end().getY() - 0.01) , Math.toRadians(90.0)).build();
-        drive.followTrajectory(rotateL90);
-        Trajectory moveBackRight = drive.trajectoryBuilder(rotateL90.end()).back(AutonomousConstants.RedFarSide.RightMoveBackPlacePixel).build();
-        drive.followTrajectory(moveBackRight);
+        driveHelper.forward(AutonomousConstants.RedFarSide.BaseMoveForward);
+        driveHelper.turn(90);
+        driveHelper.reverse(AutonomousConstants.RedFarSide.RightMoveBackPlacePixel);
         claw.open();
-        moveBackRight = drive.trajectoryBuilder(moveBackRight.end()).back(AutonomousConstants.RedFarSide.RightMoveBackBackDropFunctionHandOff).build();
-        drive.followTrajectory(moveBackRight);
+        driveHelper.reverse(AutonomousConstants.RedFarSide.RightMoveBackBackDropFunctionHandOff);
         claw.close();
-        driveToBackdrop(moveBackRight, Position.RIGHT);
+
+        //driveToBackdrop(moveBackRight, Position.RIGHT);
     }
 
     private void driveToBackdrop(Trajectory start, Position position){
