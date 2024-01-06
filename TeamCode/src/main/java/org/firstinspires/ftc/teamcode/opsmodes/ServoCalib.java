@@ -62,7 +62,7 @@ public class ServoCalib extends LinearOpMode {
                 case 0: //ARM
                     if (gamepad1.dpad_up) armPos += diff;
                     if (gamepad1.dpad_down) armPos -= diff;
-                    //hardwareController.getArm() //TODO fix once the arm is refactored
+                    armServo.setPosition(armPos);
                     telemetry.addLine("CURRENT IS ARM");
                     break;
                 case 1:
