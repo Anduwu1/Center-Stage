@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Distance;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 
 @Disabled
 public abstract class AutonomousBase extends LinearOpMode {
@@ -36,6 +37,7 @@ public abstract class AutonomousBase extends LinearOpMode {
     protected Distance distance;
     protected SampleMecanumDrive drive;
     protected AutoPipeLine pipe;
+    protected Intake intake;
 
     // Drive
     protected DcMotorEx leftBackDrive = null;
@@ -53,6 +55,7 @@ public abstract class AutonomousBase extends LinearOpMode {
         bucket = new Bucket(hardwareMap);
         camMan = new OpenCVManager(hardwareMap);
         distance = new Distance(hardwareMap);
+        intake = new Intake(hardwareMap);
         // Motors
         leftBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_LBDRIVE_MOTOR);
         rightBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_RBDRIVE_MOTOR);
@@ -64,6 +67,7 @@ public abstract class AutonomousBase extends LinearOpMode {
 
         int pixelPos = 0;
         String pos = "None";
+        arm.moveToHoverPosition();
         while(!isStarted()){
             // Get pos
             pixelPos = pipe.getX();

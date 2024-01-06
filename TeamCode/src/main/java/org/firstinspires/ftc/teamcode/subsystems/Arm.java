@@ -8,6 +8,7 @@ public class Arm {
 
     private static final float POSITION_UP = 0.63f;
     private static final float POSITION_DOWN = 0.275f;
+    private static final float POSITION_HOVER = 0.31f;
 
     private final Servo servo;
     private double position = POSITION_DOWN;
@@ -26,6 +27,12 @@ public class Arm {
 
     public void moveToDownPosition() {
         position = POSITION_DOWN;
+        servo.setPosition(position);
+        isUp = false;
+    }
+
+    public void moveToHoverPosition() {
+        position = POSITION_HOVER;
         servo.setPosition(position);
         isUp = false;
     }

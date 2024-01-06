@@ -16,10 +16,10 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
         driveHelper.Turn(90);
         driveHelper.Forward(5);
         claw.open();
+        intake.slowlyEject();
         driveHelper.Reverse(5);
-        driveHelper.Turn(0);
-        driveHelper.Forward(18);
-        driveHelper.Turn(90);
+        intake.stop();
+        driveHelper.StrafeRight(22);
 
         //driveToBackdrop(moveBack, Position.LEFT);
     }
