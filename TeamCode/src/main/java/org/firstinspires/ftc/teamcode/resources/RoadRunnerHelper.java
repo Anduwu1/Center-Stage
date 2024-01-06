@@ -76,9 +76,9 @@ public class RoadRunnerHelper {
     public void strafeLeft(double dist){
         Trajectory traj;
         if(prev == null){
-            traj = drive.trajectoryBuilder(new Pose2d()).strafeLeft(dist + (dist * 0.1)).build();
+            traj = drive.trajectoryBuilder(new Pose2d()).strafeLeft(dist + (dist * 0.13)).build();
         }else{
-            traj = drive.trajectoryBuilder(prev.end()).strafeLeft(dist + (dist * 0.1)).build();
+            traj = drive.trajectoryBuilder(prev.end()).strafeLeft(dist + (dist * 0.13)).build();
         }
         drive.followTrajectory(traj);
         prev = traj;

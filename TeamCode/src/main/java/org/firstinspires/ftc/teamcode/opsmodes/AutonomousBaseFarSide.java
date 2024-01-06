@@ -14,12 +14,11 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
     public void markerOnLeft() {
         driveHelper.forward(AutonomousConstants.RedFarSide.BaseMoveForward);
         driveHelper.turn(90);
-        driveHelper.forward(5);
         claw.open();
         intake.slowlyEject();
-        driveHelper.reverse(5);
+        sleep(1500);
         intake.stop();
-        driveHelper.strafeRight(22);
+        driveHelper.strafeRight(24);
 
         //driveToBackdrop(moveBack, Position.LEFT);
     }
