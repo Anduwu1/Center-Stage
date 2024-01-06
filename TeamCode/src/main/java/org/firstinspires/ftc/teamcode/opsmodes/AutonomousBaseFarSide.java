@@ -29,7 +29,7 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
         claw.close();
 
-        traj = drive.trajectoryBuilder(traj.end()).splineTo(new Vector2d(traj.end().getX() + 0.01, traj.end().getY() - 0.01) , Math.toRadians(-90.0)).build();
+        traj = drive.trajectoryBuilder(traj.end()).splineTo(new Vector2d(traj.end().getX() + 0.01, traj.end().getY() - 0.01) , Math.toRadians(0)).build();
         drive.followTrajectory(traj);
 
         traj = drive.trajectoryBuilder(traj.end()).forward(18).build();

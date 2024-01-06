@@ -175,7 +175,6 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public void followTrajectory(Trajectory trajectory) {
-        //telemetry.addData("Pos", trajectory.end().)
         followTrajectoryAsync(trajectory);
         waitForIdle();
     }
