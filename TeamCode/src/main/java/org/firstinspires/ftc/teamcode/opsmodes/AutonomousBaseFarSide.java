@@ -13,6 +13,7 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
     @Override
     public void markerOnLeft() {
+        // Trajectory Sequence
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
             .forward(27)
             .turn(Math.toRadians(180), 20, 20)
@@ -20,6 +21,12 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
             .back(6)
             .build();
         drive.followTrajectorySequence(trajSeq);
+
+        // The same thing but using driveHelper
+        driveHelper.forward(27)
+                        .turn(180, 20, 20)
+                        .strafeRight(11)
+                        .reverse(6);
 
         claw.open();
         trajSeq = drive.trajectorySequenceBuilder(trajSeq.end()).back(6).build();
