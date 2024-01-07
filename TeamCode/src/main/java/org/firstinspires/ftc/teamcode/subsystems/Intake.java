@@ -18,7 +18,7 @@ public class Intake {
     }
 
     public void slowlyEject() {
-        motor.setPower(0.2);
+        motor.setPower(0.15);
     }
 
     public void stop() {

@@ -64,7 +64,7 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 20;//38; //MAX_VEL from RoadRunner was 42, this is 90%
+    public static double MAX_VEL = 38; //MAX_VEL from RoadRunner was 42, this is 90%
     public static double MAX_ACCEL = 20;
     public static double MAX_ANG_VEL = Math.toRadians(1);//Math.toRadians(60);
     public static double MAX_ANG_ACCEL = Math.toRadians(1);//Math.toRadians(60);

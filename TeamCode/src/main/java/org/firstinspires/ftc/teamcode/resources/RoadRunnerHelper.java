@@ -47,7 +47,7 @@ public class RoadRunnerHelper {
     }
 
     /**
-     * Turn to angle (World relative)
+     * Turn to angle (positive is turning left)
      * @param angle Turn angle
      */
     public void turn(double angle)  {

@@ -13,46 +13,44 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
     @Override
     public void markerOnLeft() {
         driveHelper.forward(AutonomousConstants.RedFarSide.BaseMoveForward);
-        driveHelper.turn(90);
+        driveHelper.turn(180);
+        driveHelper.strafeRight(11);
+        driveHelper.reverse(6);
         claw.open();
-        intake.slowlyEject();
-        sleep(1500);
-        intake.stop();
-        driveHelper.strafeRight(24);
+        driveHelper.reverse(18);
+        claw.close();
+        driveHelper.turn(90);
 
-        //driveToBackdrop(moveBack, Position.LEFT);
+        driveToBackdrop(Position.LEFT);
     }
 
     @Override
     public void markerOnCenter() {
         driveHelper.forward(27);
         driveHelper.turn(180);
-        driveHelper.reverse(20);
+        driveHelper.reverse(26);
         claw.open();
-        intake.slowlyEject();
         driveHelper.reverse(5);
-        intake.stop();
         driveHelper.turn(90);
 
-        //driveToBackdrop(moveBackCenter, Position.CENTER);
+        driveToBackdrop(Position.CENTER);
     }
 
     @Override
     public void markerOnRight() {
         driveHelper.forward(AutonomousConstants.RedFarSide.BaseMoveForward);
         driveHelper.turn(-90);
+        driveHelper.forward(2);
         claw.open();
-        intake.slowlyEject();
-        driveHelper.reverse(1);
+        driveHelper.reverse(2);
         claw.close();
-        intake.stop();
         driveHelper.strafeLeft(24);
         driveHelper.turn(180);
 
-        //driveToBackdrop(moveBackRight, Position.RIGHT);
+        driveToBackdrop(Position.RIGHT);
     }
 
-    private void driveToBackdrop(Trajectory start, Position position){
+    private void driveToBackdrop(Position position){
         driveHelper.reverse(66);
         arm.moveToUpPosition();
         bucket.moveToDropPosition();
