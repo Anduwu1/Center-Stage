@@ -13,28 +13,15 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
     @Override
     public void markerOnLeft() {
-        // Trajectory Sequence
-        TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-            .forward(27)
-            .turn(Math.toRadians(180), 20, 20)
-            .strafeRight(11)
-            .back(6)
-            .build();
-        drive.followTrajectorySequence(trajSeq);
-
-        // The same thing but using driveHelper
         driveHelper.forward(27)
                         .turn(180, 20, 20)
                         .strafeRight(11)
                         .reverse(6);
-
         claw.open();
-        trajSeq = drive.trajectorySequenceBuilder(trajSeq.end()).back(6).build();
-        drive.followTrajectorySequence(trajSeq);
+        driveHelper.reverse(6);
         claw.close();
 
-        trajSeq = drive.trajectorySequenceBuilder(trajSeq.end()).turn(Math.toRadians(90), 20, 20).build();
-        drive.followTrajectorySequence(trajSeq);
+        driveHelper.turn(90, 20, 20);
 
         driveToBackdrop(Position.LEFT);
     }
