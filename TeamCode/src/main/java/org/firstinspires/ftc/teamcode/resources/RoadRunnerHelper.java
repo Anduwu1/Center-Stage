@@ -10,17 +10,20 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 /**
     Makes sure trajectories are linked together
  */
-public class RoadRunnerHelper {
+public class RoadRunnerHelper{
     private SampleMecanumDrive drive;
     private Trajectory prev;
     private Pose2d pose;
 
     public RoadRunnerHelper(SampleMecanumDrive drive){
         this.drive = drive;
-        prev = null;
-        pose = null;
+        pose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(pose);
     }
+
+    // [NOTE] All functions return RoadRunnerHelper so its possible
+    // to chain functions together
+    // (im assuming thats how roadrunner does it internally idk i havent checked)
 
     // Move functions
 
@@ -83,7 +86,7 @@ public class RoadRunnerHelper {
     }
 
     /**
-     * Turn to angle with speeed (positive is turning left)
+     * Turn to angle with speed (positive is turning left)
      * @param angle Turn angle (in degrees)
      * @param speed Rotation speed
      * @param angAcc Max angular acceleration
@@ -98,7 +101,6 @@ public class RoadRunnerHelper {
                 pose = null;
             }
         }else{
-            //traj = drive.trajectoryBuilder(prev.end()).splineTo(new Vector2d(prev.end().getX() + 0.01, prev.end().getY() - 0.01) , Math.toRadians(angle)).build();
             traj = drive.trajectorySequenceBuilder(prev.end()).turn(Math.toRadians(angle), speed, angAcc).build();
 
         }

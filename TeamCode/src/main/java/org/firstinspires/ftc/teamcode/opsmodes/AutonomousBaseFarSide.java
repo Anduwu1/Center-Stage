@@ -41,26 +41,26 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
     @Override
     public void markerOnCenter() {
-        driveHelper.forward(27);
-        driveHelper.turn(180);
-        driveHelper.reverse(26);
+        driveHelper.forward(27)
+                .turn(180)
+                .reverse(26);
         claw.open();
-        driveHelper.reverse(5);
-        driveHelper.turn(90);
+        driveHelper.reverse(5)
+                .turn(90);
 
         driveToBackdrop(Position.CENTER);
     }
 
     @Override
     public void markerOnRight() {
-        driveHelper.forward(AutonomousConstants.RedFarSide.BaseMoveForward);
-        driveHelper.turn(-90);
-        driveHelper.forward(2);
+        driveHelper.forward(AutonomousConstants.RedFarSide.BaseMoveForward)
+                .turn(-90)
+                .forward(2);
         claw.open();
         driveHelper.reverse(2);
         claw.close();
-        driveHelper.strafeLeft(24);
-        driveHelper.turn(180);
+        driveHelper.strafeLeft(24)
+                    .turn(180);
 
         driveToBackdrop(Position.RIGHT);
     }
