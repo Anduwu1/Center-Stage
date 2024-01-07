@@ -16,8 +16,7 @@ public class RoadRunnerHelper{
 
     public RoadRunnerHelper(SampleMecanumDrive drive){
         this.drive = drive;
-        pose = new Pose2d(0, 0, 0);
-        drive.setPoseEstimate(pose);
+        pose = new Pose2d();
     }
 
     // [NOTE] All functions return RoadRunnerHelper so its possible
@@ -32,12 +31,7 @@ public class RoadRunnerHelper{
      */
     public RoadRunnerHelper forward(double dist){
         Trajectory traj;
-        if(pose == null){
-            traj = drive.trajectoryBuilder(new Pose2d()).forward(dist).build();
-
-        }else{
-            traj = drive.trajectoryBuilder(pose).forward(dist).build();
-        }
+        traj = drive.trajectoryBuilder(pose).forward(dist).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
@@ -45,11 +39,7 @@ public class RoadRunnerHelper{
 
     public RoadRunnerHelper reverse(double dist){
         Trajectory traj;
-        if(pose == null){
-            traj = drive.trajectoryBuilder(new Pose2d()).back(dist).build();
-        }else{
-            traj = drive.trajectoryBuilder(pose).back(dist).build();
-        }
+        traj = drive.trajectoryBuilder(pose).back(dist).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
@@ -79,11 +69,7 @@ public class RoadRunnerHelper{
      */
     public RoadRunnerHelper turn(double angle, double speed, double angAcc)  {
         TrajectorySequence traj = null;
-        if(pose == null){
-            throw new RotateWithoutPreviousPathException();
-        }else{
-            traj = drive.trajectorySequenceBuilder(pose).turn(Math.toRadians(angle), speed, angAcc).build();
-        }
+        traj = drive.trajectorySequenceBuilder(pose).turn(Math.toRadians(angle), speed, angAcc).build();
         drive.followTrajectorySequence(traj);
         pose = traj.end();
         return this;
@@ -92,12 +78,7 @@ public class RoadRunnerHelper{
     // Strafe
     public RoadRunnerHelper strafeRight(double dist){
         Trajectory traj;
-        if(pose == null){
-            traj = drive.trajectoryBuilder(new Pose2d()).strafeRight(dist + (dist * 0.13)).build();
-
-        }else{
-            traj = drive.trajectoryBuilder(pose).strafeRight(dist + (dist * 0.13)).build();
-        }
+        traj = drive.trajectoryBuilder(pose).strafeRight(dist + (dist * 0.13)).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
@@ -105,11 +86,7 @@ public class RoadRunnerHelper{
 
     public RoadRunnerHelper strafeLeft(double dist){
         Trajectory traj;
-        if(pose == null){
-            traj = drive.trajectoryBuilder(new Pose2d()).strafeLeft(dist + (dist * 0.13)).build();
-        }else{
-            traj = drive.trajectoryBuilder(pose).strafeLeft(dist + (dist * 0.13)).build();
-        }
+        traj = drive.trajectoryBuilder(pose).strafeLeft(dist + (dist * 0.13)).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
@@ -124,13 +101,7 @@ public class RoadRunnerHelper{
      */
     public RoadRunnerHelper splineToLinearHeading(double x, double y, double ang){
         Trajectory traj;
-        Pose2d endPose = new Pose2d(x, y, Math.toRadians(ang));
-        if(pose == null){
-            traj = drive.trajectoryBuilder(new Pose2d()).splineToLinearHeading(endPose, 0).build();
-
-        }else{
-            traj = drive.trajectoryBuilder(pose).splineToLinearHeading(endPose, 0).build();
-        }
+        traj = drive.trajectoryBuilder(pose).splineToLinearHeading(new Pose2d(x, y, Math.toRadians(ang)), 0).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;

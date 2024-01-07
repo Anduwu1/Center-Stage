@@ -6,7 +6,7 @@ package org.firstinspires.ftc.teamcode.resources;
  */
 public class RotateWithoutPreviousPathException extends RuntimeException {
     public RotateWithoutPreviousPathException() {
-        super("RoadRunnerHelper::Rotate called without a previous path!");
+        super("RoadRunnerHelper::Turn called without a previous path!");
     }
 
     // Why use it, idk lamo
