@@ -6,20 +6,28 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.resources.AutonomousConstants;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 @Disabled
 public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
     @Override
     public void markerOnLeft() {
-        driveHelper.forward(AutonomousConstants.RedFarSide.BaseMoveForward);
-        driveHelper.turn(180);
-        driveHelper.strafeRight(11);
-        driveHelper.reverse(6);
+        TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
+            .forward(27)
+            .turn(Math.toRadians(180), 20, 20)
+            .strafeRight(11)
+            .back(6)
+            .build();
+        drive.followTrajectorySequence(trajSeq);
+
         claw.open();
-        driveHelper.reverse(18);
+        trajSeq = drive.trajectorySequenceBuilder(trajSeq.end()).back(6).build();
+        drive.followTrajectorySequence(trajSeq);
         claw.close();
-        driveHelper.turn(90);
+
+        trajSeq = drive.trajectorySequenceBuilder(trajSeq.end()).turn(Math.toRadians(90), 20, 20).build();
+        drive.followTrajectorySequence(trajSeq);
 
         driveToBackdrop(Position.LEFT);
     }
