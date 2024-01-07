@@ -30,16 +30,14 @@ public class RoadRunnerHelper{
      * @param dist
      */
     public RoadRunnerHelper forward(double dist){
-        Trajectory traj;
-        traj = drive.trajectoryBuilder(pose).forward(dist).build();
+        Trajectory traj = drive.trajectoryBuilder(pose).forward(dist).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
     }
 
     public RoadRunnerHelper reverse(double dist){
-        Trajectory traj;
-        traj = drive.trajectoryBuilder(pose).back(dist).build();
+        Trajectory traj = drive.trajectoryBuilder(pose).back(dist).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
@@ -68,8 +66,7 @@ public class RoadRunnerHelper{
      * @param angAcc Max angular acceleration
      */
     public RoadRunnerHelper turn(double angle, double speed, double angAcc)  {
-        TrajectorySequence traj = null;
-        traj = drive.trajectorySequenceBuilder(pose).turn(Math.toRadians(angle), speed, angAcc).build();
+        TrajectorySequence traj = drive.trajectorySequenceBuilder(pose).turn(Math.toRadians(angle), speed, angAcc).build();
         drive.followTrajectorySequence(traj);
         pose = traj.end();
         return this;
@@ -77,16 +74,14 @@ public class RoadRunnerHelper{
 
     // Strafe
     public RoadRunnerHelper strafeRight(double dist){
-        Trajectory traj;
-        traj = drive.trajectoryBuilder(pose).strafeRight(dist + (dist * 0.13)).build();
+        Trajectory traj = drive.trajectoryBuilder(pose).strafeRight(dist + (dist * 0.13)).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
     }
 
     public RoadRunnerHelper strafeLeft(double dist){
-        Trajectory traj;
-        traj = drive.trajectoryBuilder(pose).strafeLeft(dist + (dist * 0.13)).build();
+        Trajectory traj = drive.trajectoryBuilder(pose).strafeLeft(dist + (dist * 0.13)).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
@@ -100,8 +95,7 @@ public class RoadRunnerHelper{
      * @return
      */
     public RoadRunnerHelper splineToLinearHeading(double x, double y, double ang){
-        Trajectory traj;
-        traj = drive.trajectoryBuilder(pose).splineToLinearHeading(new Pose2d(x, y, Math.toRadians(ang)), 0).build();
+        Trajectory traj = drive.trajectoryBuilder(pose).splineToLinearHeading(new Pose2d(x, y, Math.toRadians(ang)), 0).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
