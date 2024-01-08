@@ -20,9 +20,7 @@ import java.util.Locale;
 
 public class AutoPipeLine extends OpenCvPipeline {
     private Marker marker;
-    Mat hsvMat = new Mat();
-    Mat hierarchyMat = new Mat();
-    Mat mask = new Mat();
+    Mat hsvMat = new Mat(), hierarchyMat = new Mat(), hsvThresholdMat = new Mat(), erosionElement = new Mat(), dilationElement = new Mat();
 
     //configurations
     int erosionKernelSize = 2;
@@ -38,13 +36,11 @@ public class AutoPipeLine extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input) {
         //Core.flip(input, input, 1);
-        // For mask
-        Mat mask = new Mat(input.rows(), input.cols(), CvType.CV_8U, Scalar.all(0));
 
         Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
 
         // Get RED
-        Mat hsvThresholdMat = new Mat();
+
         Scalar lowHSV = new Scalar(marker.getHueMin(), 100, 100); // FILL IN WITH VALS
         Scalar highHSV = new Scalar(marker.getHueMax(), 255, 255);
 
@@ -56,9 +52,9 @@ public class AutoPipeLine extends OpenCvPipeline {
         Core.inRange(hsvMat, lowHSV, highHSV, hsvThresholdMat);
 
         //erode then dilate the image
-        Mat erosionElement = Imgproc.getStructuringElement(elementType, new Size(2 * erosionKernelSize + 1, 2 * erosionKernelSize + 1), new Point(erosionKernelSize, erosionKernelSize));
+        erosionElement = Imgproc.getStructuringElement(elementType, new Size(2 * erosionKernelSize + 1, 2 * erosionKernelSize + 1), new Point(erosionKernelSize, erosionKernelSize));
         Imgproc.erode(hsvThresholdMat, hsvThresholdMat, erosionElement);
-        Mat dilationElement = Imgproc.getStructuringElement(elementType, new Size(2 * dilationKernelSize + 1, 2 * dilationKernelSize + 1), new Point(dilationKernelSize, dilationKernelSize));
+        dilationElement = Imgproc.getStructuringElement(elementType, new Size(2 * dilationKernelSize + 1, 2 * dilationKernelSize + 1), new Point(dilationKernelSize, dilationKernelSize));
         Imgproc.dilate(hsvThresholdMat, hsvThresholdMat, dilationElement);
 
         List<MatOfPoint> contourPoints = new ArrayList<>();
