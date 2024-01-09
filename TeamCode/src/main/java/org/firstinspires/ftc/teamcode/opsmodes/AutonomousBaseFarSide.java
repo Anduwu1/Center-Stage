@@ -21,7 +21,8 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
         driveHelper.reverse(6);
         claw.close();
 
-        driveHelper.turn(90, 20, 20);
+        driveHelper.reverse(18)
+                .turn(-90, 20, 20);
 
         driveToBackdrop(Position.LEFT);
     }
