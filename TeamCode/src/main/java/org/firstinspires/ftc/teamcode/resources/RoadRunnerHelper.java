@@ -3,20 +3,32 @@ package org.firstinspires.ftc.teamcode.resources;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 
+import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 /**
-    Makes sure trajectories are linked together
+    Makes sure trajectories are linked together + provide a convenient way to
+    use roadrunner
+
  */
 public class RoadRunnerHelper{
+
+    public static final int DEFAULT_VEL = 20;
+    public static final int DEFAULT_ANG_VEL = 2;
+    public static final int REVERSE_FAST = 60;
+
     private SampleMecanumDrive drive;
     private Pose2d pose;
 
+    private TrajectoryVelocityConstraint trajectoryVelocityConstraint;
     public RoadRunnerHelper(SampleMecanumDrive drive){
         this.drive = drive;
         pose = new Pose2d();
+
     }
 
     // [NOTE] All functions return RoadRunnerHelper so its possible
@@ -30,15 +42,43 @@ public class RoadRunnerHelper{
      * @param dist
      */
     public RoadRunnerHelper forward(double dist){
-        Trajectory traj = drive.trajectoryBuilder(pose).forward(dist).build();
-        drive.followTrajectory(traj);
+        forward(dist, DEFAULT_VEL);
+        return this;
+    }
+
+
+    /**
+     * Forward with speed
+     * @param dist
+     * @param speed
+     */
+    public RoadRunnerHelper forward(double dist, double speed){
+        trajectoryVelocityConstraint = SampleMecanumDrive.getVelocityConstraint(
+            speed,
+            speed,
+            DriveConstants.TRACK_WIDTH
+        );
+        TrajectorySequence traj = drive.trajectorySequenceBuilder(pose).forward(dist, trajectoryVelocityConstraint, SampleMecanumDrive.getAccelerationConstraint(speed * 2)).build();
+        drive.followTrajectorySequence(traj);
         pose = traj.end();
         return this;
     }
 
+
+
     public RoadRunnerHelper reverse(double dist){
-        Trajectory traj = drive.trajectoryBuilder(pose).back(dist).build();
-        drive.followTrajectory(traj);
+        reverse(dist, DEFAULT_VEL);
+        return this;
+    }
+
+    public RoadRunnerHelper reverse(double dist, double speed){
+        trajectoryVelocityConstraint = SampleMecanumDrive.getVelocityConstraint(
+                speed,
+                speed,
+                DriveConstants.TRACK_WIDTH
+        );
+        TrajectorySequence traj = drive.trajectorySequenceBuilder(pose).back(dist, trajectoryVelocityConstraint, SampleMecanumDrive.getAccelerationConstraint(speed * 2)).build();
+        drive.followTrajectorySequence(traj);
         pose = traj.end();
         return this;
     }
@@ -48,14 +88,7 @@ public class RoadRunnerHelper{
      * @param angle Turn angle
      */
     public RoadRunnerHelper turn(double angle)  {
-        Trajectory traj = null;
-        if(pose == null){
-            throw new RotateWithoutPreviousPathException();
-        }else{
-            traj = drive.trajectoryBuilder(pose).splineTo(new Vector2d(pose.getX() + 0.01, pose.getY() - 0.01) , Math.toRadians(angle)).build();
-        }
-        drive.followTrajectory(traj);
-        pose = traj.end();
+        turn(angle, DEFAULT_ANG_VEL, DEFAULT_ANG_VEL);
         return this;
     }
 
@@ -74,14 +107,14 @@ public class RoadRunnerHelper{
 
     // Strafe
     public RoadRunnerHelper strafeRight(double dist){
-        Trajectory traj = drive.trajectoryBuilder(pose).strafeRight(dist + (dist * 0.13)).build();
+        Trajectory traj = drive.trajectoryBuilder(pose).strafeRight(dist).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
     }
 
     public RoadRunnerHelper strafeLeft(double dist){
-        Trajectory traj = drive.trajectoryBuilder(pose).strafeLeft(dist + (dist * 0.13)).build();
+        Trajectory traj = drive.trajectoryBuilder(pose).strafeLeft(dist).build();
         drive.followTrajectory(traj);
         pose = traj.end();
         return this;
@@ -119,7 +152,8 @@ public class RoadRunnerHelper{
      * why not maybe some edge case
      */
     public void resetPath(){
-        pose = null;
+        pose = new Pose2d();
+        drive.setPoseEstimate(pose);
     }
 
 }

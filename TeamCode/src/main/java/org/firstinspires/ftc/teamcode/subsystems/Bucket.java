@@ -9,7 +9,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Bucket {
     public static final String HARDWARE_NAME = "servoR";
 
-    private static final float POSITION_DROP = 1f;
+    private static final float POSITION_DROP = 0.62f;
+    private static final float POSITION_AUTO_DROP = 1f;
     private static final float POSITION_INTAKE = 0.03f;
 
     private final Servo servo;
@@ -59,6 +60,15 @@ public class Bucket {
      */
     public void moveToDropPosition() {
         position = POSITION_DROP;
+        servo.setPosition(position);
+        isIntakePosition = false;
+    }
+
+    /**
+     * Open the bucket stuff for the Autonomus
+     */
+    public void moveToAutoDropPos(){
+        position = POSITION_AUTO_DROP;
         servo.setPosition(position);
         isIntakePosition = false;
     }

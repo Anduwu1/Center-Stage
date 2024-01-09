@@ -6,67 +6,50 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.resources.AutonomousConstants;
+import org.firstinspires.ftc.teamcode.resources.RoadRunnerHelper;
 
 @Disabled
 public abstract class AutonomousBaseNearSide extends AutonomousBase {
 
     @Override
     public void markerOnLeft() {
-        driveHelper.forward(27);
-        driveHelper.turn(90);
-        driveHelper.forward(6);
+        driveHelper.forward(27)
+            .turn(90)
+            .forward(5);
         claw.open();
-        driveHelper.reverse(6);
+        driveHelper.reverse(5);
         claw.close();
-        driveHelper.reverse(24);
-        driveHelper.turn(90);
+        driveHelper.reverse(22.5);
+
+        redDropPixels(Position.LEFT);
     }
 
     @Override
     public void markerOnCenter() {
-        driveHelper.forward(27);
-        driveHelper.turn(90);
-        driveHelper.strafeRight(12);
-        driveHelper.reverse(6);
+        driveHelper.forward(28, 38)
+                .reverse(1)
+                .turn(90)
+                .strafeRight(10)
+                .reverse(5);
         claw.open();
-        driveHelper.reverse(6);
+        driveHelper.reverse(5, RoadRunnerHelper.REVERSE_FAST);
         claw.close();
-        driveHelper.reverse(12);
-        driveHelper.strafeLeft(12);
+        driveHelper.reverse(12.5)
+                .strafeLeft(12);
+
+        redDropPixels(Position.CENTER);
     }
 
     @Override
     public void markerOnRight() {
-        driveHelper.forward(27);
-        driveHelper.turn(90);
-        driveHelper.reverse(16);
+        driveHelper.forward(27)
+                .turn(90)
+                .reverse(16);
         claw.open();
-        driveHelper.reverse(6);
+        driveHelper.reverse(6, RoadRunnerHelper.REVERSE_FAST);
         claw.close();
-        driveHelper.reverse(9);
+
+        redDropPixels(Position.RIGHT);
     }
 
-    private void driveToBackdrop(Trajectory start, Position position){
-        Trajectory moveBackBg = drive.trajectoryBuilder(start.end()).back(66).build();
-        drive.followTrajectory(moveBackBg);
-        arm.moveToUpPosition();
-        bucket.moveToDropPosition();
-        //bucket.moveToDropPositionAndWait();
-        sleep(2500);
-        while(distance.getLeftDistance() > 2 && distance.getRightDistance() > 2){
-            rightBackDrive.setPower(-0.1);
-            leftBackDrive.setPower(-0.1);
-        }
-        rightBackDrive.setPower(0);
-        leftBackDrive.setPower(0);
-
-        // move left/right based on position of team prop position
-        if (position == Position.LEFT)
-            drive.followTrajectory(drive.trajectoryBuilder(moveBackBg.end()).strafeRight(6).build());
-        else if (position == Position.RIGHT)
-            drive.followTrajectory(drive.trajectoryBuilder(moveBackBg.end()).strafeLeft(10).build());
-
-        // Drop em
-        claw.open();
-    }
 }

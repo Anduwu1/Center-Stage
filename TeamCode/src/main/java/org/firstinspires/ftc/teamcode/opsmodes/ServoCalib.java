@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.objects.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 
@@ -27,6 +28,7 @@ public class ServoCalib extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         clawServo = this.hardwareMap.get(Servo.class, Claw.HARDWARE_NAME);
         bucketServo = this.hardwareMap.get(Servo.class, Bucket.HARDWARE_NAME);
+        armServo = this.hardwareMap.get(Servo.class, Arm.HARDWARE_NAME);
 
         waitForStart();
 

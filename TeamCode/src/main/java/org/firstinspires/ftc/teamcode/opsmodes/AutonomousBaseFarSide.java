@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.resources.AutonomousConstants;
+import org.firstinspires.ftc.teamcode.resources.RoadRunnerHelper;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 @Disabled
@@ -14,15 +15,16 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
     @Override
     public void markerOnLeft() {
         driveHelper.forward(27)
-                        .turn(180, 20, 20)
-                        .strafeRight(11)
+                        .turn(180)
+                        .strafeRight(10)
                         .reverse(6);
         claw.open();
-        driveHelper.reverse(6);
+        driveHelper.reverse(6, RoadRunnerHelper.REVERSE_FAST);
         claw.close();
 
-        driveHelper.reverse(18)
-                .turn(-90, 20, 20);
+        driveHelper.reverse(10)
+                .turn(-90)
+                .reverse(10);
 
         driveToBackdrop(Position.LEFT);
     }
@@ -31,48 +33,29 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
     public void markerOnCenter() {
         driveHelper.forward(27)
                 .turn(180)
-                .reverse(26);
+                .reverse(15.5);
         claw.open();
-        driveHelper.reverse(5)
-                .turn(90);
-
+        driveHelper.reverse(6.5, RoadRunnerHelper.REVERSE_FAST)
+                .turn(-90);
+        claw.close();
         driveToBackdrop(Position.CENTER);
     }
 
     @Override
     public void markerOnRight() {
-        driveHelper.forward(AutonomousConstants.RedFarSide.BaseMoveForward)
+        driveHelper.forward(27)
                 .turn(-90)
-                .forward(2);
+                .forward(5);
         claw.open();
-        driveHelper.reverse(2);
+        driveHelper.reverse(5, RoadRunnerHelper.REVERSE_FAST);
         claw.close();
-        driveHelper.strafeLeft(24)
+        driveHelper.strafeLeft(22)
                     .turn(180);
 
         driveToBackdrop(Position.RIGHT);
     }
 
     private void driveToBackdrop(Position position){
-        driveHelper.reverse(66);
-        arm.moveToUpPosition();
-        bucket.moveToDropPosition();
-        //bucket.moveToDropPositionAndWait();
-        sleep(2500);
-        while(distance.getLeftDistance() > 2 && distance.getRightDistance() > 2){
-            rightBackDrive.setPower(-0.1);
-            leftBackDrive.setPower(-0.1);
-        }
-        rightBackDrive.setPower(0);
-        leftBackDrive.setPower(0);
-
-        // move left/right based on position of team prop position
-        if (position == Position.LEFT)
-            driveHelper.strafeRight(6);
-        else if (position == Position.RIGHT)
-            driveHelper.strafeLeft(10);
-
-        // Drop em
-        claw.open();
+        // Move to that tile
     }
 }

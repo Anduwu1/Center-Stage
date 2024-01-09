@@ -10,6 +10,8 @@ public class Arm {
     private static final float POSITION_DOWN = 0.275f;
     private static final float POSITION_HOVER = 0.295f;
 
+    private static final float POSITION_AUTO_DROP = 0.699f;
+
     private final Servo servo;
     private double position = POSITION_DOWN;
     private boolean isUp;
@@ -35,6 +37,12 @@ public class Arm {
         position = POSITION_HOVER;
         servo.setPosition(position);
         isUp = false;
+    }
+
+    public void moveToAutoDropPosition(){
+        position = POSITION_AUTO_DROP;
+        servo.setPosition(position);
+        isUp = true;
     }
 
     /**

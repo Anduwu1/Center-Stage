@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opsmodes;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.objects.Marker;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
@@ -68,6 +69,7 @@ public abstract class AutonomousBase extends LinearOpMode {
         int pixelPos = 0;
         String pos = "None";
         arm.moveToHoverPosition();
+        claw.close();
         while(!isStarted()){
             // Get pos
             pixelPos = pipe.getX();
@@ -113,6 +115,33 @@ public abstract class AutonomousBase extends LinearOpMode {
     public abstract void markerOnCenter();
 
     public abstract void markerOnRight();
+
+    public void redDropPixels(Position position){
+        claw.close();
+        arm.moveToAutoDropPosition();
+        bucket.moveToAutoDropPos();
+        sleep(2500);
+        // Insurance
+        ElapsedTime insTime = new ElapsedTime();
+        double time = insTime.seconds();
+        while(distance.getLeftDistance() > 8.3 && distance.getRightDistance() > 8.3){
+            rightBackDrive.setPower(-0.1);
+            leftBackDrive.setPower(-0.1);
+            // If we just dont find it, drop the pixel anyway
+            if(Math.abs(time - insTime.seconds()) > 5) break;
+        }
+        rightBackDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        driveHelper.resetPath();
+        // move left/right based on position of team prop position
+        if (position == Position.LEFT)
+            driveHelper.strafeRight(7.5);
+        else if (position == Position.RIGHT)
+            driveHelper.strafeLeft(7.5);
+
+        // Drop em
+        claw.open();
+    }
 
     public abstract Marker getMarker();
 }
