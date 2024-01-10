@@ -14,7 +14,7 @@ public abstract class AutonomousBaseNearSide extends AutonomousBase {
     @Override
     public void markerOnLeft() {
         driveHelper.forward(27)
-            .turn(90)
+            .turn(90 * flip)
             .forward(5);
         claw.open();
         driveHelper.reverse(5);
@@ -28,7 +28,7 @@ public abstract class AutonomousBaseNearSide extends AutonomousBase {
     public void markerOnCenter() {
         driveHelper.forward(28, 38)
                 .reverse(1)
-                .turn(90)
+                .turn(90 * flip)
                 .strafeRight(10)
                 .reverse(5);
         claw.open();
@@ -43,7 +43,7 @@ public abstract class AutonomousBaseNearSide extends AutonomousBase {
     @Override
     public void markerOnRight() {
         driveHelper.forward(27)
-                .turn(90)
+                .turn(90 * flip)
                 .reverse(16);
         claw.open();
         driveHelper.reverse(6, RoadRunnerHelper.REVERSE_FAST);

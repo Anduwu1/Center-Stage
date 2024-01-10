@@ -48,6 +48,8 @@ public abstract class AutonomousBase extends LinearOpMode {
 
     protected RoadRunnerHelper driveHelper;
 
+    protected int flip = 1;
+
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
@@ -70,6 +72,12 @@ public abstract class AutonomousBase extends LinearOpMode {
         String pos = "None";
         arm.moveToHoverPosition();
         claw.close();
+
+        // Should we flip the rotation
+        if(getMarker() != Marker.RED){
+            flip = -1;
+        }
+
         while(!isStarted()){
             // Get pos
             pixelPos = pipe.getX();
@@ -91,7 +99,8 @@ public abstract class AutonomousBase extends LinearOpMode {
         // Move to position based on pixelPos
         if(pixelPos > RobotSettings.PIXEL_CENTER){
             pos = "RIGHT";
-            markerOnRight();
+            if(getMarker() != Marker.RED) markerOnLeft();
+            else markerOnRight();
         }
         else if(pixelPos > RobotSettings.PIXEL_LEFT){
             pos = "CENTER";
@@ -99,7 +108,8 @@ public abstract class AutonomousBase extends LinearOpMode {
         }
         else{
             pos = "LEFT";
-            markerOnLeft();
+            if(getMarker() != Marker.RED) markerOnRight();
+            else markerOnLeft();
         }
 
         // idle
