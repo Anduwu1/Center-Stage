@@ -82,6 +82,7 @@ public abstract class AutonomousBase extends LinearOpMode {
             // Get pos
             pixelPos = pipe.getX();
             telemetry.addData("X:","%d", pixelPos);
+            telemetry.addData("Side", "%s", getMarker().toString());
             if(pixelPos > RobotSettings.PIXEL_CENTER){
                 pos = "RIGHT";
             }
