@@ -38,7 +38,7 @@ public class AutoPipeLine extends OpenCvPipeline {
         Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
 
 
-        Scalar lowHSV = new Scalar(marker.getHueMin(), 50, 0); // FILL IN WITH VALS
+        Scalar lowHSV = new Scalar(marker.getHueMin(), 100, 80); // FILL IN WITH VALS
         Scalar highHSV = new Scalar(marker.getHueMax(), 255, 255);
 
         Core.inRange(hsvMat, lowHSV, highHSV, hsvThresholdMat);

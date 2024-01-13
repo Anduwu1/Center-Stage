@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.objects;
 
 public enum Marker {
     RED(1, 60, 170, 180),
-    BLUE(80, 150, -1, 110);
+    BLUE(90, 100, -1, 110);
 
     Marker(int hueMin, int hueMax, int hueWrapAroundMin, int hueWrapAroundMax) {
         this.hueMin = hueMin;

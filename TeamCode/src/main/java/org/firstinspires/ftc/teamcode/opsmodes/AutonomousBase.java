@@ -38,7 +38,6 @@ public abstract class AutonomousBase extends LinearOpMode {
     protected Distance distance;
     protected SampleMecanumDrive drive;
     protected AutoPipeLine pipe;
-    protected Intake intake;
 
     // Drive
     protected DcMotorEx leftBackDrive = null;
@@ -58,7 +57,6 @@ public abstract class AutonomousBase extends LinearOpMode {
         bucket = new Bucket(hardwareMap);
         camMan = new OpenCVManager(hardwareMap);
         distance = new Distance(hardwareMap);
-        intake = new Intake(hardwareMap);
         // Motors
         leftBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_LBDRIVE_MOTOR);
         rightBackDrive = hardwareMap.get(DcMotorEx.class, RobotSettings.BANA_RBDRIVE_MOTOR);
@@ -127,7 +125,7 @@ public abstract class AutonomousBase extends LinearOpMode {
 
     public abstract void markerOnRight();
 
-    public void redDropPixels(Position position){
+    public void dropPixels(Position position){
         claw.close();
         arm.moveToAutoDropPosition();
         bucket.moveToAutoDropPos();
@@ -146,9 +144,9 @@ public abstract class AutonomousBase extends LinearOpMode {
         driveHelper.resetPath();
         // move left/right based on position of team prop position
         if (position == Position.LEFT)
-            driveHelper.strafeRight(7.5);
+            driveHelper.strafeRight(7.5 * flip);
         else if (position == Position.RIGHT)
-            driveHelper.strafeLeft(7.5);
+            driveHelper.strafeLeft(7.5 * flip);
 
         // Drop em
         claw.open();

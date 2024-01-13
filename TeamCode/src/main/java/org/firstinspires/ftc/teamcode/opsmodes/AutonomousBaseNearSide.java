@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.opsmodes;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.resources.AutonomousConstants;
 import org.firstinspires.ftc.teamcode.resources.RoadRunnerHelper;
 
 @Disabled
@@ -21,7 +17,7 @@ public abstract class AutonomousBaseNearSide extends AutonomousBase {
         claw.close();
         driveHelper.reverse(22.5);
 
-        redDropPixels(Position.LEFT);
+        dropPixels(Position.LEFT);
     }
 
     @Override
@@ -37,7 +33,7 @@ public abstract class AutonomousBaseNearSide extends AutonomousBase {
         driveHelper.reverse(12.5)
                 .strafeLeft(12);
 
-        redDropPixels(Position.CENTER);
+        dropPixels(Position.CENTER);
     }
 
     @Override
@@ -49,7 +45,7 @@ public abstract class AutonomousBaseNearSide extends AutonomousBase {
         driveHelper.reverse(6, RoadRunnerHelper.REVERSE_FAST);
         claw.close();
 
-        redDropPixels(Position.RIGHT);
+        dropPixels(Position.RIGHT);
     }
 
 }
