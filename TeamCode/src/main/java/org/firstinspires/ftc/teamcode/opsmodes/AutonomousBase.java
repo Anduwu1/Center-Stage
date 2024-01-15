@@ -32,7 +32,7 @@ public abstract class AutonomousBase extends LinearOpMode {
         }
     }
 
-    protected static final double DISTANCE_TO_DROP = 8.3;
+    protected static final double DISTANCE_TO_DROP = 8.48;
 
     protected Claw claw;
     protected Arm arm;
@@ -155,12 +155,15 @@ public abstract class AutonomousBase extends LinearOpMode {
         driveHelper.resetPath();
         // move left/right based on position of team prop position
         if (position == Position.LEFT)
-            driveHelper.strafeRight(7.5 * flip);
+            driveHelper.strafeRight(7 * flip);
         else if (position == Position.RIGHT)
             driveHelper.strafeLeft(7.5 * flip);
 
         // Drop em
         claw.open();
+        sleep(800);
+        arm.moveToDownPosition();
+        bucket.moveToIntakePosition();
     }
 
     public abstract Marker getMarker();
