@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Bucket {
     public static final String HARDWARE_NAME = "servoR";
 
-    private static final float POSITION_DROP = 0.62f;
+    private static final float POSITION_DROP = 1f;
     private static final float POSITION_AUTO_DROP = 1f;
-    private static final float POSITION_INTAKE = 0.03f;
+    private static final float POSITION_INTAKE = 0f;
 
     private final Servo servo;
     private double position = POSITION_INTAKE;

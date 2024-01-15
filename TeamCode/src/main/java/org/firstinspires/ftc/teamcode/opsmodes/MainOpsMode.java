@@ -127,6 +127,7 @@ public class MainOpsMode extends LinearOpMode {
         if(arm.isUp()) {
             bucket.moveToIntakePosition();
             arm.moveToDownPosition();
+            arm.moveToHoverPosition();
         } else {
             bucket.moveToDropPosition();
             arm.moveToUpPosition();
@@ -264,11 +265,17 @@ public class MainOpsMode extends LinearOpMode {
         // Intake
         double intakePower = 0;
 
-        if(gamepad2.right_trigger != 0)
+        if(gamepad2.right_trigger != 0) {
             intakePower = -1;
+            arm.moveToDownPosition();
+            bucket.moveToIntakePosition();
+        }
 
-        if(gamepad2.left_trigger != 0)
+        if(gamepad2.left_trigger != 0) {
             intakePower = 1;
+            arm.moveToDownPosition();
+            bucket.moveToIntakePosition();
+        }
 
         intake.setPower(intakePower);
 
