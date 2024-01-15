@@ -35,21 +35,20 @@ public class AutoPipeLine extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        //Core.flip(input, input, 1);
-
         Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
 
-        // Get RED
 
-        Scalar lowHSV = new Scalar(marker.getHueMin(), 100, 100); // FILL IN WITH VALS
+        Scalar lowHSV = new Scalar(marker.getHueMin(), 100, 80); // FILL IN WITH VALS
         Scalar highHSV = new Scalar(marker.getHueMax(), 255, 255);
 
         Core.inRange(hsvMat, lowHSV, highHSV, hsvThresholdMat);
 
-        lowHSV = new Scalar(marker.getHueWrapAroundMin(), 100, 100); // FILL IN WITH VALS
-        highHSV = new Scalar(marker.getHueWrapAroundMax(), 255, 255);
+        if(marker.getHueWrapAroundMin() > 1) {
+            lowHSV = new Scalar(marker.getHueWrapAroundMin(), 100, 100); // FILL IN WITH VALS
+            highHSV = new Scalar(marker.getHueWrapAroundMax(), 255, 255);
 
-        Core.inRange(hsvMat, lowHSV, highHSV, hsvThresholdMat);
+            Core.inRange(hsvMat, lowHSV, highHSV, hsvThresholdMat);
+        }
 
         //erode then dilate the image
         erosionElement = Imgproc.getStructuringElement(elementType, new Size(2 * erosionKernelSize + 1, 2 * erosionKernelSize + 1), new Point(erosionKernelSize, erosionKernelSize));

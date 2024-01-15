@@ -31,7 +31,7 @@ public class MainOpsMode extends LinearOpMode {
 
     // Constants
     private static final double DRIVE_SPEED = 0.8;
-    private static final int MAX_VELOCITY = 2200;
+    private static final int MAX_VELOCITY = 1700; //true physical max = 2200, we want it slower
     // Servo Constants
 
     // Subsystems
@@ -295,9 +295,9 @@ public class MainOpsMode extends LinearOpMode {
         if (leftDistance < far_distance && leftDistance > close_distance) {
             double scaledPower = (leftDistance - close_distance) / (far_distance - close_distance); // Scale from 2 inches (0 power) to 10 inches (1 power)
             if (rightFrontPower < 0)
-                rightFrontPower *= scaledPower;
+                rightFrontPower *= scaledPower * 0.5;
             if (rightBackPower < 0)
-                rightBackPower *= scaledPower;
+                rightBackPower *= scaledPower * 0.5;
         } else if (leftDistance <= close_distance) {
             if (rightFrontPower < 0)
                 rightFrontPower = 0;
@@ -310,9 +310,9 @@ public class MainOpsMode extends LinearOpMode {
         if (rightDistance < far_distance && rightDistance > 2.0) {
             double scaledPower = (rightDistance - close_distance) / (far_distance - close_distance); // Scale from 2 inches (0 power) to 10 inches (1 power)
             if (leftFrontPower < 0)
-                leftFrontPower *= scaledPower;
+                leftFrontPower *= scaledPower * 0.5;
             if (leftBackPower < 0)
-                leftBackPower *= scaledPower;
+                leftBackPower *= scaledPower * 0.5;
         } else if (rightDistance <= close_distance) {
             if (leftFrontPower < 0)
                 leftFrontPower = 0;

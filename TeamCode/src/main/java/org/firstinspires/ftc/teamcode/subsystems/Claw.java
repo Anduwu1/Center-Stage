@@ -7,6 +7,7 @@ public class Claw {
     public static final String HARDWARE_NAME = "servoT";
 
     private static float POSITION_OPEN = 0.7f;
+    private static float POSITION_OPEN_SLIGHTLY = 0.85f;
     private static float POSITION_CLOSED = 1.0f;
     private boolean isOpen; //used to track the position of the claw
 
@@ -40,6 +41,14 @@ public class Claw {
      */
     public void open() {
         servo.setPosition(POSITION_OPEN);
+        isOpen = true;
+    }
+
+    /**
+     * Open the claw, allowing a pixel to drop out of the bucket
+     */
+    public void openSlightly() {
+        servo.setPosition(POSITION_OPEN_SLIGHTLY);
         isOpen = true;
     }
 }

@@ -20,7 +20,7 @@ public class CalibratePipeline extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input)
     {
-        Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_BGR2RGB);
+        Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
 
 
         int size = 30;

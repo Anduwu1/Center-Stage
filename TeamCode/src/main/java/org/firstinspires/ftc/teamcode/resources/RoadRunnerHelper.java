@@ -13,13 +13,13 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 /**
     Makes sure trajectories are linked together + provide a convenient way to
     use roadrunner
-
  */
-public class RoadRunnerHelper{
+public class RoadRunnerHelper<T>{
 
     public static final int DEFAULT_VEL = 20;
     public static final int DEFAULT_ANG_VEL = 2;
     public static final int REVERSE_FAST = 60;
+
 
     private SampleMecanumDrive drive;
     private Pose2d pose;
@@ -148,8 +148,8 @@ public class RoadRunnerHelper{
 
     /**
      * Clears the current path to start a new one
-     * I don't know when you would use this but
-     * why not maybe some edge case
+     * Useful if you take manual control of the motors
+     * and then want to use RoadRunner again
      */
     public void resetPath(){
         pose = new Pose2d();
