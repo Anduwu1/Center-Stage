@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.AutonomousConstants;
 import org.firstinspires.ftc.teamcode.resources.RoadRunnerHelper;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
@@ -26,7 +27,7 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
                 .turn(-90 * flip)
                 .reverse(10);
 
-        driveToBackdrop(Position.LEFT);
+        dropPixels(Position.LEFT);
     }
 
     @Override
@@ -38,7 +39,7 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
         driveHelper.reverse(6.5, RoadRunnerHelper.REVERSE_FAST)
                 .turn(-90 * flip);
         claw.close();
-        driveToBackdrop(Position.CENTER);
+        dropPixels(Position.CENTER);
     }
 
     @Override
@@ -50,12 +51,10 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
         driveHelper.reverse(5, RoadRunnerHelper.REVERSE_FAST);
         claw.close();
         driveHelper.strafeLeft(22)
-                    .turn(180 * flip);
+                    .turn(180 * flip)
+                    .reverse(10)
+                    .strafeLeft(RobotSettings.FULL_TILE_INCHES);
 
-        driveToBackdrop(Position.RIGHT);
-    }
-
-    private void driveToBackdrop(Position position){
-        // Move to that tile
+        dropPixels(Position.RIGHT);
     }
 }
