@@ -67,7 +67,7 @@ public abstract class AutonomousBase extends LinearOpMode {
         driveHelper = new RoadRunnerHelper(drive);
 
         int pixelPos = 0;
-        String pos = "None";
+        String pos = "None", goingTo = "None";
         arm.moveToHoverPosition();
         claw.close();
 
@@ -75,7 +75,7 @@ public abstract class AutonomousBase extends LinearOpMode {
         if(getMarker() != Marker.RED){
             flip = -1;
         }
-
+        bucket.moveToIntakePosition();
         while(!isStarted()){
             // Get pos
             pixelPos = pipe.getX();
@@ -83,14 +83,21 @@ public abstract class AutonomousBase extends LinearOpMode {
             telemetry.addData("Side", "%s", getMarker().toString());
             if(pixelPos > RobotSettings.PIXEL_CENTER){
                 pos = "RIGHT";
+                if(getMarker() != Marker.RED) goingTo = "LEFT";
+                else goingTo = "RIGHT";
             }
             else if(pixelPos > RobotSettings.PIXEL_LEFT){
                 pos = "CENTER";
+                if(getMarker() != Marker.RED) goingTo = "CENTER";
+                else goingTo = "CENTER";
             }
             else{
                 pos = "LEFT";
+                if(getMarker() != Marker.RED) goingTo = "RIGHT";
+                else goingTo = "LEFT";
             }
             telemetry.addData("Projected position","%s" ,pos);
+            telemetry.addData("GoTo position","%s" ,goingTo);
             telemetry.update();
 
         }
