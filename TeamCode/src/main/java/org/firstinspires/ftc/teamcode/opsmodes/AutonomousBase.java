@@ -32,6 +32,8 @@ public abstract class AutonomousBase extends LinearOpMode {
         }
     }
 
+    protected static final double DISTANCE_TO_DROP = 8.3;
+
     protected Claw claw;
     protected Arm arm;
     protected Bucket bucket;
@@ -68,7 +70,7 @@ public abstract class AutonomousBase extends LinearOpMode {
 
         int pixelPos = 0;
         String pos = "None", goingTo = "None";
-        arm.moveToHoverPosition();
+        arm.moveToDownPosition();
         claw.close();
 
         // Should we flip the rotation
@@ -136,11 +138,13 @@ public abstract class AutonomousBase extends LinearOpMode {
         claw.close();
         arm.moveToAutoDropPosition();
         bucket.moveToAutoDropPos();
+        // Wait until the arm and bucket are done moving
         sleep(2500);
         // Insurance
         ElapsedTime insTime = new ElapsedTime();
         double time = insTime.seconds();
-        while(distance.getLeftDistance() > 8.3 && distance.getRightDistance() > 8.3){
+        while(distance.getLeftDistance() > DISTANCE_TO_DROP && distance.getRightDistance() > DISTANCE_TO_DROP){
+            // Reverse
             rightBackDrive.setPower(-0.1);
             leftBackDrive.setPower(-0.1);
             // If we just dont find it, drop the pixel anyway
