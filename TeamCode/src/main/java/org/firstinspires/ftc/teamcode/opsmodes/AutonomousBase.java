@@ -78,7 +78,7 @@ public abstract class AutonomousBase extends LinearOpMode {
             flip = -1;
         }
         bucket.moveToIntakePosition();
-        while(!isStarted()){
+        while(!isStarted() && !isStopRequested()){
             // Get pos
             pixelPos = pipe.getX();
             telemetry.addData("X:","%d", pixelPos);
@@ -145,8 +145,8 @@ public abstract class AutonomousBase extends LinearOpMode {
         double time = insTime.seconds();
         while(distance.getLeftDistance() > DISTANCE_TO_DROP && distance.getRightDistance() > DISTANCE_TO_DROP){
             // Reverse
-            rightBackDrive.setPower(-0.1);
-            leftBackDrive.setPower(-0.1);
+            rightBackDrive.setPower(-0.15);
+            leftBackDrive.setPower(-0.15);
             // If we just dont find it, drop the pixel anyway
             if(Math.abs(time - insTime.seconds()) > 5) break;
         }
@@ -164,7 +164,18 @@ public abstract class AutonomousBase extends LinearOpMode {
         sleep(800);
         arm.moveToDownPosition();
         bucket.moveToIntakePosition();
+
+        //move out of the way for team member
+        if (isNear()) {
+            driveHelper.resetPath();
+            if (flip < 0)
+                driveHelper.strafeRight(28);
+            else
+                driveHelper.strafeLeft(28);
+        }
     }
 
     public abstract Marker getMarker();
+
+    public abstract boolean isNear();
 }

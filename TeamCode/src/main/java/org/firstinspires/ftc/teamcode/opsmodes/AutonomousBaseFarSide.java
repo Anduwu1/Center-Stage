@@ -63,4 +63,7 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
         dropPixels(Position.RIGHT);
     }
 
+    public boolean isNear() {
+        return false;
+    }
 }
