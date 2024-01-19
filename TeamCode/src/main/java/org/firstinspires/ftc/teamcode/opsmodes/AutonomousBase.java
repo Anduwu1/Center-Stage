@@ -104,20 +104,20 @@ public abstract class AutonomousBase extends LinearOpMode {
 
         }
 
-        // Move to position based on pixelPos
-        if(pixelPos > RobotSettings.PIXEL_CENTER){
-            pos = "RIGHT";
-            if(getMarker() != Marker.RED) markerOnLeft();
-            else markerOnRight();
-        }
-        else if(pixelPos > RobotSettings.PIXEL_LEFT){
-            pos = "CENTER";
-            markerOnCenter();
-        }
-        else{
-            pos = "LEFT";
-            if(getMarker() != Marker.RED) markerOnRight();
-            else markerOnLeft();
+        if(!isStopRequested() && opModeIsActive()) {
+            // Move to position based on pixelPos
+            if (pixelPos > RobotSettings.PIXEL_CENTER) {
+                pos = "RIGHT";
+                if (getMarker() != Marker.RED) markerOnLeft();
+                else markerOnRight();
+            } else if (pixelPos > RobotSettings.PIXEL_LEFT) {
+                pos = "CENTER";
+                markerOnCenter();
+            } else {
+                pos = "LEFT";
+                if (getMarker() != Marker.RED) markerOnRight();
+                else markerOnLeft();
+            }
         }
 
         // idle
