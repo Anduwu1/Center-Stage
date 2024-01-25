@@ -32,7 +32,7 @@ public abstract class AutonomousBase extends LinearOpMode {
         }
     }
 
-    protected static final double DISTANCE_TO_DROP = 8.48;
+    protected static final double DISTANCE_TO_DROP = 8.28;
 
     protected Claw claw;
     protected Arm arm;
@@ -98,7 +98,7 @@ public abstract class AutonomousBase extends LinearOpMode {
                 if(getMarker() != Marker.RED) goingTo = "RIGHT";
                 else goingTo = "LEFT";
             }
-            telemetry.addData("Projected position","%s" ,pos);
+            telemetry.addData("TeamProp position","%s" ,pos);
             telemetry.addData("GoTo position","%s" ,goingTo);
             telemetry.update();
 
@@ -122,7 +122,6 @@ public abstract class AutonomousBase extends LinearOpMode {
 
         // idle
         while (!isStopRequested() && opModeIsActive()){
-            telemetry.addData("X:","%d", pipe.getX());
             telemetry.addLine(pos);
             telemetry.update();
         }
@@ -161,7 +160,9 @@ public abstract class AutonomousBase extends LinearOpMode {
 
         // Drop em
         claw.open();
+        // Wait
         sleep(800);
+        // Reset
         arm.moveToDownPosition();
         bucket.moveToIntakePosition();
 
@@ -173,6 +174,10 @@ public abstract class AutonomousBase extends LinearOpMode {
             else
                 driveHelper.strafeLeft(28);
         }
+    }
+
+    public void delayForOther(){
+        sleep(5000);
     }
 
     public abstract Marker getMarker();
