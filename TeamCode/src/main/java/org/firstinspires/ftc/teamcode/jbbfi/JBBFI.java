@@ -70,74 +70,77 @@ public class JBBFI {
                     if(obj.getName().equals(possible[0])){
                         found = true;
                         // Start doing stuff
+                        for (int i = 1; i < possible.length; i++) {
+                            String func = possible[i];
+                            // Name of the function
+                            String functionName = func.split("\\(")[0];
+                            // Get the arguments in the "( )"
+                            String argsSTR = func.substring(func.indexOf("(")+1, func.indexOf(")"));
+                            // Isolate args
+                            String[] argList = argsSTR.split("\\,");
+                            // Args
+                            ArrayList<JBBFIArg> args = new ArrayList<>();
+                            for(String argStr : argList){
+                                // Convert to a JBBFIArg
 
-                        // Name of the function
-                        String functionName = possible[1].split("\\(")[0];
-                        // Get the arguments in the "( )"
-                        String argsSTR = possible[1].substring(possible[1].indexOf("(")+1, possible[1].indexOf(")"));
-                        // Isolate args
-                        String[] argList = argsSTR.split("\\,");
-                        // Args
-                        ArrayList<JBBFIArg> args = new ArrayList<>();
-                        for(String argStr : argList){
-                            // Convert to a JBBFIArg
-
-                            // Is it a primitive
-                            // Int
-                            try {
-                                Integer intTmp = Integer.parseInt(argStr);
-                                args.add(
-                                        new JBBFIArg(intTmp)
-                                );
-                                continue;
-                            }catch (NumberFormatException n){
-                                // Continue
-                            }
-                            // Float
-                            try {
-                                Float floatTmp = Float.parseFloat(argStr);
-                                args.add(
-                                        new JBBFIArg(floatTmp)
-                                );
-                                continue;
-                            }catch (NumberFormatException n){
-                                // Continue
-                            }
-                            // Double
-                            try {
-                                Double doubleTmp = Double.parseDouble(argStr);
-                                args.add(
-                                        new JBBFIArg(doubleTmp)
-                                );
-                                continue;
-                            }catch (NumberFormatException n){
-                                // Continue
-                            }
-
-
-                            // Is it a type of class we know?
-                            boolean fClass = false;
-                            for (JBBFIObject objKnown:
-                                    objects) {
-                                if(obj.getName().equals(argStr)){
+                                // Is it a primitive
+                                // Int
+                                try {
+                                    Integer intTmp = Integer.parseInt(argStr);
                                     args.add(
-                                            new JBBFIArg(objKnown)
+                                            new JBBFIArg(intTmp)
                                     );
-                                    fClass = true;
-                                    break;
+                                    continue;
+                                }catch (NumberFormatException n){
+                                    // Continue
                                 }
+                                // Float
+                                try {
+                                    Float floatTmp = Float.parseFloat(argStr);
+                                    args.add(
+                                            new JBBFIArg(floatTmp)
+                                    );
+                                    continue;
+                                }catch (NumberFormatException n){
+                                    // Continue
+                                }
+                                // Double
+                                try {
+                                    Double doubleTmp = Double.parseDouble(argStr);
+                                    args.add(
+                                            new JBBFIArg(doubleTmp)
+                                    );
+                                    continue;
+                                }catch (NumberFormatException n){
+                                    // Continue
+                                }
+
+
+                                // Is it a type of class we know?
+                                boolean fClass = false;
+                                for (JBBFIObject objKnown:
+                                        objects) {
+                                    if(obj.getName().equals(argStr)){
+                                        args.add(
+                                                new JBBFIArg(objKnown)
+                                        );
+                                        fClass = true;
+                                        break;
+                                    }
+                                }
+                                if(fClass) continue;
+
+                                // Ok just assume its a string omg
+                                args.add(new JBBFIArg(argStr));
                             }
-                            if(fClass) continue;
 
-                            // Ok just assume its a string omg
-                            args.add(new JBBFIArg(argStr));
+                            try {
+                                obj.executeFunction(functionName, args.toArray(new JBBFIArg[0]));
+                            } catch (Exception e){
+                                throw new JBBFIInvalidFunctionException(obj.getName() + "::" + functionName);
+                            }
                         }
 
-                        try {
-                            obj.executeFunction(functionName, args.toArray(new JBBFIArg[0]));
-                        } catch (Exception e){
-                            throw new JBBFIInvalidFunctionException(obj.getName() + "::" + functionName);
-                        }
 
                     }
                 }
