@@ -12,23 +12,45 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+
 /**
  Manages scripting
  */
 public class JBBFI {
     ArrayList<JBBFIObject> objects;
+    ArrayList<JBBFIFunction> functions;
+
+    ArrayList<String> fileData;
+
+    int currentLine = 0;
 
     public JBBFI(String fileName) throws JBBFIScriptNotFoundException, JBBFIClassNotFoundException, FileNotFoundException, JBBFIInvalidFunctionException, JBBFIUnknownKeywordException {
         objects = new ArrayList<>();
-
+        functions = new ArrayList<>();
+        fileData = new ArrayList<>();
         try {
             readFile(fileName);
         } catch (FileNotFoundException e){
             throw new JBBFIScriptNotFoundException(fileName);
         }
 
+        for(currentLine = 0; currentLine < fileData.size(); currentLine++){
+            parseLine(fileData.get(currentLine));
+        }
 
     }
+
+    public void addGlobal(Object global, String name){
+        objects.add(
+                new JBBFIObject(
+                        global,
+                        name
+                )
+        );
+    }
+
+
 
     private void readFile(String fileName) throws FileNotFoundException, JBBFIClassNotFoundException, JBBFIUnknownKeywordException, JBBFIInvalidFunctionException {
         File scriptFile = new File(fileName);
@@ -36,7 +58,7 @@ public class JBBFI {
 
         while(fileScan.hasNextLine()){
 
-            parseLine(fileScan.nextLine());
+            fileData.add(fileScan.nextLine());
 
         }
     }
@@ -53,20 +75,38 @@ public class JBBFI {
                 // Jesse, we need to initialize an object
                 try{
                     objects.add(
-                      new JBBFIObject(tokens[1], tokens[2])
+                            new JBBFIObject(tokens[1], tokens[2])
                     );
                 }catch (Exception e){
                     throw new JBBFIClassNotFoundException(tokens[1]);
                 }
                 break;
-
+            // Oh. Its on.
+            case "function":
+                // TODO: IF THE NEXT LINE FAILS, CRASH WITH FUNCTIONWITHOUTNAMEEXCPETION
+                JBBFIFunction function = new JBBFIFunction(tokens[1]);
+                int offSet = currentLine + 1;
+                while(offSet < fileData.size() - 1){
+                    String l = fileData.get(offSet);
+                    if(l.contains("function_end")) break;
+                    function.addLine(l);
+                    offSet++;
+                }
+                functions.add(function);
+                currentLine += (offSet - currentLine);
+                break;
             default:
+                // is it empty?
+                if(tokens[0].isEmpty()) return;
+
+                // Maybe a function? lets see
+                if(runFunction(tokens[0]) == 1) return;
                 // Maybe the name of an object? lets try
                 // Split at "." since that is how functions are called
                 String[] possible = line.split("\\.");
                 boolean found = false;
                 for (JBBFIObject obj:
-                     objects) {
+                        objects) {
                     if(obj.getName().equals(possible[0])){
                         found = true;
                         // Start doing stuff
@@ -120,7 +160,7 @@ public class JBBFI {
                                 boolean fClass = false;
                                 for (JBBFIObject objKnown:
                                         objects) {
-                                    if(obj.getName().equals(argStr)){
+                                    if(objKnown.getName().equals(argStr)){
                                         args.add(
                                                 new JBBFIArg(objKnown)
                                         );
@@ -149,6 +189,19 @@ public class JBBFI {
                 }
                 break;
         }
+    }
+
+    private int runFunction(String funcName) throws JBBFIClassNotFoundException, JBBFIInvalidFunctionException, JBBFIUnknownKeywordException {
+        for (JBBFIFunction func:
+                functions) {
+            if(funcName.split("\\(")[0].contains(func.getFunctionName())) {
+                for(String s : func.getCommands()){
+                    parseLine(s);
+                }
+                return 1;
+            }
+        }
+        return 0;
     }
 
 }

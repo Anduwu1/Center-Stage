@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode.jbbfi;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -10,9 +12,20 @@ public class JBBFIObject<T> {
     public JBBFIObject(String objectName, String frontEndName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         java.lang.Class<T> claz = (Class<T>) Class.forName(objectName);
 
-        object = claz.newInstance();
-
+        // Is it in the subsystem folder, or is it RoadRunner Helper?
+        if(objectName.contains("subsystems") || objectName.contains("RoadRunnerHelper")){
+            // Pass a hardwareMap, but we need someway for JBFFIObject to get it...
+            //object = claz.getDeclaredConstructor(HardwareMap.class).newInstance(hardwareMap);
+        }else {
+            // No, just assume nothing
+            object = claz.newInstance();
+        }
         this.name = frontEndName;
+    }
+
+    public JBBFIObject(Object object, String frontEndName){
+        this.name = frontEndName;
+        this.object = object;
     }
 
     public void executeFunction(String name, JBBFIArg... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
