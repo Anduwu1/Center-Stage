@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.jbbfi;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.jbbfi.exceptions.JBBFIHardwareMapNullException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -9,13 +11,16 @@ public class JBBFIObject<T> {
 
     private String name;
 
-    public JBBFIObject(String objectName, String frontEndName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public JBBFIObject(String objectName, String frontEndName) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException, JBBFIHardwareMapNullException {
         java.lang.Class<T> claz = (Class<T>) Class.forName(objectName);
 
         // Is it in the subsystem folder, or is it RoadRunner Helper?
         if(objectName.contains("subsystems") || objectName.contains("RoadRunnerHelper")){
+            if(JBBFI.hardwareMap == null){
+                throw new JBBFIHardwareMapNullException();
+            }
             // Pass a hardwareMap, but we need someway for JBFFIObject to get it...
-            //object = claz.getDeclaredConstructor(HardwareMap.class).newInstance(hardwareMap);
+            object = claz.getDeclaredConstructor(HardwareMap.class).newInstance(JBBFI.hardwareMap);
         }else {
             // No, just assume nothing
             object = claz.newInstance();
@@ -49,5 +54,13 @@ public class JBBFIObject<T> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
     }
 }
