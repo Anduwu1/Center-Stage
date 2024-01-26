@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.jbbfi.JBBFI;
+import org.firstinspires.ftc.teamcode.jbbfi.ScriptingWebPortal;
 import org.firstinspires.ftc.teamcode.objects.Marker;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.OpenCVManager;
@@ -49,6 +51,9 @@ public abstract class AutonomousBase extends LinearOpMode {
 
     protected RoadRunnerHelper driveHelper;
 
+    protected JBBFI jbbfi;
+    protected ScriptingWebPortal scriptingWebPortal;
+
     protected int flip = 1;
 
     @Override
@@ -77,6 +82,17 @@ public abstract class AutonomousBase extends LinearOpMode {
         if(getMarker() != Marker.RED){
             flip = -1;
         }
+
+        try {
+            jbbfi = new JBBFI("/sdcard/auto/autoCode.jbbfi");
+            jbbfi.addGlobal(driveHelper, "driveHelper");
+            jbbfi.addGlobal(flip, "flip");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        scriptingWebPortal = new ScriptingWebPortal(hardwareMap.appContext);
+
         bucket.moveToIntakePosition();
         while(!isStarted() && !isStopRequested()){
             // Get pos

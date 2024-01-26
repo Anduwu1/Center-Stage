@@ -17,6 +17,7 @@ public class JBBFIObject<T> {
         // Is it in the subsystem folder, or is it RoadRunner Helper?
         if(objectName.contains("subsystems") || objectName.contains("RoadRunnerHelper")){
             if(JBBFI.hardwareMap == null){
+                // Well i need a hardwaremap
                 throw new JBBFIHardwareMapNullException();
             }
             // Pass a hardwareMap, but we need someway for JBFFIObject to get it...
@@ -34,8 +35,11 @@ public class JBBFIObject<T> {
     }
 
     public void executeFunction(String name, JBBFIArg... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        // Holds the class types for the args
         ArrayList<Class<?>> argTypes = new ArrayList<>();
+        // Holds the args themselves
         ArrayList<Object> argsObj = new ArrayList<>();
+        // Fill em up
         for (JBBFIArg arg:
                 args) {
             argTypes.add(
@@ -43,7 +47,9 @@ public class JBBFIObject<T> {
             );
             argsObj.add(arg.getArg());
         }
+
         Class<?>[] parameterTypes = argTypes.toArray(new Class<?>[0]);
+        // Function
         Method function = object.getClass().getMethod(name, parameterTypes);
         function.invoke(object, argsObj.toArray());
     }

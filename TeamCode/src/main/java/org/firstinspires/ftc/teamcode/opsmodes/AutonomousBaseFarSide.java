@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.jbbfi.JBBFI;
 import org.firstinspires.ftc.teamcode.objects.Robot;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.AutonomousConstants;
@@ -16,6 +17,12 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
     @Override
     public void markerOnLeft() {
+        // jbbfi could be used
+        try {
+            jbbfi.runFunction("markerOnLeft");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         driveHelper.forward(27)
                 .turn(180 * flip)
                 .strafeRight(10 * flip)

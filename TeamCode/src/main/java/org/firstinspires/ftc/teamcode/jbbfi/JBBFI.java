@@ -64,6 +64,11 @@ public class JBBFI {
         }
     }
 
+    /**
+     * Add a global variable
+     * @param global Object of variable
+     * @param name Name to be used in scripts
+     */
     public void addGlobal(Object global, String name){
         objects.add(
                 new JBBFIObject(
@@ -148,6 +153,7 @@ public class JBBFI {
                             // Args
                             ArrayList<JBBFIArg> args = new ArrayList<>();
                             for(String argStr : argList){
+                                if(argStr.isEmpty()) continue;
                                 // Convert to a JBBFIArg
 
                                 // Is it a primitive
@@ -218,6 +224,14 @@ public class JBBFI {
         }
     }
 
+    /**
+     * Run a function
+     * @param funcName name of the function (shocking)
+     * @return 1 for sucesss, 0 for failure
+     * @throws JBBFIClassNotFoundException
+     * @throws JBBFIInvalidFunctionException
+     * @throws JBBFIUnknownKeywordException
+     */
     public int runFunction(String funcName) throws JBBFIClassNotFoundException, JBBFIInvalidFunctionException, JBBFIUnknownKeywordException {
         for (JBBFIFunction func:
                 functions) {
