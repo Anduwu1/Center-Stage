@@ -92,6 +92,7 @@ public abstract class AutonomousBase extends LinearOpMode {
         }
 
         scriptingWebPortal = new ScriptingWebPortal(hardwareMap.appContext);
+        scriptingWebPortal.start();
 
         bucket.moveToIntakePosition();
         while(!isStarted() && !isStopRequested()){

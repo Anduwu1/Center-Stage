@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.resources.RoadRunnerHelper;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 
 @Autonomous(group="drive")
 public class JBBFITest extends LinearOpMode {
@@ -38,6 +39,12 @@ public class JBBFITest extends LinearOpMode {
         } catch (JBBFIInvalidFunctionException e) {
             throw new RuntimeException(e);
         } catch (JBBFIUnknownKeywordException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
 

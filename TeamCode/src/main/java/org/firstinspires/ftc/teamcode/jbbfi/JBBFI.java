@@ -29,7 +29,7 @@ public class JBBFI {
 
     int currentLine = 0;
 
-    public JBBFI(String fileName) throws JBBFIScriptNotFoundException, JBBFIClassNotFoundException, FileNotFoundException, JBBFIInvalidFunctionException, JBBFIUnknownKeywordException {
+    public JBBFI(String fileName) throws JBBFIScriptNotFoundException, JBBFIClassNotFoundException, FileNotFoundException, JBBFIInvalidFunctionException, JBBFIUnknownKeywordException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         try {
             readFile(fileName);
         } catch (FileNotFoundException e){
@@ -51,7 +51,7 @@ public class JBBFI {
      * @throws JBBFIInvalidFunctionException
      * @throws JBBFIUnknownKeywordException
      */
-    public JBBFI(String fileName, HardwareMap hardwareMap) throws JBBFIScriptNotFoundException, JBBFIClassNotFoundException, FileNotFoundException, JBBFIInvalidFunctionException, JBBFIUnknownKeywordException {
+    public JBBFI(String fileName, HardwareMap hardwareMap) throws JBBFIScriptNotFoundException, JBBFIClassNotFoundException, FileNotFoundException, JBBFIInvalidFunctionException, JBBFIUnknownKeywordException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.hardwareMap = hardwareMap;
         try {
             readFile(fileName);
@@ -81,6 +81,8 @@ public class JBBFI {
 
 
     private void readFile(String fileName) throws FileNotFoundException, JBBFIClassNotFoundException, JBBFIUnknownKeywordException, JBBFIInvalidFunctionException {
+        // Add math as a global
+        addGlobal(new JBBFIMath(), "Math");
         File scriptFile = new File(fileName);
         Scanner fileScan = new Scanner(scriptFile);
 
@@ -91,7 +93,7 @@ public class JBBFI {
         }
     }
 
-    private void parseLine(String line) throws JBBFIClassNotFoundException, JBBFIUnknownKeywordException, JBBFIInvalidFunctionException {
+    private void parseLine(String line) throws JBBFIClassNotFoundException, JBBFIUnknownKeywordException, JBBFIInvalidFunctionException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         String[] tokens = line.split("\\s+"); // we're looking for spaces
 
         switch(tokens[0]){
@@ -155,56 +157,10 @@ public class JBBFI {
                             for(String argStr : argList){
                                 if(argStr.isEmpty()) continue;
                                 // Convert to a JBBFIArg
+                                args.add(
+                                        getArgFromString(argStr)
+                                );
 
-                                // Is it a primitive
-                                // Int
-                                try {
-                                    Integer intTmp = Integer.parseInt(argStr);
-                                    args.add(
-                                            new JBBFIArg(intTmp)
-                                    );
-                                    continue;
-                                }catch (NumberFormatException n){
-                                    // Continue
-                                }
-                                // Float
-                                try {
-                                    Float floatTmp = Float.parseFloat(argStr);
-                                    args.add(
-                                            new JBBFIArg(floatTmp)
-                                    );
-                                    continue;
-                                }catch (NumberFormatException n){
-                                    // Continue
-                                }
-                                // Double
-                                try {
-                                    Double doubleTmp = Double.parseDouble(argStr);
-                                    args.add(
-                                            new JBBFIArg(doubleTmp)
-                                    );
-                                    continue;
-                                }catch (NumberFormatException n){
-                                    // Continue
-                                }
-
-
-                                // Is it a type of class we know?
-                                boolean fClass = false;
-                                for (JBBFIObject objKnown:
-                                        objects) {
-                                    if(objKnown.getName().equals(argStr)){
-                                        args.add(
-                                                new JBBFIArg(objKnown.getObject())
-                                        );
-                                        fClass = true;
-                                        break;
-                                    }
-                                }
-                                if(fClass) continue;
-
-                                // Ok just assume its a string omg
-                                args.add(new JBBFIArg(argStr));
                             }
 
                             try {
@@ -224,6 +180,75 @@ public class JBBFI {
         }
     }
 
+    private JBBFIArg getArgFromString(String argStr) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException{
+        // Is it a primitive
+        // Int
+        try {
+            Integer intTmp = Integer.parseInt(argStr);
+            return new JBBFIArg(intTmp);
+
+        }catch (NumberFormatException n){
+            // Continue
+        }
+        // Float
+        try {
+            Float floatTmp = Float.parseFloat(argStr);
+            return new JBBFIArg(floatTmp);
+
+        }catch (NumberFormatException n){
+            // Continue
+        }
+        // Double
+        try {
+            Double doubleTmp = Double.parseDouble(argStr);
+            return new JBBFIArg(doubleTmp);
+
+        }catch (NumberFormatException n){
+            // Continue
+        }
+
+        // Is it a type of class we know?
+        // Look for object
+        for (JBBFIObject objKnown:
+                objects) {
+            if(objKnown.getName().equals(argStr)){
+                return new JBBFIArg(objKnown.getObject());
+            }
+        }
+
+        try{
+            // Ok ok what if what if its a JBBFI helper class
+            String moduleName = argStr.split("\\:")[0];
+            String moduleFunc = argStr.split("\\:")[1].substring(0,argStr.split("\\:")[1].indexOf("<"));
+            String moduleArgs = argStr.split("\\:")[1];
+
+
+            for (JBBFIObject module : objects) {
+                if(module.getName().equals(moduleName)){
+                    ArrayList<JBBFIArg> args = new ArrayList<>();
+                    // Get the arguments in the "( )"
+                    String argsSTR = moduleArgs.substring(moduleArgs.indexOf("<")+1, moduleArgs.length());
+                    // Isolate args
+                    String[] argList = argsSTR.split("\\;");
+                    for(String arg : argList){
+                        arg = arg.split("\\>")[0];
+                        if(arg.isEmpty()) continue;
+                        // Convert to a JBBFIArg
+                        args.add(
+                                getArgFromString(arg)
+                        );
+                    }
+                    // Run
+                    return new JBBFIArg(module.executeFunction(moduleFunc, args.toArray(new JBBFIArg[0])));
+                }
+            }
+        }catch(Exception e){
+            // its not lamfo
+        }
+
+        return new JBBFIArg(argStr);
+    }
+
     /**
      * Run a function
      * @param funcName name of the function (shocking)
@@ -232,7 +257,7 @@ public class JBBFI {
      * @throws JBBFIInvalidFunctionException
      * @throws JBBFIUnknownKeywordException
      */
-    public int runFunction(String funcName) throws JBBFIClassNotFoundException, JBBFIInvalidFunctionException, JBBFIUnknownKeywordException {
+    public int runFunction(String funcName) throws JBBFIClassNotFoundException, JBBFIInvalidFunctionException, JBBFIUnknownKeywordException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         for (JBBFIFunction func:
                 functions) {
             if(funcName.split("\\(")[0].contains(func.getFunctionName())) {

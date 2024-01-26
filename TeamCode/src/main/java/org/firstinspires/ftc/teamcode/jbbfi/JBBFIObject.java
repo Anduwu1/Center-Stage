@@ -34,7 +34,7 @@ public class JBBFIObject<T> {
         this.object = object;
     }
 
-    public void executeFunction(String name, JBBFIArg... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public T executeFunction(String name, JBBFIArg... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         // Holds the class types for the args
         ArrayList<Class<?>> argTypes = new ArrayList<>();
         // Holds the args themselves
@@ -51,7 +51,7 @@ public class JBBFIObject<T> {
         Class<?>[] parameterTypes = argTypes.toArray(new Class<?>[0]);
         // Function
         Method function = object.getClass().getMethod(name, parameterTypes);
-        function.invoke(object, argsObj.toArray());
+        return (T) function.invoke(object, argsObj.toArray());
     }
 
     public String getName() {
