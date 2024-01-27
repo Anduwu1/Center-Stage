@@ -125,6 +125,43 @@ public class JBBFI {
                 functions.add(function);
                 currentLine += (offSet - currentLine);
                 break;
+            // If?
+            case "if":
+
+                break;
+            /*
+                Variable types
+             */
+            case "int":
+                objects.add(
+                    new JBBFIObject(
+                            new Integer(tokens[2]),
+                            tokens[1]
+                    )
+                );
+                break;
+            case "double":
+                objects.add(
+                        new JBBFIObject(
+                                new Double(tokens[2]),
+                                tokens[1]
+                        )
+                );
+                break;
+            case "float":
+                objects.add(
+                        new JBBFIObject(
+                                new Float(tokens[2]),
+                                tokens[1]
+                        )
+                );
+                break;
+            /*
+                set varName value
+             */
+            case "set":
+
+                break;
             default:
                 // is it empty?
                 if(tokens[0].isEmpty()) return;
@@ -218,7 +255,7 @@ public class JBBFI {
 
         try{
             // Ok ok what if what if its a JBBFI helper class
-            String moduleName = argStr.split("\\:")[0];
+            String moduleName = argStr.split("\\:")[0].replaceAll(" ", "");;
             String moduleFunc = argStr.split("\\:")[1].substring(0,argStr.split("\\:")[1].indexOf("<"));
             String moduleArgs = argStr.split("\\:")[1];
 

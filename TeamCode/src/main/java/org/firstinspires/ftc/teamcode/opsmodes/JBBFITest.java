@@ -30,21 +30,8 @@ public class JBBFITest extends LinearOpMode {
         try {
             jbbfi = new JBBFI("/sdcard/test.jbbfi", hardwareMap);
             jbbfi.addGlobal(roadRunnerHelper, "driveHelper");
-        } catch (JBBFIScriptNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (JBBFIClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (JBBFIInvalidFunctionException e) {
-            throw new RuntimeException(e);
-        } catch (JBBFIUnknownKeywordException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
 
@@ -54,6 +41,10 @@ public class JBBFITest extends LinearOpMode {
             jbbfi.runFunction("driveTest");
         } catch (Exception e){
             throw new RuntimeException(e);
+        }
+
+        while(opModeIsActive() && !isStopRequested()){
+
         }
 
     }

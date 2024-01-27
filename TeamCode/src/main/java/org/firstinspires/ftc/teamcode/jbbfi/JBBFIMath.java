@@ -41,4 +41,5 @@ public class JBBFIMath {
     public Integer divide(Integer one, Integer two){
         return one / two;
     }
+
 }
