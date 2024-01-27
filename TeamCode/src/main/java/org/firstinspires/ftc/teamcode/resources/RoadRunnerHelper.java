@@ -41,7 +41,7 @@ public class RoadRunnerHelper<T>{
      * I dare you to guess what this does
      * @param dist
      */
-    public RoadRunnerHelper forward(double dist){
+    public RoadRunnerHelper forward(T dist){
         forward(dist, DEFAULT_VEL);
         return this;
     }
@@ -52,13 +52,13 @@ public class RoadRunnerHelper<T>{
      * @param dist
      * @param speed
      */
-    public RoadRunnerHelper forward(double dist, double speed){
+    public RoadRunnerHelper forward(T dist, double speed){
         trajectoryVelocityConstraint = SampleMecanumDrive.getVelocityConstraint(
-            speed,
-            speed,
+                speed,
+                speed,
             DriveConstants.TRACK_WIDTH
         );
-        TrajectorySequence traj = drive.trajectorySequenceBuilder(pose).forward(dist, trajectoryVelocityConstraint, SampleMecanumDrive.getAccelerationConstraint(speed * 2)).build();
+        TrajectorySequence traj = drive.trajectorySequenceBuilder(pose).forward((double)dist, trajectoryVelocityConstraint, SampleMecanumDrive.getAccelerationConstraint((double) speed * 2)).build();
         drive.followTrajectorySequence(traj);
         pose = traj.end();
         return this;

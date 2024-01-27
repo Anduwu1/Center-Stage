@@ -54,7 +54,7 @@ public class ScriptingWebPortal extends Thread {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String requestLine = reader.readLine();
-            if (requestLine.startsWith("GET /")) {
+            if (requestLine.startsWith("GET /scripting")) {
                 String filePath = "/sdcard/scripting/index.html"; // Adjust if needed
                 File file = new File(filePath);
                 if (file.exists() && file.isFile()) {
@@ -65,7 +65,7 @@ public class ScriptingWebPortal extends Thread {
                 }
             } else if (requestLine.startsWith("POST /upload")) {
                 handleFileUpload(reader, clientSocket);
-            } else if (requestLine.startsWith("GET /")) {
+            } else if (requestLine.startsWith("GET /scripting")) {
                 String filePath = "/sdcard/scripting/index.html"; // Adjust if needed
                 File file = new File(filePath);
                 if (file.exists() && file.isFile()) {

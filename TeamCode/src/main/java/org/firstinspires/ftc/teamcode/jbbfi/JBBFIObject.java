@@ -50,7 +50,11 @@ public class JBBFIObject<T> {
 
         Class<?>[] parameterTypes = argTypes.toArray(new Class<?>[0]);
         // Function
-        Method function = object.getClass().getMethod(name, parameterTypes);
+        Method function = object.getClass().getMethods()[0];
+        int i = 0;
+        while(!function.getName().equals(name)){
+            function = object.getClass().getMethods()[i++];
+        }
         return (T) function.invoke(object, argsObj.toArray());
     }
 

@@ -22,13 +22,14 @@ public class JBBFITest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         ScriptingWebPortal scriptingWebPortal = new ScriptingWebPortal(hardwareMap.appContext);
         scriptingWebPortal.start();
+        scriptingWebPortal.run();
 
         // Create drivehelper
         SampleMecanumDrive sampleMecanumDrive = new SampleMecanumDrive(hardwareMap);
         RoadRunnerHelper roadRunnerHelper = new RoadRunnerHelper(sampleMecanumDrive);
 
         try {
-            jbbfi = new JBBFI("/sdcard/test.jbbfi", hardwareMap);
+            jbbfi = new JBBFI("/sdcard/test/test.jbbfi", hardwareMap);
             jbbfi.addGlobal(roadRunnerHelper, "driveHelper");
         } catch (Exception e) {
             e.printStackTrace();

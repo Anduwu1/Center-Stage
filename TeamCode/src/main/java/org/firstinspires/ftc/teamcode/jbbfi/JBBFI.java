@@ -108,6 +108,7 @@ public class JBBFI {
                             new JBBFIObject(tokens[1], tokens[2])
                     );
                 }catch (Exception e){
+                    e.printStackTrace();
                     throw new JBBFIClassNotFoundException(tokens[1]);
                 }
                 break;
@@ -174,7 +175,7 @@ public class JBBFI {
 
                 // Maybe the name of an object? lets try
                 // Split at "." since that is how functions are called
-                String[] possible = line.split("\\.");
+                String[] possible = line.split("\\::");
                 boolean found = false;
                 for (JBBFIObject obj:
                         objects) {
@@ -203,6 +204,7 @@ public class JBBFI {
                             try {
                                 obj.executeFunction(functionName, args.toArray(new JBBFIArg[0]));
                             } catch (Exception e){
+                                e.printStackTrace();
                                 throw new JBBFIInvalidFunctionException(obj.getName() + "::" + functionName);
                             }
                         }
@@ -227,14 +229,6 @@ public class JBBFI {
         }catch (NumberFormatException n){
             // Continue
         }
-        // Float
-        try {
-            Float floatTmp = Float.parseFloat(argStr);
-            return new JBBFIArg(floatTmp);
-
-        }catch (NumberFormatException n){
-            // Continue
-        }
         // Double
         try {
             Double doubleTmp = Double.parseDouble(argStr);
@@ -243,6 +237,15 @@ public class JBBFI {
         }catch (NumberFormatException n){
             // Continue
         }
+        // Float
+        try {
+            Float floatTmp = Float.parseFloat(argStr);
+            return new JBBFIArg(floatTmp);
+
+        }catch (NumberFormatException n){
+            // Continue
+        }
+
 
         // Is it a type of class we know?
         // Look for object
@@ -264,7 +267,7 @@ public class JBBFI {
                 if(module.getName().equals(moduleName)){
                     ArrayList<JBBFIArg> args = new ArrayList<>();
                     // Get the arguments in the "( )"
-                    String argsSTR = moduleArgs.substring(moduleArgs.indexOf("<")+1, moduleArgs.length());
+                    String argsSTR = moduleArgs.substring(moduleArgs.indexOf("<")+1);
                     // Isolate args
                     String[] argList = argsSTR.split("\\;");
                     for(String arg : argList){
