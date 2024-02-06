@@ -7,7 +7,7 @@ public class Drone {
     public static final String HARDWARE_NAME = "servoD";
 
     private static final float DRONE_READY = 0f;
-    private static final float DRONE_LAUNCHED = 0.65f;
+    private static final float DRONE_LAUNCHED = 0.25f;
 
     private final Servo servo;
 

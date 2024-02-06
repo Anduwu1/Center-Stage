@@ -185,10 +185,9 @@ public class MainOpsMode extends LinearOpMode {
         if(gamepad2.dpad_down)
             bucket.adjustPosition(-0.005);
 
-        if (gamepad1.a)
+        // only launch drone when a and b are pressed simultaneously on gamepad 1
+        if (gamepad1.a && gamepad1.b)
             drone.launch();
-        else if (gamepad1.b)
-            drone.reset();
     }
 
     private void updateDriveMotors() {
