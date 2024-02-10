@@ -287,7 +287,7 @@ public class MainOpsMode extends LinearOpMode {
         double rightBackPower = wheelValues.rightBackValue;
 
         float far_distance = 18.0f;
-        float close_distance = 4.0f;
+        float close_distance = 2.0f;
 
         // Linearly scale the power for the left wheels based on the left sensor distance
         double leftDistance = dsensors.getLeftDistance();
@@ -306,7 +306,7 @@ public class MainOpsMode extends LinearOpMode {
 
         // Linearly scale the power for the right wheels based on the right sensor distance
         double rightDistance = dsensors.getRightDistance();
-        if (rightDistance < far_distance && rightDistance > 2.0) {
+        if (rightDistance < far_distance && rightDistance > close_distance) {
             double scaledPower = (rightDistance - close_distance) / (far_distance - close_distance); // Scale from 2 inches (0 power) to 10 inches (1 power)
             if (leftFrontPower < 0)
                 leftFrontPower *= scaledPower * 0.5;
