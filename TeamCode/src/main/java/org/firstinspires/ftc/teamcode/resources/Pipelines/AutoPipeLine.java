@@ -20,7 +20,7 @@ import java.util.Locale;
 
 public class AutoPipeLine extends OpenCvPipeline {
     private Marker marker;
-    Mat hsvMat = new Mat(), hierarchyMat = new Mat(), hsvThresholdMat = new Mat(), erosionElement = new Mat(), dilationElement = new Mat();
+    Mat hsvMat = new Mat(), hierarchyMat = new Mat(), hsvThresholdMat = new Mat(), erosionElement = new Mat(), dilationElement = new Mat(), cutOff = new Mat();
 
     //configurations
     int erosionKernelSize = 2;
@@ -36,6 +36,10 @@ public class AutoPipeLine extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input) {
         Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
+        /*Rect rect = new Rect(0, 0, input.width(), input.height() / 3);
+        cutOff = new Mat(input.rows(), input.cols(), CvType.CV_8U, Scalar.all(255));
+        Imgproc.rectangle(cutOff, rect, new Scalar(0,0,0), -1, 8, 0);
+        input.copyTo(hsvMat, cutOff);*/
 
 
         Scalar lowHSV = new Scalar(marker.getHueMin(), 100, 80); // FILL IN WITH VALS

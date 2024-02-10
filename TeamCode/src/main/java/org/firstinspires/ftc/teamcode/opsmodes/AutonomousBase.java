@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.jbbfi.JBBFI;
+import org.firstinspires.ftc.teamcode.jbbfi.ScriptingWebPortal;
 import org.firstinspires.ftc.teamcode.objects.Marker;
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.resources.OpenCVManager;
@@ -32,7 +34,7 @@ public abstract class AutonomousBase extends LinearOpMode {
         }
     }
 
-    protected static final double DISTANCE_TO_DROP = 8.48;
+    protected static final double DISTANCE_TO_DROP = 8.28;
 
     protected Claw claw;
     protected Arm arm;
@@ -48,6 +50,9 @@ public abstract class AutonomousBase extends LinearOpMode {
     protected OpenCVManager camMan;
 
     protected RoadRunnerHelper driveHelper;
+
+    protected JBBFI jbbfi;
+    protected ScriptingWebPortal scriptingWebPortal;
 
     protected int flip = 1;
 
@@ -77,6 +82,18 @@ public abstract class AutonomousBase extends LinearOpMode {
         if(getMarker() != Marker.RED){
             flip = -1;
         }
+
+        try {
+            jbbfi = new JBBFI("/sdcard/auto/autoCode.jbbfi");
+            jbbfi.addGlobal(driveHelper, "driveHelper");
+            jbbfi.addGlobal(flip, "flip");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        scriptingWebPortal = new ScriptingWebPortal(hardwareMap.appContext);
+        scriptingWebPortal.start();
+
         bucket.moveToIntakePosition();
         while(!isStarted() && !isStopRequested()){
             // Get pos
@@ -98,7 +115,7 @@ public abstract class AutonomousBase extends LinearOpMode {
                 if(getMarker() != Marker.RED) goingTo = "RIGHT";
                 else goingTo = "LEFT";
             }
-            telemetry.addData("Projected position","%s" ,pos);
+            telemetry.addData("TeamProp position","%s" ,pos);
             telemetry.addData("GoTo position","%s" ,goingTo);
             telemetry.update();
 
@@ -122,7 +139,6 @@ public abstract class AutonomousBase extends LinearOpMode {
 
         // idle
         while (!isStopRequested() && opModeIsActive()){
-            telemetry.addData("X:","%d", pipe.getX());
             telemetry.addLine(pos);
             telemetry.update();
         }
@@ -161,7 +177,9 @@ public abstract class AutonomousBase extends LinearOpMode {
 
         // Drop em
         claw.open();
+        // Wait
         sleep(800);
+        // Reset
         arm.moveToDownPosition();
         bucket.moveToIntakePosition();
 
@@ -173,6 +191,10 @@ public abstract class AutonomousBase extends LinearOpMode {
             else
                 driveHelper.strafeLeft(28);
         }
+    }
+
+    public void delayForOther(){
+        sleep(5000);
     }
 
     public abstract Marker getMarker();
