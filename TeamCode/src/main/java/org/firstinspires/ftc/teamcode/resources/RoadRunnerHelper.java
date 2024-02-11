@@ -41,7 +41,7 @@ public class RoadRunnerHelper<T>{
      * I dare you to guess what this does
      * @param dist
      */
-    public RoadRunnerHelper forward(T dist){
+    public RoadRunnerHelper forward(double dist){
         forward(dist, DEFAULT_VEL);
         return this;
     }
@@ -52,7 +52,7 @@ public class RoadRunnerHelper<T>{
      * @param dist
      * @param speed
      */
-    public RoadRunnerHelper forward(T dist, double speed){
+    public RoadRunnerHelper forward(double dist, double speed){
         trajectoryVelocityConstraint = SampleMecanumDrive.getVelocityConstraint(
                 speed,
                 speed,

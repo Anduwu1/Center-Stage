@@ -8,7 +8,7 @@ public class Arm {
 
     private static final float POSITION_UP = 0.63f;
     private static final float POSITION_DOWN = 0.275f;
-    private static final float POSITION_HOVER = 0.295f;
+    private static final float POSITION_HOVER = 0.33f;
 
     private static final float POSITION_AUTO_DROP = 0.7f;
 
