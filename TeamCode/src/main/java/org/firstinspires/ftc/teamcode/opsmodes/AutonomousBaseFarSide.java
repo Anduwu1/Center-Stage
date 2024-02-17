@@ -35,15 +35,16 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
     @Override
     public void markerOnCenter() {
+        float badOffSetFixForState = 1.0f;
         driveHelper.forward(27)
                 .turn(180 * flip)
-                .reverse(15.5);
+                .reverse(16.5);
         claw.open();
-        driveHelper.reverse(6.5, RoadRunnerHelper.REVERSE_FAST)
+        driveHelper.reverse(6.5 + badOffSetFixForState, RoadRunnerHelper.REVERSE_FAST)
                 .turn(-90 * flip);
         claw.close();
         driveHelper.reverse(RobotSettings.FULL_TILE_INCHES * 2.7)
-                .strafeLeft(RobotSettings.FULL_TILE_INCHES * flip);
+                .strafeLeft(RobotSettings.FULL_TILE_INCHES * flip + badOffSetFixForState);
         dropPixels(Position.CENTER);
     }
 

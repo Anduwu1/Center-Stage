@@ -24,10 +24,6 @@ public class CalibratePipeline extends OpenCvPipeline {
     public Mat processFrame(Mat input)
     {
         Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
-        Rect rectCrop = new Rect(0, 0, input.width(), input.height() / 3);
-        cutOff = new Mat(input.rows(), input.cols(), CvType.CV_8U, Scalar.all(255));
-        Imgproc.rectangle(cutOff, rectCrop, new Scalar(0,0,0), -1, 8, 0);
-        input.copyTo(input, cutOff);
 
         int size = 30;
         Rect rect = new Rect(((input.width() - size) / 2), (input.height() - size) / 2, size, size);

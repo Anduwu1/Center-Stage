@@ -34,21 +34,21 @@ public class AutoPipeLine extends OpenCvPipeline {
     }
 
     @Override
-    public Mat processFrame(Mat input) {
+    public Mat processFrame(Mat inputRaw) {
+        Imgproc.cvtColor(inputRaw, hsvMat, Imgproc.COLOR_RGB2HSV);
+
+        Rect roi = new Rect(0, (inputRaw.rows() / 3), inputRaw.cols(), inputRaw.rows() - ((inputRaw.rows() / 3)));
+        Mat input = new Mat(inputRaw, roi);
+
         Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
-        /*Rect rect = new Rect(0, 0, input.width(), input.height() / 3);
-        cutOff = new Mat(input.rows(), input.cols(), CvType.CV_8U, Scalar.all(255));
-        Imgproc.rectangle(cutOff, rect, new Scalar(0,0,0), -1, 8, 0);
-        input.copyTo(hsvMat, cutOff);*/
 
-
-        Scalar lowHSV = new Scalar(marker.getHueMin(), 100, 80); // FILL IN WITH VALS
+        Scalar lowHSV = new Scalar(marker.getHueMin(), 120, 80); // FILL IN WITH VALS
         Scalar highHSV = new Scalar(marker.getHueMax(), 255, 255);
 
         Core.inRange(hsvMat, lowHSV, highHSV, hsvThresholdMat);
 
         if(marker.getHueWrapAroundMin() > 1) {
-            lowHSV = new Scalar(marker.getHueWrapAroundMin(), 100, 100); // FILL IN WITH VALS
+            lowHSV = new Scalar(marker.getHueWrapAroundMin(), 120, 100); // FILL IN WITH VALS
             highHSV = new Scalar(marker.getHueWrapAroundMax(), 255, 255);
 
             Core.inRange(hsvMat, lowHSV, highHSV, hsvThresholdMat);
