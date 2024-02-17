@@ -165,6 +165,16 @@ public class MainOpsMode extends LinearOpMode {
             bPressed = false;
         }
 
+        if(gamepad2.a) {
+            arm.moveToLowDropPosition();
+            bucket.moveToLowDropPosition();
+        }
+
+        if(gamepad2.x) {
+            arm.moveToAutoDropPosition();
+            bucket.moveToAutoDropPos();
+        }
+
         // Arm Toggle
         if (gamepad2.right_bumper && !rbPressed) {
             rbPressed = true; toggleArm();

@@ -10,8 +10,9 @@ public class Bucket {
     public static final String HARDWARE_NAME = "servoR";
 
     private static final float POSITION_DROP = 0;
-    private static final float POSITION_AUTO_DROP = 0.063f;
-    private static final float POSITION_INTAKE = 0.37f;
+    private static final float POSITION_LOW_DROP = 0.1f;
+    private static final float POSITION_AUTO_DROP = 0.192f;
+    private static final float POSITION_INTAKE = 0.47f;
 
     private final Servo servo;
     private double position = POSITION_INTAKE;
@@ -69,6 +70,12 @@ public class Bucket {
      */
     public void moveToAutoDropPos(){
         position = POSITION_AUTO_DROP;
+        servo.setPosition(position);
+        isIntakePosition = false;
+    }
+
+    public void moveToLowDropPosition() {
+        position = POSITION_LOW_DROP;
         servo.setPosition(position);
         isIntakePosition = false;
     }
