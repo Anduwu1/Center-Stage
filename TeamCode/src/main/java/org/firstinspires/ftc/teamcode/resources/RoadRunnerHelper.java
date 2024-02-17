@@ -58,7 +58,7 @@ public class RoadRunnerHelper<T>{
                 speed,
             DriveConstants.TRACK_WIDTH
         );
-        TrajectorySequence traj = drive.trajectorySequenceBuilder(pose).forward((double)dist, trajectoryVelocityConstraint, SampleMecanumDrive.getAccelerationConstraint((double) speed * 2)).build();
+        TrajectorySequence traj = drive.trajectorySequenceBuilder(pose).forward(dist, trajectoryVelocityConstraint, SampleMecanumDrive.getAccelerationConstraint(speed * 2)).build();
         drive.followTrajectorySequence(traj);
         pose = traj.end();
         return this;

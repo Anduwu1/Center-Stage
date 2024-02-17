@@ -17,12 +17,6 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
 
     @Override
     public void markerOnLeft() {
-        // jbbfi could be used
-        try {
-            jbbfi.runFunction("markerOnLeft");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         driveHelper.forward(27)
                 .turn(180 * flip)
                 .strafeRight(10 * flip)
