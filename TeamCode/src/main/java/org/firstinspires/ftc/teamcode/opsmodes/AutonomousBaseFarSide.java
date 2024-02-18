@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 
 @Disabled
 public abstract class AutonomousBaseFarSide extends AutonomousBase {
+    float badOffSetFixForState = 1.0f;
 
     @Override
     public void markerOnLeft() {
@@ -25,17 +26,17 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
         driveHelper.reverse(6, RoadRunnerHelper.REVERSE_FAST);
         claw.close();
 
-        driveHelper.reverse(10)
+        driveHelper.reverse(10 + + badOffSetFixForState)
                 .turn(-90 * flip)
                 .reverse(RobotSettings.FULL_TILE_INCHES * 3.5)
-                .strafeLeft(RobotSettings.FULL_TILE_INCHES * flip);
+                .strafeLeft((RobotSettings.FULL_TILE_INCHES + badOffSetFixForState) * flip);
 
         dropPixels(Position.LEFT);
     }
 
     @Override
     public void markerOnCenter() {
-        float badOffSetFixForState = 1.0f;
+
         driveHelper.forward(27)
                 .turn(180 * flip)
                 .reverse(16.5);
@@ -56,10 +57,10 @@ public abstract class AutonomousBaseFarSide extends AutonomousBase {
         claw.open();
         driveHelper.reverse(5, RoadRunnerHelper.REVERSE_FAST);
         claw.close();
-        driveHelper.strafeLeft(22 * flip)
+        driveHelper.strafeLeft((badOffSetFixForState + 22) * flip)
                 .turn(180 * flip)
-                .reverse(RobotSettings.FULL_TILE_INCHES * 3.5)
-                .strafeLeft(RobotSettings.FULL_TILE_INCHES * flip);
+                .reverse(RobotSettings.FULL_TILE_INCHES * 3)
+                .strafeLeft((RobotSettings.FULL_TILE_INCHES) * flip);
 
 
         dropPixels(Position.RIGHT);
