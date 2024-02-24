@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
  */
 public class RoadRunnerHelper<T>{
 
-    public static final int DEFAULT_VEL = 25;
-    public static final int DEFAULT_ANG_VEL = 2;
-    public static final int REVERSE_FAST = 60;
+    public static final int DEFAULT_VEL = 200;
+    public static final int DEFAULT_ANG_VEL = 100;
+    public static final int REVERSE_FAST = 200;
 
 
     private SampleMecanumDrive drive;
@@ -151,9 +151,10 @@ public class RoadRunnerHelper<T>{
      * Useful if you take manual control of the motors
      * and then want to use RoadRunner again
      */
-    public void resetPath(){
+    public RoadRunnerHelper resetPath(){
         pose = new Pose2d();
         drive.setPoseEstimate(pose);
+        return this;
     }
 
 }

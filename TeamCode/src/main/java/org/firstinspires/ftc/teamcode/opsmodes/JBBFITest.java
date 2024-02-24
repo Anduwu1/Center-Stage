@@ -21,8 +21,8 @@ public class JBBFITest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         ScriptingWebPortal scriptingWebPortal = new ScriptingWebPortal(hardwareMap.appContext);
-        scriptingWebPortal.start();
-        scriptingWebPortal.run();
+        /*scriptingWebPortal.run();
+        scriptingWebPortal.start();*/
 
         // Create drivehelper
         SampleMecanumDrive sampleMecanumDrive = new SampleMecanumDrive(hardwareMap);
@@ -36,13 +36,21 @@ public class JBBFITest extends LinearOpMode {
             throw new RuntimeException(e);
         }
 
-        waitForStart();
+        while(!isStarted() && !isStopRequested()) {
+            if(scriptingWebPortal.isAlive()){
+                telemetry.addLine("ScriptPortal is alive\n");
+            }else{
+                telemetry.addLine("ScriptPortal is dead\n");
+            }
+            telemetry.addData("State %s\n", scriptingWebPortal.getState().toString());
+            //scriptingWebPortal.join();
+        }
 
-        try{
+        /*try{
             jbbfi.runFunction("driveTest");
         } catch (Exception e){
             throw new RuntimeException(e);
-        }
+        }*/
 
         while(opModeIsActive() && !isStopRequested()){
 

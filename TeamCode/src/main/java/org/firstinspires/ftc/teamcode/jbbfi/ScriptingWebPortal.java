@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.jbbfi;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotserver.internal.webserver.CoreRobotWebServer;
 import android.content.Context;
 import android.os.Handler;
@@ -28,6 +29,7 @@ public class ScriptingWebPortal extends Thread {
     private ServerSocket serverSocket;
     private Context context;
     private Handler handler;
+
 
     public ScriptingWebPortal(Context context) {
         this.context = context;
@@ -65,15 +67,6 @@ public class ScriptingWebPortal extends Thread {
                 }
             } else if (requestLine.startsWith("POST /upload")) {
                 handleFileUpload(reader, clientSocket);
-            } else if (requestLine.startsWith("GET /scripting")) {
-                String filePath = "/sdcard/scripting/index.html"; // Adjust if needed
-                File file = new File(filePath);
-                if (file.exists() && file.isFile()) {
-                    byte[] fileContent = readFileContent(file);
-                    sendResponse(clientSocket, fileContent);
-                } else {
-                    sendNotFoundResponse(clientSocket);
-                }
             }
             else {
                 sendMethodNotAllowedResponse(clientSocket);
