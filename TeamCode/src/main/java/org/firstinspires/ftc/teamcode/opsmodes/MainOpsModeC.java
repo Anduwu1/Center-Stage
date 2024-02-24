@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 @TeleOp(name="Main OpMode")
-public class MainOpsMode extends LinearOpMode {
+public class MainOpsModeC extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     // Motors
@@ -139,11 +139,11 @@ public class MainOpsMode extends LinearOpMode {
 
     private void updateServos(){
         // Trapdoor toggle
-        if(gamepad2.y && !yPressed) {
+        if(gamepad2.right_bumper && !yPressed) {
             yPressed = true;
             claw.toggleClaw();
             // telemetry.addLine("Toggling trapdoor");
-        } else if(!gamepad2.y) {
+        } else if(!gamepad2.right_bumper) {
             yPressed = false;
             //telemetry.addLine("Button Pressed but not toggling");
         }
@@ -176,10 +176,10 @@ public class MainOpsMode extends LinearOpMode {
         }
 
         // Arm Toggle
-        if (gamepad2.right_bumper && !rbPressed) {
+        if (gamepad2.y && !rbPressed) {
             rbPressed = true; toggleArm();
         }
-        else if (!gamepad2.right_bumper){
+        else if (!gamepad2.y){
             rbPressed = false;
         }
 
@@ -201,12 +201,7 @@ public class MainOpsMode extends LinearOpMode {
     }
 
     private void updateDriveMotors() {
-        // Max motor speed
-        double max;
-
-        double axial = 0;
-        double lateral = 0;
-        double yaw = 0;
+        double max, axial = 0, lateral = 0, yaw = 0;
 
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
         if (Math.abs(gamepad1.left_stick_y) > 0.1)
@@ -297,7 +292,7 @@ public class MainOpsMode extends LinearOpMode {
         double rightBackPower = wheelValues.rightBackValue;
 
         float far_distance = 20.0f;
-        float close_distance = 3.0f;
+        float close_distance = 8.5f;
 
         // Linearly scale the power for the left wheels based on the left sensor distance
         double leftDistance = dsensors.getLeftDistance();
