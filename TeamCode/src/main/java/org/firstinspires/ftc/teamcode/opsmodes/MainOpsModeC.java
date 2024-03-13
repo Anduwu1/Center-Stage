@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opsmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,7 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-@TeleOp(name="Main OpMode")
+@Disabled
+@TeleOp(name="Main OpMode C")
 public class MainOpsModeC extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
