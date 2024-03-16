@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.objects.RobotSettings;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Bucket;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 @TeleOp(name="Main OpMode")
-public class MainOpsModeC extends LinearOpMode {
+public class MainOpsMode extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     // Motors
@@ -139,11 +140,11 @@ public class MainOpsModeC extends LinearOpMode {
 
     private void updateServos(){
         // Trapdoor toggle
-        if(gamepad2.right_bumper && !yPressed) {
+        if(gamepad2.y && !yPressed) {
             yPressed = true;
             claw.toggleClaw();
             // telemetry.addLine("Toggling trapdoor");
-        } else if(!gamepad2.right_bumper) {
+        } else if(!gamepad2.y) {
             yPressed = false;
             //telemetry.addLine("Button Pressed but not toggling");
         }
@@ -176,10 +177,10 @@ public class MainOpsModeC extends LinearOpMode {
         }
 
         // Arm Toggle
-        if (gamepad2.y && !rbPressed) {
+        if (gamepad2.right_bumper && !rbPressed) {
             rbPressed = true; toggleArm();
         }
-        else if (!gamepad2.y){
+        else if (!gamepad2.right_bumper){
             rbPressed = false;
         }
 

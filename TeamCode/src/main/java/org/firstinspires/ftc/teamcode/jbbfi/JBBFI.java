@@ -80,16 +80,14 @@ public class JBBFI {
 
 
 
-    private void readFile(String fileName) throws FileNotFoundException, JBBFIClassNotFoundException, JBBFIUnknownKeywordException, JBBFIInvalidFunctionException {
+    private void readFile(String fileName) throws FileNotFoundException {
         // Add math as a global
         addGlobal(new JBBFIMath(), "Math");
         File scriptFile = new File(fileName);
         Scanner fileScan = new Scanner(scriptFile);
 
         while(fileScan.hasNextLine()){
-
             fileData.add(fileScan.nextLine());
-
         }
     }
 

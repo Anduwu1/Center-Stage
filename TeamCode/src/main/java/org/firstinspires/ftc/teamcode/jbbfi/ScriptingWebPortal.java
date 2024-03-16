@@ -25,15 +25,22 @@ import java.net.Socket;
  */
 public class ScriptingWebPortal extends Thread {
 
-    private static final int PORT = 8080;
+    private static final int PORT = 8082;
     private ServerSocket serverSocket;
     private Context context;
     private Handler handler;
+
+    private boolean running = true;
 
 
     public ScriptingWebPortal(Context context) {
         this.context = context;
         this.handler = new Handler(Looper.getMainLooper());
+        this.running = true;
+    }
+
+    public void stopRunning(){
+        this.running = false;
     }
 
     @Override
@@ -42,12 +49,12 @@ public class ScriptingWebPortal extends Thread {
     public void run() {
         try {
             serverSocket = new ServerSocket(PORT);
-            while (true) {
+            while (running) {
                 Socket clientSocket = serverSocket.accept();
                 handleRequest(clientSocket);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -57,7 +64,7 @@ public class ScriptingWebPortal extends Thread {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String requestLine = reader.readLine();
             if (requestLine.startsWith("GET /scripting")) {
-                String filePath = "/sdcard/scripting/index.html"; // Adjust if needed
+                String filePath = "/sdcard/scripting/index.html";
                 File file = new File(filePath);
                 if (file.exists() && file.isFile()) {
                     byte[] fileContent = readFileContent(file);
@@ -67,8 +74,16 @@ public class ScriptingWebPortal extends Thread {
                 }
             } else if (requestLine.startsWith("POST /upload")) {
                 handleFileUpload(reader, clientSocket);
-            }
-            else {
+            } else if (requestLine.startsWith("/sdcard")){
+                String filePath = "/sdcard/test.jbbfi";
+                File file = new File(filePath);
+                if (file.exists() && file.isFile()) {
+                    byte[] fileContent = readFileContent(file);
+                    sendResponse(clientSocket, fileContent);
+                } else {
+                    sendNotFoundResponse(clientSocket);
+                }
+            } else {
                 sendMethodNotAllowedResponse(clientSocket);
             }
             clientSocket.close();
