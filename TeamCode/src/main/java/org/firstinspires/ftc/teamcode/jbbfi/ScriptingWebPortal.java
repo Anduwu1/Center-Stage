@@ -20,12 +20,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * All from Google Bard, i am too lazy to make a web portal myself
- * it is 10:26 pm :(
+ * script portal (awesome)
  */
 public class ScriptingWebPortal extends Thread {
 
     private static final int PORT = 8082;
+
+    public int PORT_FINAL = 8082;
+
     private ServerSocket serverSocket;
     private Context context;
     private Handler handler;
@@ -47,8 +49,20 @@ public class ScriptingWebPortal extends Thread {
 
 
     public void run() {
+        boolean good = false;
         try {
-            serverSocket = new ServerSocket(PORT);
+            while(!good) {
+                PORT_FINAL += 1;
+                try {
+                    serverSocket = new ServerSocket(PORT_FINAL);
+                    good = true;
+                }catch (Exception e){
+                    if(PORT_FINAL > 9000){
+                        throw new RuntimeException(e);
+                    }
+                    good = false;
+                }
+            }
             while (running) {
                 Socket clientSocket = serverSocket.accept();
                 handleRequest(clientSocket);
@@ -65,6 +79,15 @@ public class ScriptingWebPortal extends Thread {
             String requestLine = reader.readLine();
             if (requestLine.startsWith("GET /scripting")) {
                 String filePath = "/sdcard/scripting/index.html";
+                File file = new File(filePath);
+                if (file.exists() && file.isFile()) {
+                    byte[] fileContent = readFileContent(file);
+                    sendResponse(clientSocket, fileContent);
+                } else {
+                    sendNotFoundResponse(clientSocket);
+                }
+            } else if(requestLine.startsWith("GET /test.jbbfi")){
+                String filePath = "/sdcard/test/test.jbbfi";
                 File file = new File(filePath);
                 if (file.exists() && file.isFile()) {
                     byte[] fileContent = readFileContent(file);
@@ -137,15 +160,14 @@ public class ScriptingWebPortal extends Thread {
             requestBody.append(line).append("\n");
         }
 
-        // Parse the request body to get the file content
+        //
         String[] parts = requestBody.toString().split("\r\n");
         byte[] fileContent = parts[parts.length - 1].getBytes();
 
         // Save the file locally
-        String filePath = "/sdcard/test.jbbfi"; // Adjust if needed
+        String filePath = "/sdcard/test/test.jbbfi";
         saveFileLocally(filePath, fileContent);
 
-        // Respond with a success message
         String response = "HTTP/1.1 200 OK\r\n" +
                 "Content-Type: text/plain\r\n" +
                 "\r\n" +

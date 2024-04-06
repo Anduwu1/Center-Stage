@@ -65,7 +65,7 @@ public class JBBFI {
     }
 
     /**
-     * Add a global variable
+     * Add a global variable\
      * @param global Object of variable
      * @param name Name to be used in scripts
      */

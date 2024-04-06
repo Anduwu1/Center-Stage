@@ -45,6 +45,11 @@ public class RoadRunnerHelper<T>{
         forward(dist, DEFAULT_VEL);
         return this;
     }
+
+    public RoadRunnerHelper forward(int dist){
+        forward(dist, DEFAULT_VEL);
+        return this;
+    }
     
 
     /**

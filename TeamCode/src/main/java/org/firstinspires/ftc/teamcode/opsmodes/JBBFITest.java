@@ -53,6 +53,13 @@ public class JBBFITest extends LinearOpMode {
             throw new RuntimeException(e);
         }
 
+        try{
+            jbbfi.runFunction("driveTest");
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
+
         while(!isStarted() && !isStopRequested()) {
             if(scriptingWebPortal.isAlive()){
                 telemetry.addLine("ScriptPortal is alive\n");
@@ -60,15 +67,12 @@ public class JBBFITest extends LinearOpMode {
                 telemetry.addLine("ScriptPortal is dead\n");
             }
             telemetry.addData("State", scriptingWebPortal.getState().toString());
+            telemetry.addData("PORT", scriptingWebPortal.PORT_FINAL);
             telemetry.addData("Error", error);
             telemetry.update();
         }
 
-        /*try{
-            jbbfi.runFunction("driveTest");
-        } catch (Exception e){
-            throw new RuntimeException(e);
-        }*/
+
 
         while(opModeIsActive() && !isStopRequested()){
 
